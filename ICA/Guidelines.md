@@ -28,6 +28,10 @@ The software should be functional and well documented to make it easy for someon
     
     **It is better to have a more straightforward but working approach than a complex non-functional one.**
     
+- **Does our software need a GUI (graphical user interface)**
+
+    Depending on what your software does, a GUI can be very helpful! There are many Python packages to create GUIs. PySimpleGUI is a good one to look at, but there is no restriction on which packages you can use.
+
 - **How should we write documentation?**
 
     This is entirely up to you!
@@ -43,4 +47,34 @@ The software should be functional and well documented to make it easy for someon
 
 ## The datasets
 
-    Below you will find a list of datasets that you can use to test your software.
+Below you will find a list of datasets that you can analyse with your software. Each datasets has some "example tasks" that you could choose to perform on the images. These are not compulsory and you can choose to develop a tool to solve any meaningful question.
+
+- ### *Drosophila melanogaster* Wings
+
+    ***DOUBLE CHECK - LINK APPEARS NOT WORKING** (but was checked during Chinese New Year...)*
+
+    *Description*: This dataset contains images of Drosophila wings with various genotypes.
+
+    *Reference*: Sonnenschein et al, 2015 - An Image Database of Drosophila melanogaster Wings for Phenomic and Biometric analysis
+
+    *Available from*: http://gigadb.org/dataset/view/id/100141
+
+    *Data type and size*: ~7 Gb of TIFF (**double check**) files taken at 20x and 40x with different microscopes. 
+
+    *Example tasks*: 
+    - automatically detect the wing and identify the genotype of the fly
+    - automate measurements of fly wings
+
+- ### Retina scans
+
+    *Description*: This dataset contains images of retina scans from glaucoma positive and negative patients.
+
+    *Available from*: https://www.kaggle.com/sshikamaru/glaucoma-detection
+
+    *Data type and size*: 650 files (~200 Mb) of jpg files. 
+
+    *Example tasks*: 
+    - classify images to detect whether glaucoma is present
+    - segment blood vessels and determine their properties
+
+
