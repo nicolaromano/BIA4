@@ -14,7 +14,7 @@ These will include general Python introductory exercises, links to courses etc. 
 
 ### Week 1 (w/b 13 September 2020)
 
-Basics of image analysis.
+_Introduction to image analysis._
 
 #### Lecture 1.1
 
@@ -26,11 +26,10 @@ Basics of image analysis.
 
 **Indicative content:**
 
-- Introduction to the course. Course structure and ICAs
+- Introduction to the course structure and ICAs
 - What is image analysis and what can we use it for
 - The rationale for using Python - not as an absolute substitute for existing pieces of software
-- Very cursory introduction (1-2 slides, to be used as a reference) to the tools we will be using (e.g. Scikit Image, OpenCV, Numpy, Pandas, Matplotlib, Napari, Scikit-Learn, Keras, ...)
-- Imaging methods - Light microscopy, fluorescence, confocal, electron microscopy, X-ray, MRI, etc. and associated challenges
+- Very cursory introduction (1-2 slides, to be used as a reference) to the tools we will be using
 - Examples of problems to be solved in image analysis
 
 #### Lecture 1.2
@@ -65,7 +64,7 @@ Basics of image analysis.
 
 ### Week 2 (week beginning 20 September)
 
-Filters and features.
+_Filters and features - week 1._
 
 *Monday 20 and Tuesday 21 holiday.*
 
@@ -88,6 +87,8 @@ Filters and features.
   - Convolutional filters (Gaussian, Sobel)
 
 ### Week 3 (week beginning 27 September)
+
+_Filters and features - week 2._
 
 *Friday 1 October holiday.*
 
@@ -116,22 +117,23 @@ _Holiday week, no lectures!_
 
 ### Week 5 (week beginning 11 October)
 
-Shape detection in images
+_Filters and features - week 3._
 
 #### Lecture 5.1
 
 **Learning objectives:**
 
-- Define the different types of segmentation
-- Describe common algorithms to segment images
-- Explain the challenges of segmentation
+- Describe and apply methods for detection of shapes in an image
+- Describe and apply methods for particle detection
+- Discuss advantages and issues with these methods
 
 **Indicative content:**
 
-- The Hough transform
-  - Detecting lines
-  - Detecting circles
-  
+- The Hough transform to detect lines or circles
+- Particle detection (Difference of Gaussians, Laplacian of Gaussians, etc.)
+
+**Suggested reading:**
+
 #### ICA introductory session
 
 **Indicative content:**
@@ -144,9 +146,47 @@ Shape detection in images
 
 ### Week 6 (Week beginning 18 October)
 
-Segmentation
+_Tracking._
 
 #### Lecture 6.1
+
+**Learning objectives:**
+
+- Discuss the issues related to analysis of multidimensional datasets
+- Describe common tracing algorithms
+- Implement them in Python
+
+**Indicative content:**
+
+- Problems associated with analysing multidimensional datasets – stacks and videos
+- Tracing algorithms (vessels, neurites, cell processes)
+
+#### Lecture 6.2
+
+**Learning objectives:**
+
+- Discuss issues with tracking objects/particles in videos
+- Describe common tracking algorithms
+- Implement them in Python
+
+**Indicative content:**
+
+- Registration algorithms
+- Tracking algorithms
+
+#### Workshop 6
+
+**Learning objectives:**
+
+**Indicative content:**
+
+Video registration / Particle tracking / Tracing?
+
+### Week 7 (Week beginning 25 October)
+
+_Segmentation._
+
+#### Lecture 7.1
 
 **Learning objectives:**
 
@@ -163,67 +203,189 @@ Segmentation
 - k-means segmentation
 - Watershed
 
-#### Lecture 6.2
-_Traditional_ ML approaches in image analysis
-
-- Trainable (random forest) segmentation
-- Image classification using SVM
-
-#### Workshop 6
-
-### Week 7 (Week beginning 25 October)
-
-#### Lecture 7.1
 #### Lecture 7.2
+
+- Something else on segmentation (TBD)
 
 #### Workshop 7
 
+**Learning objectives:**
+
+**Indicative content:**
+
+Segmantation of cells
+
 ### Week 8 (Week beginning 1 November)
 
+_Traditional ML approaches in image analysis._
+
 #### Lecture 8.1
+
+**Learning objectives:**
+
+**Indicative content:**
+
+- Recap of ML terminology (training, validation and test set, loss function, etc)
+- Trainable (random forest) segmentation
+- Image classification using SVM or logistic regression
+
 #### Lecture 8.2
+
+**Learning objectives:**
+
+- Describe the basic structure of an ANN
+- Describe how (multi-layer) perceptrons (MLPs) work
+- Discuss pros and cons of various types of activation functions
+- Discuss the limitations of MLPs
+
+**Indicative content:**
+
+- Introduction to (shallow) neural networks
+- The perceptron
+- Multilayer perceptron and hidden layers
+- Activation functions
+- Gradient descent
+
+#### Workshop 8
+
+### Week 9 (Week beginning 8 November)
+
+_Convolutional neural networks (CNNs)._
+
+#### Lecture 9.1
+
+- Deep networks
+- General structure
+- An overview of how a CNN "learns" features
+- Types of network layers
+
+#### Lecture 9.2
+
+- Introduction to Keras and Tensorflow
+- Building a simple CNN with Keras
 
 #### Project discussion session groups 1-4
 
 **Idea:** we are going to briefly go through the project each group is developing and discuss how they can improve on that (30 min/group)
 
-### Week 9 (Week beginning 8 November)
+### Week 10 (Week beginning 15 November)
 
-#### Lecture 9.1
-#### Lecture 9.2
+_CNNs architectures._
+
+#### Lecture 10.1
+
+**Learning objectives:**
+
+**Indicative content:**
+
+- Transfer learning 
+- Common CNN architectures
+- AlexNet
+- LeNet
+- U-Net
+- Inception
+
+#### Lecture 10.2
+
+**Learning objectives:**
+
+**Indicative content:**
+
+- CNN for cell segmentation in 2D and 3D
+- More on U-Net
+- StarDist
+- YOLO
 
 #### Project discussion session groups 5-9
 
 **Idea:** we are going to briefly go through the project each group is developing and discuss how they can improve on that (30 min/group)
 
-### Week 10 (Week beginning 15 November)
-
-#### Lecture 10.1
-#### Lecture 10.2
-#### Workshop 10
+**Learning objectives:**
 
 ### Week 11 (Week beginning 22 November)
 
+_Practical aspects of using CNNs._
+
 #### Lecture 11.1
+
+**Learning objectives:**
+
+- Define hyperparameters and discuss why their choice is important
+- Discuss different strategies for hyperparameter optimization
+
+**Indicative content:**
+
+- Hyperparameters optimization
+- What are hyperparameters?
+- Search strategies (Grid, HyperBand, Bayesian)
+- AutoKeras
+
 #### Lecture 11.2
+
+**Learning objectives:**
+
+- Describe the concept of data augmentation and discuss why it is needed
+- Strategies for data augmentation in image analysis
+
+**Indicative content:**
+
+- Data augmentation
+
 #### Workshop 11
+
+Classification with CNN
+
+**Learning objectives:**
 
 ### Week 12 (Week beginning 29 November)
 
+_Autoencoders._
+
 #### Lecture 12.1
+
+**Learning objectives:**
+
+**Indicative content:**
+
+- What are autoencoders?
+- Applications of autoencoders (denoising, anomaly detection, domain adaptation)
+- Latent space
+
 #### Lecture 12.2
+
+**Indicative content:**
+
+- Analysis of recent papers
+
 #### Workshop 12
 
-**SUBMISSION ICA 1 - Wednesday 8 December 12 noon.**
+Autoencoders
+
+**Learning objectives:**
 
 ### Week 13 (Week beginning 6 December)
 
+_Recent topics in image analysis._
+
 - Lecture 13.1
+
+**Indicative content:**
+
+Analysis of recent papers
+
 - Lecture 13.2
+
+**Indicative content:**
+
+Analysis of recent papers
 
 ### Week 14 (Week beginning 13 December)
 
-- Lecture 14.1
+_No lectures._
+
+- Time reserved for the finalization of the ICAs
+
+**SUBMISSION ICA 1 - Wednesday 15 December 12 noon.**
 
 **SUBMISSION ICA 2 - Wednesday 22 December 12 noon.**
 
