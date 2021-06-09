@@ -139,15 +139,82 @@
 \section{Why do we need to analyse images?}
 
 \begin{frame}
-    {A general quantitative image processing pipeline}
+    {Examples of biomedical images and associated problems}
+    Image processing is a major task in biomedical sciences (and not only).
+    Problems in image analysis include detection of object; quantification of their properties; improvement of image quality; classification of images\dots
 
-    When analysing a set of images you will need to process them to go from raw data to an output.
+    \begin{columns}
+        \begin{column}{0.25\textwidth}
+            \begin{figure}
+                \includegraphics[height=10em]{MRI - Becky Stern CC-BY-SA2.jpg}
+                \caption{\color{gray}{Becky Stern - CC-BY-SA 2.0}}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.25\textwidth}
+            \begin{figure}
+                \includegraphics[height=10em]{Retinal pigment epithelium - NIH - CC BY-NC 2.0.jpg}
+                \caption{\color{gray}{NIH - CC-BY-SA 2.0}}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.25\textwidth}
+            \begin{figure}
+                \includegraphics[height=10em]{c elegans - Zeiss - CC-BY 2.0.jpg}
+                \caption{\color{gray}{Zeiss - CC-BY 2.0}}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.25\textwidth}
+            \begin{figure}
+                \includegraphics[height=10em]{ISIC melanoma competition - CC0.png}
+                \caption{\color{gray}{ISIC melanoma competition - CC-0}}
+            \end{figure}
+        \end{column}
+    \end{columns}
 
+\end{frame}
+
+\begin{frame}
+    {Examples of image analysis problems}
+    \only<1>
+    {
     \begin{figure}
-        \centering
-        \includegraphics[width=\textwidth]{pipeline.png}
+        \includegraphics[height=12em]{c elegans - Zeiss - CC-BY 2.0.jpg}
+        \caption{\color{gray}{Zeiss - CC-BY 2.0}}
     \end{figure}
+    \centering
+    How many worms are in this image?\\
+    Where are they located?\\
+    Where are they moving to (assuming you have a video!)?
+    }
+    \only<2>
+    {
+    \begin{figure}
+        \includegraphics[height=12em]{Retinal pigment epithelium - NIH - CC BY-NC 2.0.jpg}
+        \caption{\color{gray}{NIH - CC-BY-SA 2.0}}
+    \end{figure}
+    \centering
+    Where are the cells located?\\
+    How intense is the green staining in each cell?\\
+    How uniformly is the staining distributed?
+    }
+    \only<3>
+    {
+    \begin{figure}
+        \includegraphics[height=10em]{ISIC melanoma competition - CC0.png}
+        \caption{\color{gray}{ISIC melanoma competition - CC-0}}
+    \end{figure}
+    \centering
+    Is this a melanoma?
+    }
+\end{frame}
 
+\begin{frame}
+    {In this course...}
+    \centering
+    \Large
+    We will learn strategies to analyse images and answer this types of questions.
+    
+    Let's start with something simple!
+    
 \end{frame}
 
 \section{Simple operations with images}
@@ -455,16 +522,14 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
         \only<1>
         {
             \includegraphics[width=300px]{jet_vs_viridis.png}
-            \caption{\centering
-                Jet can create artefacts in the data. [Source: Matplotlib website]
-
+            \caption{\centering\color{gray}{Jet can create artefacts in the data. [Source: Matplotlib website]}
                 See https://www.youtube.com/watch?v=xAoljeRJ3lU}
         }
         \only<2>
         {
             \includegraphics[width=170px]{borkin2011.png}
-            \caption{\centering
-                \textit{Rainbow} palette resulted in significantly more diagnostic errors - Borkin 2011}
+            \caption{\centering\color{gray}
+                {\textit{Rainbow} palette resulted in significantly more diagnostic errors - Borkin 2011}}
         }
     \end{figure}
 \end{frame}
@@ -496,6 +561,12 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
     }
 \end{frame}
 
+\begin{frame}
+    {Prcatice time!}
+    \centering
+    \Large
+    And now some practice on what we saw today!
+\end{frame}
 
 \end{document}
 
