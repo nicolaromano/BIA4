@@ -121,10 +121,21 @@
 
     \pause
 
-    You will need Python knowledge to make the most of this course.\\
-    Introductory material is available and further material can be provided, if needed - plase ask!
+    You will need Python knowledge to make the most of this course.
 \end{frame}
 
+\begin{frame}
+    {Asking for help}
+    \begin{center}
+        \includegraphics[width=0.1\textwidth]{slack.png}
+    \end{center}
+
+    You have all been added to a Slack group, please join and introduce yourself, if you have not already!
+
+    This is an invaluable opportunity to discuss anything related to the course with your peers and myself.
+
+    Introductory material about Pytnon is available on Learn and further material can be provided, if needed - plase ask!
+\end{frame}
 \section{Why do we need to analyse images?}
 
 \begin{frame}
@@ -180,9 +191,7 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
 \begin{frame}
     {What about colour?}
     Colour images are generally stored as RGB (red, green, blue).\\
-    Each pixel contains an intensity value of in each of these three \textbf{colour channels} and its final colour is determined by the sum of the three.
-
-    For example
+    The color of each pixel depends on its intensity in each of these three \textbf{colour channels}.
 
     \begin{tikzpicture}
         \definecolor{tempcolor}{RGB}{80,0,0}
@@ -199,8 +208,20 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
         \draw [fill=tempcolor](5.5, 0) rectangle (6.5, 1);
     \end{tikzpicture}
     \pause
-    \vspace{2em}
-    Microscope images are often composed of multiple grayscale images, e.g. taken from different fluorophores. In this case each pixel has multiple colour channels (equal to the number of fluorophores).
+
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{colorspaces.png}
+                \caption{\color{gray}Adapted from Wikipedia}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            RGB is not the only way to represent color. If you are interested in knowing more about \textbf{colour spaces} see the attached review by Hastings and Rubins, 2012.
+        \end{column}
+    \end{columns}
+    \pause
+    Important: microscope images are often composed of multiple grayscale images, e.g. of different fluorophores. In this case each pixel has multiple colour channels.
 \end{frame}
 
 \begin{frame}
@@ -224,7 +245,7 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
             \begin{tikzpicture}
                 \foreach \i in {-1,-0.8,...,0.6}
                     {
-                    \draw[black,very thin, fill=white] ({-\i+1.2}, {-\i+1.2}) rectangle ({-\i}, {-\i});
+                        \draw[black,very thin, fill=white] ({-\i+1.2}, {-\i+1.2}) rectangle ({-\i}, {-\i});
                     }
             \end{tikzpicture}
         \end{column}
@@ -233,7 +254,8 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
         \end{column}
     \end{columns}
 
-    Note that the order of the dimensions may vary.
+    \vspace{1em}
+    Note that the order of the dimensions might vary.
 \end{frame}
 
 \begin{frame}
@@ -246,12 +268,13 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
     \end{figure}
     \pause
 
-    You can also represent images with floating point numbers. In that case, you have infinite levels between [0.0, 1.0] or [-1.0, 1.0].\\    
+    You can also represent images with floating point numbers. In that case, you have infinite levels between [0.0, 1.0] or [-1.0, 1.0].\\
 \end{frame}
 
 \begin{frame}
     {Representing matrices in Python}
-    The Numpy library is the perfect choice for working with matrices in Python.
+    \includegraphics[width = 0.3\textwidth]{numpylogo.png}
+    The Numpy library simplifies working with matrices in Python.
 
     NumPy is a Python open-source library for numerical computing, with support for n-dimensional arrays and many functionalities to work with matrices.
 
@@ -406,6 +429,71 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
         \centering
         \includegraphics[height=180px]{pseudocolor.png}
     \end{figure}
+\end{frame}
+
+\begin{frame}
+    {Look-up tables (LUTs)}
+    Pseudocoloring is obtained through look-up tables (sometimes referred to as "palettes" or "colourmaps")
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=400px]{lut.png}
+        \caption{\centering Colourmaps can be sequential/linear or non sequential.
+
+            Divergent and non linear colour maps can be good to enhance differences in the image,
+
+            but should be used with caution!}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    {The Jet palette - when colourmaps go bad...}
+    The Jet colourmap has for a long time been the standard palette in Matlab, is used in many pieces of software and is seen in many published articles. Jet is problematic because it can create artefacts in your data.
+
+    \begin{figure}
+        \centering
+        \only<1>
+        {
+            \includegraphics[width=300px]{jet_vs_viridis.png}
+            \caption{\centering
+                Jet can create artefacts in the data. [Source: Matplotlib website]
+
+                See https://www.youtube.com/watch?v=xAoljeRJ3lU}
+        }
+        \only<2>
+        {
+            \includegraphics[width=170px]{borkin2011.png}
+            \caption{\centering
+                \textit{Rainbow} palette resulted in significantly more diagnostic errors - Borkin 2011}
+        }
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    {Colourmapping in Matplotlib}
+    We can easily colourmap an image loaded in Matplotlib
+
+    \only<1-2>{
+        \begin{codebox}
+            \texttt{import matplotlib.pyplot as plt\\
+                img = imread("cells.tif")\\
+                \# plt.subplots allows plotting more than one image\\
+                \# side by side. It creates and returns a figure and\\
+                \# a list of axes (the subplots)\\
+                fig, ax = plt.subplots(ncols=3, nrows=1, figsize=(10, 6))\\
+                \pause
+                ax[0].imshow(img, cmap="viridis")\\
+                ax[1].imshow(img, cmap="terrain")\\
+                ax[2].imshow(img, cmap="spring")\\
+                plt.show()}
+        \end{codebox}
+    }
+    \only<3>{
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{colourmaps.png}
+        \end{figure}
+    }
 \end{frame}
 
 
