@@ -121,7 +121,7 @@
 
     \pause
 
-    You will need Python knowledge to make the most of this course.
+    Please note that you will need Python knowledge to make the most of this course.
 \end{frame}
 
 \begin{frame}
@@ -136,6 +136,24 @@
 
     Introductory material about Pytnon is available on Learn and further material can be provided, if needed - plase ask!
 \end{frame}
+
+\begin{frame}
+    {Learning objectives}
+    \begin{columns}
+        \begin{column}{0.8\textwidth}
+            \begin{itemize}
+                \item Give examples of problems in image analysis
+                \item Describe common Python libraries used in image analysis
+                \item Describe images as matrices or tensors
+                \item Display images using Python
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.2\textwidth}
+            \includegraphics[angle=-30, origin=tr, width=1.5\textwidth]{lightbulb.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \section{Why do we need to analyse images?}
 
 \begin{frame}
@@ -176,34 +194,34 @@
     {Examples of image analysis problems}
     \only<1>
     {
-    \begin{figure}
-        \includegraphics[height=12em]{c elegans - Zeiss - CC-BY 2.0.jpg}
-        \caption{\color{gray}{Zeiss - CC-BY 2.0}}
-    \end{figure}
-    \centering
-    How many worms are in this image?\\
-    Where are they located?\\
-    Where are they moving to (assuming you have a video!)?
+        \begin{figure}
+            \includegraphics[height=12em]{c elegans - Zeiss - CC-BY 2.0.jpg}
+            \caption{\color{gray}{Zeiss - CC-BY 2.0}}
+        \end{figure}
+        \centering
+        How many worms are in this image?\\
+        Where are they located?\\
+        Where are they moving to (assuming you have a video!)?
     }
     \only<2>
     {
-    \begin{figure}
-        \includegraphics[height=12em]{Retinal pigment epithelium - NIH - CC BY-NC 2.0.jpg}
-        \caption{\color{gray}{NIH - CC-BY-SA 2.0}}
-    \end{figure}
-    \centering
-    Where are the cells located?\\
-    How intense is the green staining in each cell?\\
-    How uniformly is the staining distributed?
+        \begin{figure}
+            \includegraphics[height=12em]{Retinal pigment epithelium - NIH - CC BY-NC 2.0.jpg}
+            \caption{\color{gray}{NIH - CC-BY-SA 2.0}}
+        \end{figure}
+        \centering
+        Where are the cells located?\\
+        How intense is the green staining in each cell?\\
+        How uniformly is the staining distributed?
     }
     \only<3>
     {
-    \begin{figure}
-        \includegraphics[height=10em]{ISIC melanoma competition - CC0.png}
-        \caption{\color{gray}{ISIC melanoma competition - CC-0}}
-    \end{figure}
-    \centering
-    Is this a melanoma?
+        \begin{figure}
+            \includegraphics[height=10em]{ISIC melanoma competition - CC0.png}
+            \caption{\color{gray}{ISIC melanoma competition - CC-0}}
+        \end{figure}
+        \centering
+        Is this a melanoma?
     }
 \end{frame}
 
@@ -212,9 +230,9 @@
     \centering
     \Large
     We will learn strategies to analyse images and answer this types of questions.
-    
+
     Let's start with something simple!
-    
+
 \end{frame}
 
 \section{Simple operations with images}
