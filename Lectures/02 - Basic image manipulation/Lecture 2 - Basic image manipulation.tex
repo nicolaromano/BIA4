@@ -11,7 +11,7 @@
 \usepackage[T1]{fontenc} 
 \usepackage[skins]{tcolorbox}
 \author{Nicola Roman\`o - nicola.romano@ed.ac.uk}
-\title{Basic image manipulation in Python}
+\title{Geometric image transformations}
 \setlength{\fboxsep}{0pt}
 \setbeamertemplate{caption}{\raggedright\insertcaption\par}
 \setbeamertemplate {footline}{\begin{scriptsize}\hfill\insertframenumber ~of \inserttotalframenumber\kern1em\vskip5pt\end{scriptsize}}
@@ -60,8 +60,10 @@
     \begin{columns}
         \begin{column}{0.8\textwidth}
             \begin{itemize}
-                \item Perform basic image manipulation (cropping, scaling, rotating, etc)
-                \item Interpret and manipulate image histograms
+                \item Describe use cases for geometric transformations of images
+                \item Use Python to crop images (in 2 or more dimensions)
+                \item Explain the theory of affine transformations
+                \item Implement basic transformations in Python (translation, scaling, rotation)
             \end{itemize}
         \end{column}
         \begin{column}{0.2\textwidth}
@@ -147,21 +149,25 @@
 
 \end{frame}
 
-\section{Basic image operations}
+\section{Geometric image transformations}
 
 \begin{frame}
-    {Basic image operations}
-    Often you will need to crop, scale or rotate an image before further manipulation.
-    There are many use cases for this, including
+    {Geometric image transformations}
+    \textbf{Geometric image transformations} are operations that change the image geometry without altering its pixel values (mostly\dots).
+
+    Examples are cropping, translating, scaling rotating an image.\\
+    \pause
+    Example use cases:
 
     \begin{itemize}
         \item Analysing only part of an image (cropping)
         \item Making sure all input images for a pipeline are the same size (scaling, cropping)
-        \item Aligning multiple images (e.g. in video stabilization) (rotating)
+        \item Aligning multiple images (e.g. in video stabilization) (rotating, translating)
         \item \dots
     \end{itemize}
-    \centering
-    \includegraphics[width=0.4\textwidth]{basic_manipulation.png}
+    \begin{center}
+        \includegraphics[width=0.4\textwidth]{basic_manipulation.png}
+    \end{center}
 \end{frame}
 
 \subsection{Cropping}
@@ -170,35 +176,82 @@
 {Cropping}
 Cropping is as easy as subsetting the image matrix.
 
-\begin{codebox}
-    \texttt{\# Assume we loaded a 512 x 512 image in the img variable\\
-        \# Take the top-left 100 x 100 pixels\\
-        img1 = img[0:100, 0:100] \# shape (100, 100)\\
-        \pause
-        \# Take a 100 pixel wide strip on the left of the image\dots\\
-        img2 = img[:, 0:100] \# shape (512, 100)\\
-        \# Or on the right!\\
-        img3 = img[:, -100:] \# shape (512, 100)
-    }
-\end{codebox}
+
+\begin{columns}
+    \begin{column}{0.6\textwidth}
+        \begin{codebox}
+            \texttt{\# img contains a 512 x 512 image\\
+                \# Take the top-left 100 x 100 pixels\\
+                img1 = img[0:100, 0:100] \# shape (100, 100)\\
+                \onslide<2->
+                {\\
+                    \# A 100 pixel wide strip on the left\dots\\
+                    img2 = img[:, 0:100] \# shape (512, 100)\\
+                    \# \dots or on the right!\\
+                    img3 = img[:, -100:] \# shape (512, 100)
+                }
+            }
+        \end{codebox}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+        \only<1>{
+            \begin{tikzpicture}[scale=0.7]
+                \draw [fill=yellow]  (0,0) -- (0,5) -- (5,5) -- (5,0) -- cycle;
+                \draw [fill=red]  (0, 0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+            \end{tikzpicture}
+        }
+        \only<2>{
+            \begin{tikzpicture}[scale=0.7]
+                \draw [fill=yellow]  (0,0) -- (0,5) -- (5,5) -- (5,0) -- cycle;
+                \draw [fill=red]  (0,0) -- (0,5) -- (1,5) -- (1,0) -- cycle;
+                \draw [fill=green]  (4,0) -- (5,0) -- (5,5) -- (4,5) -- cycle;
+            \end{tikzpicture}
+        }
+    \end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}
     {Cropping in more than two dimensions}
-    Since images are just tensors, we can crop them in any dimensions.
-    \begin{codebox}
-        \texttt{\# We loaded a 512 x 512 RGB image in img\\
-            \# img.shape is (3, 512, 512)\\
-            \# Extract the green channel\\
-            img\_green = img[1] \# Shape (512, 512)\\
-            \pause
-            $~$\\
-            \# We have a 512 x 512 video of 300 frames\\
-            \# Take the first 50 frames\\
-            \# video.shape is (300, 512, 512)\\
-            video\_crop = video[0:50]
-        }
-    \end{codebox}
+    Since images are just tensors, we can crop them in any dimension.
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \begin{codebox}
+                \texttt{\# img is a 512 x 512 RGB image\\
+                    \# img.shape is (3, 512, 512)\\
+                    \# Extract the green channel\\
+                    img\_green = img[1] \# Shape (512, 512)\\
+                    \onslide<2->{\\
+                        \# video is a 512 x 512 video of 300 frames\\
+                        \# video.shape is (300, 512, 512)\\
+                        \# Take the first 50 frames\\
+                        video\_crop = video[0:50]
+                    }
+                }
+            \end{codebox}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \only<1>{
+                \begin{tikzpicture}[scale=0.7]
+                    \draw [fill=red]  (0,0) rectangle (5,5);
+                    \draw [fill=green]  (1,1) rectangle (6,6);
+                    \draw [fill=blue]  (2,2) rectangle (7,7);
+                \end{tikzpicture}
+            }
+            \only<2>{
+                \begin{tikzpicture}[scale=0.7]
+                    \foreach \i in {2,1.8,...,0.6}
+                        {
+                            \draw [fill=white] (\i, \i) rectangle (\i+5, \i+5);
+                        }
+                    \foreach \i in {0.6,0.4,...,0}
+                        {
+                            \draw [fill=red] (\i, \i) rectangle (\i+5, \i+5);
+                        }
+                \end{tikzpicture}
+            }
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
@@ -221,6 +274,71 @@ Cropping is as easy as subsetting the image matrix.
     \end{columns}
 \end{frame}
 
+\begin{frame}
+    {Affine transformations}
+    In Euclidean geometry, an affine transformation is a geometric transformation that preserves lines and parallelism but not necessarily distances and angles. [Wikipedia]
+    \vspace{2em}
+
+    \begin{columns}
+        \begin{column}{0.5\textwidth}{
+                \centering
+                \begin{tikzpicture}
+                    \draw [thin, ->] (1,2) -- (3,1);
+                    \fill[red] (1, 2) circle (2pt) node at (1, 2.3) {$P$};
+                    \fill[red] (3.1, 1) circle (2pt) node at (3.3, 1) {$P'$};
+                \end{tikzpicture}
+
+                We want to transform $P~(x;y)$ into $P'~(x';y')$.
+
+                $$P': \begin{cases}x' = f(x, y) + a\\y' = f(x, y) + b\end{cases}$$
+                \begin{center}
+                    where $f$ is a linear function
+                \end{center}
+            }
+        \end{column}
+        \pause
+        \begin{column}{0.5\textwidth}
+            {We can generalise this to an image, by applying the transformation to every pixel.
+                \begin{center}
+                    {
+                        \begin{tikzpicture}[scale=0.7]
+                            \draw (0,0) rectangle (3,2);
+                            \draw (4,3) -- (4,4) -- (6,4) -- (6,3) -- cycle;
+                            \draw [thin, dotted, ->] (0,0) -- (4,3);
+                            \draw [thin, dotted, ->] (0,2) -- (4,4);
+                            \draw [thin, dotted, ->] (3,2) -- (6,4);
+                            \draw [thin, dotted, ->] (3,0) -- (6,3);
+                        \end{tikzpicture}
+                    }
+                \end{center}
+            }
+        \end{column}
+    \end{columns}
+    \pause
+    $$\begin{bmatrix}x'\\y'\end{bmatrix}=\mathbf{A}\begin{bmatrix}x\\y\end{bmatrix}+\mathbf{B}\hspace{2em}\mathbf{A}=\begin{bmatrix}a_{00}&a_{01}\\a_{10}&a_{11}\end{bmatrix};~\mathbf{B}=\begin{bmatrix}b_{00}\\b_{10}\end{bmatrix}$$
+\end{frame}
+
+\begin{frame}
+    {Transformation matrix}
+    $$\begin{bmatrix}x'\\y'\end{bmatrix}=\mathbf{A}\begin{bmatrix}x\\y\end{bmatrix}+\mathbf{B}$$
+    $$\mathbf{A}=\begin{bmatrix}a_{00}&a_{01}\\a_{10}&a_{11}\end{bmatrix};~\mathbf{B}=\begin{bmatrix}b_{00}\\b_{10}\end{bmatrix}$$
+
+    \begin{center}
+        This can be combined into
+    \end{center}
+    $$\begin{bmatrix}x'\\y'\end{bmatrix}=\color{red}\begin{bmatrix}a_{00}&a_{01}&b_{00}\\a_{10}&a_{11}&b_{10}\end{bmatrix}\color{black}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
+
+    \begin{center}
+        This is the \color{red}\textbf{transformation matrix}.
+    \end{center}
+\end{frame}
+
+\subsection{Translation}
+
+\begin{frame}
+    {Translation}
+    Translation is the easiest of affine transformations
+\end{frame}
 \subsection{Scaling}
 
 \begin{frame}
@@ -234,8 +352,8 @@ Cropping is as easy as subsetting the image matrix.
 \end{frame}
 
 \begin{frame}
-    {Nearest-neighbor interpolation}
-    The simplest way to resize an image is to use nearest neighbor interpolation. Each pixel of the scaled image will have the colour of the nearest pixel in the original image.\\
+    {Nearest-neighbour interpolation}
+    The simplest way to resize an image is to use nearest-neighbour interpolation. Each pixel of the scaled image will have the colour of the nearest pixel in the original image.\\
 
     In this "1D" example, we resize a 1x2 image to 1x6
 
@@ -281,7 +399,7 @@ Cropping is as easy as subsetting the image matrix.
 \end{frame}
 
 \begin{frame}
-    {Nearest neighbor vs linear interpolation}
+    {Nearest neighbour vs linear interpolation}
     \begin{figure}
 
         \centering
@@ -300,7 +418,7 @@ Cropping is as easy as subsetting the image matrix.
         \caption{Comparison of nearest neighbour and linear interpolation - Source: \href{https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation}{Wikipedia}}
     \end{figure}
 
-    Scikit Image supports values from 0 to 5 in the \texttt{order} parameter of the \texttt{rescale} function. 0 is nearest neighbor, 1 is bi-linear, 2 is bi-quadratic and so on.
+    Scikit Image supports values from 0 to 5 in the \texttt{order} parameter of the \texttt{rescale} function. 0 is nearest neighbour, 1 is bi-linear, 2 is bi-quadratic and so on.
 \end{frame}
 
 \begin{frame}
@@ -440,8 +558,8 @@ Cropping is as easy as subsetting the image matrix.
         \end{column}
         \begin{column}{0.5\textwidth}
             \begin{figure}
-            \includegraphics[width=\textwidth]{rotate_image.png}
-            \caption{Note: we lost part of the image and we "gained" black pixels around it. By default, \texttt{rotate} performs bilinear interpolation.}
+                \includegraphics[width=\textwidth]{rotate_image.png}
+                \caption{Note: we lost part of the image and we "gained" black pixels around it. By default, \texttt{rotate} performs bilinear interpolation.}
             \end{figure}
         \end{column}
     \end{columns}
