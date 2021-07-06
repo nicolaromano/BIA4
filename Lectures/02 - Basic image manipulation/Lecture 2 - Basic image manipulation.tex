@@ -319,149 +319,54 @@ Cropping is as easy as subsetting the image matrix.
 \end{frame}
 
 \begin{frame}
-    {Transformation matrix}
+    {The transformation matrix}
+
     $$\begin{bmatrix}x'\\y'\end{bmatrix}=\mathbf{A}\begin{bmatrix}x\\y\end{bmatrix}+\mathbf{B}$$
     $$\mathbf{A}=\begin{bmatrix}a_{00}&a_{01}\\a_{10}&a_{11}\end{bmatrix};~\mathbf{B}=\begin{bmatrix}b_{00}\\b_{10}\end{bmatrix}$$
+    \pause
+    \begin{center}
+        This can be combined into\textsuperscript{*}
+    \end{center}
+    $$\begin{bmatrix}x'\\y'\\1\end{bmatrix}=\color{red}\begin{bmatrix}a_{00}&a_{01}&b_{00}\\a_{10}&a_{11}&b_{10}\\0&0&1\end{bmatrix}\color{black}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
 
     \begin{center}
-        This can be combined into
+        This is the \color{red}\textbf{transformation matrix}.\\
+        \color{black}
+        \onslide<3>{Transformation matrices are easily created using the\\ \texttt{skimage.transform.SimilarityTransform} function.}
     \end{center}
-    $$\begin{bmatrix}x'\\y'\end{bmatrix}=\color{red}\begin{bmatrix}a_{00}&a_{01}&b_{00}\\a_{10}&a_{11}&b_{10}\end{bmatrix}\color{black}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
 
-    \begin{center}
-        This is the \color{red}\textbf{transformation matrix}.
-    \end{center}
+    \textsuperscript{*} Don't remember how matrix multiplication works? Check out \href{https://en.wikipedia.org/wiki/Matrix_multiplication}{\underline{Wikipedia}}!
 \end{frame}
 
 \subsection{Translation}
 
 \begin{frame}
     {Translation}
-    Translation is the easiest of affine transformations
-\end{frame}
-\subsection{Scaling}
+    To translate we offset the points by $(t_x, t_y)$: $\begin{cases}x' = x + t_x\\y' = y + t_y\end{cases}$
 
-\begin{frame}
-    {Scaling}
-    \centering
-    \includegraphics[width=.3\textwidth]{scaling.png}\\
-    Two problems:\\
-    When \textbf{upscaling} we need to generate new information.
-    \\
-    When \textbf{downscaling} we need to decide "how to lose" information.
-\end{frame}
+    The translation matrix is: $\begin{bmatrix}1&0&t_x\\0&1&t_y\\0&0&1\end{bmatrix}$
 
-\begin{frame}
-    {Nearest-neighbour interpolation}
-    The simplest way to resize an image is to use nearest-neighbour interpolation. Each pixel of the scaled image will have the colour of the nearest pixel in the original image.\\
-
-    In this "1D" example, we resize a 1x2 image to 1x6
-
-    \centering
-    \includegraphics[width = 0.4\textwidth]{1D_NN_interpolation.png}
-\end{frame}
-
-\begin{frame}
-    {Nearest-neighbour interpolation}
-    \begin{figure}
-        \centering
-        \includegraphics[width=.65\textwidth]{upscaling_no_interpolation.png}
-        \caption{Upscaling of a 5x5 image by a factor of 2, to get a 10x10 image, with nearest neighbour interpolation}
-    \end{figure}
     \pause
-    \begin{codebox}
-        \texttt{from skimage.transform import rescale\\
-            img\_scaled = rescale(img, 2, order=0)}
-    \end{codebox}
+    \begin{columns}
+        \begin{column}{0.7\textwidth}
+            \begin{codebox}
+                \texttt{from skimage.transform import SimilarityTransform, warp\\
+                    m = SimilarityTransform(translate = (2, 5))\\
+                    img = np.ones(shape=(10, 10))\\
+                    img[5:7, 5:7] = 0\\
+                    img\_translated = warp(img, m)
+                }
+            \end{codebox}
+        \end{column}
+        \pause
+        \begin{column}{0.3\textwidth}
+            \includegraphics[width=.7\textwidth]{translation.png}
+        \end{column}
+    \end{columns}
+
 \end{frame}
 
-\begin{frame}
-    {Scaling with interpolation}
-    Better ways to scale an image involve changing the pixel values of the rescaled image based on their neighbourhood.\\
-    For example we could use linear interpolation
-    \centering
-    \includegraphics[width=0.65\textwidth]{1D_lin_interpolation.png}
-\end{frame}
-
-\begin{frame}
-    {Linear interpolation}
-    The same applies in 2D, although we need to take into accounts the values of both horizontal and vertical neighbours (bilinear interpolation).
-    \begin{figure}
-        \centering
-        \includegraphics[width=.65\textwidth]{upscaling_lin_interpolation.png}
-        \caption{Upscaling of a 5x5 image by a factor of 2, to get a 10x10 image, with bi-linear interpolation}
-    \end{figure}
-
-    \begin{codebox}
-        \texttt{from skimage.transform import rescale\\
-            img\_scaled = rescale(img, 2, order=1)}
-    \end{codebox}
-\end{frame}
-
-\begin{frame}
-    {Nearest neighbour vs linear interpolation}
-    \begin{figure}
-
-        \centering
-        \includegraphics[width=0.4\textwidth]{interpolation schematics.png}
-        \caption{Comparison of nearest neighbour and linear interpolation - Source: \href{https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation}{Wikipedia}}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    {Higher orders of interpolation}
-    We can use higher orders of interpolation to produce smoother results. \\
-    \begin{figure}
-
-        \centering
-        \includegraphics[width=0.55\textwidth]{interpolations.png}
-        \caption{Comparison of nearest neighbour and linear interpolation - Source: \href{https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation}{Wikipedia}}
-    \end{figure}
-
-    Scikit Image supports values from 0 to 5 in the \texttt{order} parameter of the \texttt{rescale} function. 0 is nearest neighbour, 1 is bi-linear, 2 is bi-quadratic and so on.
-\end{frame}
-
-\begin{frame}
-    {Scaling to a target size}
-    To scale to a target size, rather than by a specific factor, we can use \texttt{resize} instead of \texttt{rescale}.
-
-    \begin{codebox}
-        \texttt{import matplotlib.pyplot as plt\\
-            from skimage.transform import resize, rescale\\
-            \\
-            img = plt.imread("cells.jpg")\\
-            img\_scaled1 = rescale(img, 2)\\
-            img\_scaled2 = resize(img, (150, 150))
-        }
-    \end{codebox}
-\end{frame}
-
-\begin{frame}
-    {Local mean downscaling}
-    Another simple solution for downscaling is calculating the local mean of each pixel
-    \centering
-    \includegraphics[width=.65\textwidth]{downscale.png}
-    \pause
-    \begin{codebox}
-        \texttt{from skimage.transform import downscale\_local\_mean\\
-            img\_small = downscale\_local\_mean(img, (2,2))}
-    \end{codebox}
-
-    Image needs to be padded if the size is not a multiple of the downscaling factor. This method is fast but not good at keeping fine details.
-\end{frame}
-
-\begin{frame}
-    {Scaling summary}
-    \texttt{skimage.transform.rescale} $\rightarrow$ scales an image by a specific factor (>1 upscaling; <1 downscaling.). Can specify a different scaling factor for each dimension of the image.
-    \vspace{2em}
-
-    \texttt{skimage.transform.resize} $\rightarrow$ scales an image to a target size.
-    \vspace{2em}
-
-    \texttt{skimage.transform.downscale\_local\_mean} $\rightarrow$ downscales the image by a specific factor (>1), using the local mean of each pixel.
-\end{frame}
-
-\subsection{Rotating}
+\subsection{Rotations}
 
 \begin{frame}
     {Rotating a point around the origin}
@@ -559,7 +464,7 @@ Cropping is as easy as subsetting the image matrix.
         \begin{column}{0.5\textwidth}
             \begin{figure}
                 \includegraphics[width=\textwidth]{rotate_image.png}
-                \caption{Note: we lost part of the image and we "gained" black pixels around it. By default, \texttt{rotate} performs bilinear interpolation.}
+                \caption{Note: we lost part of the image and we "gained" black pixels around it.}
             \end{figure}
         \end{column}
     \end{columns}
@@ -572,13 +477,183 @@ Cropping is as easy as subsetting the image matrix.
     Hints:
 
     \begin{itemize}
-        \item You can generate transformation matrices using \texttt{skimage.transform.SimilarityTransform}
-        \item You will need three matrices: one translation matrix to offset your image by (-xcenter, -ycenter); a rotation matrix to rotate your image; and finally another translation matrix to translate your image back to its original position.
+        \item Generate the transformation matrices using \texttt{skimage.transform.SimilarityTransform}
+        \item You will need three matrices: one translation matrix to offset your image by (-xcenter, -ycenter); a rotation matrix to rotate your image around (0, 0); and finally another translation matrix to translate your image back to its original position.
         \item You can combine the matrices as \texttt{m1+m2+m3}
-        \item You can use \texttt{skimage.transform.warp} to apply the transformation matrix to your image.
+        \item You can use \texttt{skimage.transform.warp} to apply the combined transformation matrix to your image.
     \end{itemize}
 
-    If you are stuck, try to look at the \href{https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/\_warps.py\#L349-L460}{\underline{source code for rotate}}!
+    \textbf{Are there any differences between your result and the results from \texttt{rotate}?}
+
+    \textit{If you are stuck, try to look at the \href{https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/\_warps.py\#L349-L460}{\underline{source code for \texttt{rotate}}}!}
+\end{frame}
+
+\subsection{Scaling}
+
+\begin{frame}
+    {Scaling}
+
+    \begin{columns}
+        \begin{column}{0.4\textwidth}
+            \begin{tikzpicture}
+                \draw[thin, fill=white] (0,0) rectangle (3,3);
+                \draw[thin, fill=gray] (0,0) rectangle (1,1);
+                \draw[fill=red] (0, 0) circle (2pt) node at  (-.1, -.2) {A - A'};
+                \draw[fill=red] (0, 1) circle (2pt) node at  (-.2, 1) {B};
+                \draw[fill=red] (1, 1) circle (2pt) node at  (1.2, 1) {C};
+                \draw[fill=red] (1, 0) circle (2pt) node at  (1.2, -0.2) {D};
+                \draw[fill=red] (0, 3) circle (2pt) node at  (-.2, 3) {B'};
+                \draw[fill=red] (3, 3) circle (2pt) node at  (3.2, 3) {C'};
+                \draw[fill=red] (3, 0) circle (2pt) node at  (3.2, -0.2) {D'};
+                \draw[dotted] (1,1) -- (3,3);
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.6\textwidth}
+            Scaling transforms the coordinates as:
+
+            $$\begin{cases}x' = s_x * x\\y' = s_y * y\end{cases}$$
+
+            Transformation matrix = $\begin{bmatrix}s_x&0&0\\0&s_y&0\\0&0&1\end{bmatrix}$
+        \end{column}
+    \end{columns}
+    \pause
+    \begin{codebox}
+        \texttt{from skimage.transform import SimilarityTransform\\
+            m = SimilarityTransform(scale = (2, 3))
+        }
+    \end{codebox}
+\end{frame}
+\begin{frame}
+    {Scaling}
+    \centering
+    \includegraphics[width=.3\textwidth]{scaling.png}\\
+    Two problems:\\
+    When \textbf{upscaling} we need to generate new information.
+    \\
+    When \textbf{downscaling} we need to decide "how to lose" information.
+
+    \textbf{Interpolation} is the solution!
+\end{frame}
+
+\begin{frame}
+    {Nearest-neighbour interpolation}
+    The simplest way to resize an image is to use nearest-neighbour interpolation. Each pixel of the scaled image will have the colour of the nearest pixel in the original image.\\
+
+    In this "1D" example, we resize a 1x2 image to 1x6
+
+    \centering
+    \includegraphics[width = 0.4\textwidth]{1D_NN_interpolation.png}
+\end{frame}
+
+\begin{frame}
+    {Nearest-neighbour interpolation}
+    \begin{figure}
+        \centering
+        \includegraphics[width=.65\textwidth]{upscaling_no_interpolation.png}
+        \caption{Upscaling of a 5x5 image by a factor of 2, to get a 10x10 image, with nearest neighbour interpolation}
+    \end{figure}
+    \pause
+    \begin{codebox}
+        \texttt{from skimage.transform import rescale\\
+            img\_scaled = rescale(img, 2, order=0)}
+    \end{codebox}
+\end{frame}
+
+\begin{frame}
+    {Scaling with interpolation}
+    Better ways to scale an image involve changing the pixel values of the rescaled image based on their neighbourhood.\\
+    For example we could use linear interpolation
+    \centering
+    \includegraphics[width=0.65\textwidth]{1D_lin_interpolation.png}
+\end{frame}
+
+\begin{frame}
+    {Linear interpolation}
+    The same applies in 2D, although we need to take into accounts the values of both horizontal and vertical neighbours (\textbf{bilinear interpolation}).
+    \begin{figure}
+        \centering
+        \includegraphics[width=.65\textwidth]{upscaling_lin_interpolation.png}
+        \caption{Upscaling of a 5x5 image by a factor of 2, to get a 10x10 image, with bi-linear interpolation}
+    \end{figure}
+
+    \begin{codebox}
+        \texttt{from skimage.transform import rescale\\
+            img\_scaled = rescale(img, 2, order=1)}
+    \end{codebox}
+\end{frame}
+
+\begin{frame}
+    {Nearest neighbour vs linear interpolation}
+    \begin{figure}
+
+        \centering
+        \includegraphics[width=0.4\textwidth]{interpolation schematics.png}
+        \caption{Comparison of nearest neighbour and linear interpolation - Source: \href{https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation}{Wikipedia}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    {Higher orders of interpolation}
+    We can use higher orders of interpolation to produce smoother results. \\
+    \begin{figure}
+
+        \centering
+        \includegraphics[width=0.55\textwidth]{interpolations.png}
+        \caption{Comparison of nearest neighbour and linear interpolation - Source: \href{https://en.wikipedia.org/wiki/Nearest-neighbor_interpolation}{Wikipedia}}
+    \end{figure}
+
+    Scikit Image supports values from 0 to 5 in the \texttt{order} parameter of the \texttt{rescale} function. 0 is nearest neighbour, 1 is bi-linear, 2 is bi-quadratic and so on.
+\end{frame}
+
+\begin{frame}
+    {Scaling to a target size}
+    To scale to a target size, rather than by a specific factor, we can use \texttt{resize} instead of \texttt{rescale}.
+
+    \begin{codebox}
+        \texttt{import matplotlib.pyplot as plt\\
+            from skimage.transform import resize, rescale\\
+            \\
+            img = plt.imread("cells.jpg")\\
+            img\_scaled1 = rescale(img, 2)\\
+            img\_scaled2 = resize(img, (150, 150))
+        }
+    \end{codebox}
+\end{frame}
+
+\begin{frame}
+    {Local mean downscaling}
+    Another simple solution for downscaling is calculating the local mean of each pixel
+    \centering
+    \includegraphics[width=.65\textwidth]{downscale.png}
+    \pause
+    \begin{codebox}
+        \texttt{from skimage.transform import downscale\_local\_mean\\
+            img\_small = downscale\_local\_mean(img, (2,2))}
+    \end{codebox}
+
+    Image needs to be padded if the size is not a multiple of the downscaling factor. This method is fast but not good at keeping fine details.
+\end{frame}
+
+\begin{frame}
+    {Scaling summary}
+    \texttt{skimage.transform.rescale} $\rightarrow$ scales an image by a specific factor (>1 upscaling; <1 downscaling.). Can specify a different scaling factor for each dimension of the image.
+    \vspace{2em}
+
+    \texttt{skimage.transform.resize} $\rightarrow$ scales an image to a target size.
+    \vspace{2em}
+
+    \texttt{skimage.transform.downscale\_local\_mean} $\rightarrow$ downscales the image by a specific factor (>1), using the local mean of each pixel.
+\end{frame}
+
+\begin{frame}
+{Summary}
+\begin{itemize}
+\item Affine transformations are simple yet powerful way to modify an image.
+\item Scikit Image allows generation of any transformation matrix\dots
+\item \dots but also provides several pre-made functions for rotating, scaling, etc
+\item \textbf{Workshop 1} will allow you to practice what learned so far!
+\end{itemize}
+
 \end{frame}
 \end{document}
 
