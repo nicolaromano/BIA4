@@ -145,10 +145,18 @@
 
 \begin{frame}
     {Logarithmic scale}
-    Often it is useful to look at the histogram in logarithmic scale. This is particularly useful when images contain a lot of pixels of a specific intensity (e.g. cells on a black background).
+    We can plot the histogram on a logarithmic scale. Useful when images contain many pixels of a specific intensity (e.g. cells on a black background).
 
     \includegraphics[height=.5\textheight]{pit_cells.png}
     \includegraphics[height=.5\textheight]{pit_cells_histo_linear_vs_log.png}
+\end{frame}
+
+\begin{frame}
+    {Cumulative histogram}
+    Alternatively, we can plot a cumulative histogram (see later for uses). Each bar is the count of pixels with intensity between 0 and the corresponding bin.
+
+    \includegraphics[height=.5\textheight]{pit_cells.png}
+    \includegraphics[height=.5\textheight]{pit_cells_histo_cumul.png}
 \end{frame}
 
 \begin{frame}
@@ -216,14 +224,14 @@
 \end{frame}
 
 \begin{frame}
-{Brightness example}
-\centering
-\begin{figure}
-    \includegraphics[width=\textwidth]{xray_brightness_Veldkamp_2009.png}
-    \caption{\small{\color{gray}{Same X-ray, decreasing brightness - Image from Veldkamp et al., 2009}}}
-\end{figure}
-\includegraphics[width=\textwidth]{xray_brightness_Veldkamp_2009_histos.png}
-Overexposed
+    {Brightness example}
+    \centering
+    \begin{figure}
+        \includegraphics[width=\textwidth]{xray_brightness_Veldkamp_2009.png}
+        \caption{\small{\color{gray}{Same X-ray, decreasing brightness - Image from Veldkamp et al., 2009}}}
+    \end{figure}
+    \includegraphics[width=\textwidth]{xray_brightness_Veldkamp_2009_histos.png}
+    Overexposed
 \end{frame}
 \begin{frame}
     {Contrast}
@@ -232,10 +240,10 @@ Overexposed
             \includegraphics[width=\textwidth]{contrast range.png}
         \end{column}
         \begin{column}{.6\textwidth}
-            \textbf{Contrast} is \textit{the difference in luminance or colour that makes an object distinguishable} (Wikipedia). It is a measure of the relationship between light and dark pixels in an image. 
+            \textbf{Contrast} is \textit{the difference in luminance or colour that makes an object distinguishable} (Wikipedia). It measures the relationship between light and dark pixels.
             \pause
             Many different definitions in the literature (see Peli, \textit{J. Opt. Soc. Am. A}, 1990)
-            
+
             \textbf{Weber contrast} (range $0 \rightarrow \infty$)
 
             $$\frac{I_{obj}-I_{bg}}{I_{bg}}$$
@@ -253,11 +261,99 @@ Overexposed
 \section {Point operations}
 
 \begin{frame}
-{Histogram equalization}
+    {Point operations and neighborhood operations}
+    Manipulating pixel intensities allows enhancement of images.
+
+    Two types of operations:
+    \begin{itemize}
+        \item Point operations - Change pixel intensity based only on its value
+        \item Neighborhood operations - Change pixel intensity based on the intensity of the pixel and its neighbours.
+    \end{itemize}
+    \pause
+    So, the resulting intensity $I'$ of a point operation is $I'_{(x, y)} = f(I_{x, y})$.
 \end{frame}
 
 \begin{frame}
-{Histogram matching}
+    {Manipulating brightness}
+    We can easily change an image brightness by using a point operation $f(I_{x, y}) = I_{x, y} + offset$, which shifts the image histogram to the left or to the right.
+    \centering
+    \includegraphics[width=.6\textwidth]{point_operation_change_brightness.png}
+
+    \textbf{What is happening to the histograms?}
+\end{frame}
+
+\begin{frame}
+    {Example code for brightness manipulation}
+    \begin{codebox}
+        \texttt{from skimage import img\_as\_float, img\_as\_ubyte\\
+            \\
+            def change\_brightness(img, offset):\\
+            $~~~~$"""\\
+            $~~~~$Changes the brightness of an image\\
+            $~~~~$img: the image\\
+            $~~~~$offset: the brightness offset to apply\\
+            $~~~~$"""\\
+            \\
+            $~~~~$img2 = img\_as\_float(img)\\
+            $~~~~$img2 += offset/255\\
+            $~~~~$img2[img2<0]=0\\
+            $~~~~$img2[img2>1]=1\\
+            $~~~~$return (img\_as\_ubyte(img2))\\
+            \\
+            img\_2 = change\_brightness(img, 10)
+        }
+    \end{codebox}
+\end{frame}
+
+\begin{frame}
+    {Your turn!}
+    Can you think of a point operation to invert an image? What happens to the histogram?\\Write your own Python function to do this!
+
+    \centering
+    \includegraphics[width=.8\textwidth]{invert_image.png}
+
+\end{frame}
+\begin{frame}{Manipulating contrast - histogram stretching}
+    A simple way of increasing the contrast of an image is to stretch its histogram.
+
+    \begin{columns}
+        \begin{column}{.4\textwidth}
+            Simplest form:
+
+            $$I' = (I - I_{min}) \frac{T_{max}-T_{min}}{I_{max}-I_{min}} + max$$
+
+            Where $I_{min}$ and $I_{max}$ are the minimum and maximum intensity of the image, and $T_{min}$ and $T_{max}$ are the minimum and maximum intensity of the target histogram.
+        \end{column}
+        \begin{column}{.6\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{histo_stretching_example.png}
+        \end{column}    
+    \end{columns}
+    This can easily be skewed by a few values, so we can use the 2$^{nd}$ and 98$^{th}$ percentiles instead of the $I_{min}$ and $I_{max}$ values.
+\end{frame}
+
+\begin{frame}
+{Histogram stretching in Python}
+\begin{codebox}
+\texttt{import numpy as np\\
+from skimage.exposure import rescale\_intensity\\
+\\
+img\_rescale = rescale\_intensity(img, in\_range=(0, 100), out\_range=(0, 255))\\
+\pause
+\# Or, use the percentile version:\\
+\# Calculate the 2nd and 98th percentiles\\
+p2, p98 = np.percentile(img, (2, 98))\\
+img\_rescale = rescale\_intensity(img, in\_range=(p2, p98), out\_range=(0, 255))
+}
+\end{codebox}
+\end{frame}
+
+\begin{frame}
+    {Histogram equalization}
+\end{frame}
+
+\begin{frame}
+    {Histogram matching}
 \end{frame}
 \end{document}
 
