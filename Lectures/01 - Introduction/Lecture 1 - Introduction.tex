@@ -504,7 +504,7 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
     \end{columns}
     \pause
     \centering
-    These are [almost] equivalent. The \texttt{img} variable is a Numpy array.
+    These are (almost) equivalent and will output \texttt{img} as a Numpy array.    
 \end{frame}
 
 \begin{frame}
@@ -578,6 +578,30 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
             \caption{Check out the Matplotlib website for a list of colourmaps! \url{https://matplotlib.org/stable/tutorials/colors/colormaps.html}}
         \end{figure}
     }
+\end{frame}
+
+\begin{frame}
+    {Image intensity vs visualized intensity}
+    \texttt{imshow} has two parameters called \texttt{vmin} and \texttt{vmax} to control the \textbf intensity range of the image \textbf{on the screen}.
+
+    For example, if you set \texttt{vmin=0} and \texttt{vmax=255}, then the image will be shown with 0 being black and 255 being white.
+    If you set \texttt{vmax=100}, then any pixel with an intensity higher than 100 will be shown as white.
+    \pause
+    \begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{codebox}
+            \texttt{plt.imshow(img, vmin=0, vmax=255)\\
+            plt.imshow(img, vmin=0, vmax=50)\\
+            \# Automatically uses min and max of the image\\
+            plt.imshow(img)}
+        \end{codebox}        
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \includegraphics[width=\textwidth]{vmin_vmax.png}
+    \end{column}
+    \end{columns}
+
+    IMPORTANT: the actual pixel intensity of these images are all the same, we are just modifying how they are displayed on the screen.
 \end{frame}
 
 \begin{frame}
