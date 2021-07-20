@@ -7,18 +7,62 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="164.48796mm"
-   height="69.767151mm"
-   viewBox="0 0 164.48796 69.767151"
+   width="254.4463mm"
+   height="69.767143mm"
+   viewBox="0 0 254.4463 69.767143"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
    sodipodi:docname="scaling.svg"
    inkscape:export-filename="scaling.png"
-   inkscape:export-xdpi="46.325581"
-   inkscape:export-ydpi="46.325581">
+   inkscape:export-xdpi="59.894756"
+   inkscape:export-ydpi="59.894756">
   <defs
-     id="defs2" />
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="marker1173"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path1171" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="TriangleInM"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleInM"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         transform="scale(-0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path979" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Lstart"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Lstart"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         id="path861" />
+    </marker>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -26,9 +70,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="91.586543"
-     inkscape:cy="215.93776"
+     inkscape:zoom="0.46457826"
+     inkscape:cx="169.76036"
+     inkscape:cy="255.85474"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -36,9 +80,15 @@
      inkscape:showpageshadow="false"
      inkscape:window-width="1366"
      inkscape:window-height="713"
-     inkscape:window-x="0"
+     inkscape:window-x="1280"
      inkscape:window-y="27"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid839"
+       originx="42.333337"
+       originy="-22.892099" />
+  </sodipodi:namedview>
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -55,10 +105,10 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(12.618767,-11.915664)">
+     transform="translate(54.952105,-34.807762)">
     <g
        id="g2018"
-       transform="translate(0.51343384)">
+       transform="translate(3.1592653,7.6886376)">
       <rect
          style="fill:#ffd42a;stroke-width:3;stop-color:#000000"
          id="rect833"
@@ -78,7 +128,7 @@
     </g>
     <g
        id="g2024"
-       transform="matrix(1.7725289,0,0,1.7725289,35.059905,-63.102336)"
+       transform="matrix(1.7725289,0,0,1.7725289,82.684899,-40.210238)"
        style="stroke-width:0.564166">
       <rect
          style="fill:#ffd42a;stroke-width:1.6925;stop-color:#000000"
@@ -99,7 +149,7 @@
     </g>
     <g
        id="g2030"
-       transform="matrix(0.60931931,0,0,0.60931931,-28.789838,31.911894)"
+       transform="matrix(0.60931931,0,0,0.60931931,-71.123176,31.911894)"
        style="stroke-width:1.64118">
       <rect
          style="fill:#ffd42a;stroke-width:4.92354;stop-color:#000000"
@@ -118,5 +168,35 @@
          rx="15.261474"
          ry="15.456729" />
     </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#TriangleInM)"
+       d="M -24.374124,71.865275 H 21.483675"
+       id="path841" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker1173)"
+       d="M 122.92766,71.865275 H 77.069859"
+       id="path1169" />
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;line-height:1.25;font-family:Carlito;-inkscape-font-specification:Carlito;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="-18.182693"
+       y="64.049858"
+       id="text1225"><tspan
+         sodipodi:role="line"
+         id="tspan1223"
+         x="-18.182693"
+         y="64.049858"
+         style="font-size:7.05556px;stroke-width:0.264583">Downscale</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:7.05556px;line-height:1.25;font-family:Carlito;-inkscape-font-specification:Carlito;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="89.824844"
+       y="64.049858"
+       id="text1241"><tspan
+         sodipodi:role="line"
+         id="tspan1239"
+         x="89.824844"
+         y="64.049858"
+         style="font-size:7.05556px;stroke-width:0.264583">Upscale</tspan></text>
   </g>
 </svg>
