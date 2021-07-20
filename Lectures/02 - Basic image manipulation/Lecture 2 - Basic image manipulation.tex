@@ -16,6 +16,8 @@
 \setbeamertemplate{caption}{\raggedright\insertcaption\par}
 \setbeamertemplate {footline}{\begin{scriptsize}\hfill\insertframenumber ~of \inserttotalframenumber\kern1em\vskip5pt\end{scriptsize}}
 
+\definecolor{darkgreen}{rgb}{0, 0.5, 0}
+
 %\setbeamercovered{transparent} 
 %\setbeamertemplate{navigation symbols}{} 
 
@@ -55,23 +57,6 @@
     \titlepage
 \end{frame}
 
-\begin{frame}
-    {Learning objectives}
-    \begin{columns}
-        \begin{column}{0.8\textwidth}
-            \begin{itemize}
-                \item Describe use cases for geometric transformations of images
-                \item Use Python to crop images (in 2 or more dimensions)
-                \item Explain the theory of affine transformations
-                \item Implement basic transformations in Python (translation, scaling, rotation)
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.2\textwidth}
-            \includegraphics[angle=-30, origin=tr, width=1.5\textwidth]{lightbulb.png}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \section{A brief recap}
 
 \begin{frame}
@@ -106,9 +91,9 @@
             \end{center}
             \begin{codebox}
                 \texttt{import matplotlib.pyplot as plt\\
-                    img = plt.imread("cells.jpg")\\
-                    plt.imshow(img)\\
-                    plt.show()
+                    \texttt{img = plt.imread(}"cells.jpg")\\
+                    plt.imshow(\texttt{img)\\
+                        plt.show(})
                 }
             \end{codebox}
         \end{column}
@@ -118,9 +103,9 @@
             \end{center}
             \begin{codebox}
                 \texttt{from skimage import io\\
-                    img = io.imread("cells.jpg")\\
-                    io.imshow(img)\\
-                    io.show()
+                    \texttt{img = io.imread(}"cells.jpg")\\
+                    io.imshow(\texttt{img)\\
+                        io.show(})
                 }
             \end{codebox}
         \end{column}
@@ -133,11 +118,11 @@
         \begin{column}{0.6\textwidth}
             \begin{codebox}
                 \texttt{fig, ax = plt.subplots(ncols=2, nrows=2)\\
-                    ax[0, 0].imshow(img, "gray")\\
-                    ax[0, 1].imshow(img, "viridis")\\
-                    ax[1, 0].imshow(img, "Greens")\\
-                    ax[1, 1].imshow(img, "PuBu")}
-            \end{codebox}
+                    ax[0, 0].imshow(\texttt{img, "gray")\\
+                    }                    ax[0, 1].imshow\texttt{img, "viridis")\\
+                    }                    ax[1, 0].imshow\texttt{img, "Greens")\\
+                    }                    ax[1, 1].imshow\texttt{img, "PuBu")}
+                }            \end{codebox}
         \end{column}
         \begin{column}{0.4\textwidth}
             \includegraphics[width=\textwidth]{nuclei_cmapped.png}
@@ -147,6 +132,23 @@
 
     Check out the Matplotlib website for a list of colourmaps! \url{https://matplotlib.org/stable/tutorials/colors/colormaps.html}
 
+\end{frame}
+
+\begin{frame}
+    {Learning objectives}
+    \begin{columns}
+        \begin{column}{0.8\textwidth}
+            \begin{itemize}
+                \item Describe use cases for geometric transformations of images
+                \item Use Python to crop images (in 2 or more dimensions)
+                \item Explain the theory of affine transformations
+                \item Implement basic transformations in Python (translation, scaling, rotation)
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.2\textwidth}
+            \includegraphics[angle=-30, origin=tr, width=1.5\textwidth]{lightbulb.png}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \section{Geometric image transformations}
@@ -180,15 +182,17 @@ Cropping is as easy as subsetting the image matrix.
 \begin{columns}
     \begin{column}{0.6\textwidth}
         \begin{codebox}
-            \texttt{\# img contains a 512 x 512 image\\
-                \# Take the top-left 100 x 100 pixels\\
-                img1 = img[0:100, 0:100] \# shape (100, 100)\\
-                \onslide<2->
-                {\\
-                    \# A 100 pixel wide strip on the left\dots\\
-                    img2 = img[:, 0:100] \# shape (512, 100)\\
-                    \# \dots or on the right!\\
-                    img3 = img[:, -100:] \# shape (512, 100)
+            {\texttt{
+                    \# img contains a 512 x 512 image\\
+                    \# Take the bottom-left 100 x 100 pixels\\
+                    img1 = img[0:100, 0:100] \# shape (100, 100)\\
+                    \onslide<2->
+                    {\\
+                        \# A 100 pixel wide strip on the left\dots\\
+                        img2 = img[:, 0:100] \# shape (512, 100)\\
+                        \# \dots or on the right!\\
+                        img3 = img[:, -100:] \# shape (512, 100)
+                    }
                 }
             }
         \end{codebox}
@@ -197,7 +201,8 @@ Cropping is as easy as subsetting the image matrix.
         \only<1>{
             \begin{tikzpicture}[scale=0.7]
                 \draw [fill=yellow]  (0,0) -- (0,5) -- (5,5) -- (5,0) -- cycle;
-                \draw [fill=red]  (0, 0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+                \draw [fill=orange]  (0, 0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+                \draw node at (1, -1) {\color{orange}\texttt{img[0:100, 0:100]}};
             \end{tikzpicture}
         }
         \only<2>{
@@ -205,6 +210,8 @@ Cropping is as easy as subsetting the image matrix.
                 \draw [fill=yellow]  (0,0) -- (0,5) -- (5,5) -- (5,0) -- cycle;
                 \draw [fill=red]  (0,0) -- (0,5) -- (1,5) -- (1,0) -- cycle;
                 \draw [fill=green]  (4,0) -- (5,0) -- (5,5) -- (4,5) -- cycle;
+                \draw node at (0, -1) {\texttt{\color{red}img[:, 0:100]}};
+                \draw node at (5, -1) {\texttt{\color{darkgreen}img[:, -100:]}};
             \end{tikzpicture}
         }
     \end{column}
@@ -217,15 +224,18 @@ Cropping is as easy as subsetting the image matrix.
     \begin{columns}
         \begin{column}{0.6\textwidth}
             \begin{codebox}
-                \texttt{\# img is a 512 x 512 RGB image\\
-                    \# img.shape is (3, 512, 512)\\
-                    \# Extract the green channel\\
-                    img\_green = img[1] \# Shape (512, 512)\\
-                    \onslide<2->{\\
-                        \# video is a 512 x 512 video of 300 frames\\
-                        \# video.shape is (300, 512, 512)\\
-                        \# Take the first 50 frames\\
-                        video\_crop = video[0:50]
+                {
+                    \texttt{
+                        \# img is a 512 x 512 RGB image\\
+                        \# img.shape is (3, 512, 512)\\
+                        \# Extract the green channel\\
+                        img\_green = img[1] \# Shape (512, 512)\\
+                        \onslide<2->{\\
+                            \# video is a 512 x 512 video of 300 frames\\
+                            \# video.shape is (300, 512, 512)\\
+                            \# Take the first 50 frames\\
+                            video\_crop = video[0:50]
+                        }
                     }
                 }
             \end{codebox}
@@ -290,9 +300,10 @@ Cropping is as easy as subsetting the image matrix.
 
                 We want to transform $P~(x;y)$ into $P'~(x';y')$.
 
-                $$P': \begin{cases}x' = f(x, y) + a\\y' = f(x, y) + b\end{cases}$$
+                $$P': \begin{cases}x' = f(x,y)\\y' = g(x,y)\end{cases}$$
+
                 \begin{center}
-                    where $f$ is a linear function
+                    Where $f$ and $g$ are linear functions.
                 \end{center}
             }
         \end{column}
@@ -302,190 +313,30 @@ Cropping is as easy as subsetting the image matrix.
                 \begin{center}
                     {
                         \begin{tikzpicture}[scale=0.7]
-                            \draw (0,0) rectangle (3,2);
-                            \draw (4,3) -- (4,4) -- (6,4) -- (6,3) -- cycle;
-                            \draw [thin, dotted, ->] (0,0) -- (4,3);
-                            \draw [thin, dotted, ->] (0,2) -- (4,4);
-                            \draw [thin, dotted, ->] (3,2) -- (6,4);
-                            \draw [thin, dotted, ->] (3,0) -- (6,3);
+                            \foreach \x in {0.5,1.5,2.5}
+                                {
+                                    \draw [thin, ->] (\x,1.5) -- (\x/2+4.5,3.75);
+                                    \draw [thin, ->] (\x,0.5) -- (\x/2+4.5,3.25);
+                                }
+                            \draw [thick, fill=white] (0,0) rectangle (3,2);
+                            \draw [thick] (0,0) grid (3,2);
+                            \draw [thick, step=0.5] (4.49,2.99) grid (6,4);
+
+                            \foreach \x in {0.5,1.5,2.5}
+                                {
+                                    \draw [very thin, dashed, ->] (\x,0.5) -- (\x/2+4.5,3.25);
+                                    \draw [very thin, dashed, ->] (\x,1.5) -- (\x/2+4.5,3.75);
+                                }
+
+                            % \draw [thin, dotted] (0,2) -- (4.5,4);
+                            % \draw [thin, dotted] (3,2) -- (6,4);
+                            % \draw [thin, dotted] (3,0) -- (6,3);
                         \end{tikzpicture}
                     }
                 \end{center}
             }
         \end{column}
     \end{columns}
-    \pause
-    $$\begin{bmatrix}x'\\y'\end{bmatrix}=\mathbf{A}\begin{bmatrix}x\\y\end{bmatrix}+\mathbf{B}\hspace{2em}\mathbf{A}=\begin{bmatrix}a_{00}&a_{01}\\a_{10}&a_{11}\end{bmatrix};~\mathbf{B}=\begin{bmatrix}b_{00}\\b_{10}\end{bmatrix}$$
-\end{frame}
-
-\begin{frame}
-    {The transformation matrix}
-
-    $$\begin{bmatrix}x'\\y'\end{bmatrix}=\mathbf{A}\begin{bmatrix}x\\y\end{bmatrix}+\mathbf{B}$$
-    $$\mathbf{A}=\begin{bmatrix}a_{00}&a_{01}\\a_{10}&a_{11}\end{bmatrix};~\mathbf{B}=\begin{bmatrix}b_{00}\\b_{10}\end{bmatrix}$$
-    \pause
-    \begin{center}
-        This can be combined into\textsuperscript{*}
-    \end{center}
-    $$\begin{bmatrix}x'\\y'\\1\end{bmatrix}=\color{red}\begin{bmatrix}a_{00}&a_{01}&b_{00}\\a_{10}&a_{11}&b_{10}\\0&0&1\end{bmatrix}\color{black}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
-
-    \begin{center}
-        This is the \color{red}\textbf{transformation matrix}.\\
-        \color{black}
-        \onslide<3>{Transformation matrices are easily created using the\\ \texttt{skimage.transform.SimilarityTransform} function.}
-    \end{center}
-
-    \textsuperscript{*} Don't remember how matrix multiplication works? Check out \href{https://en.wikipedia.org/wiki/Matrix_multiplication}{\underline{Wikipedia}}!
-\end{frame}
-
-\subsection{Translation}
-
-\begin{frame}
-    {Translation}
-    To translate we offset the points by $(t_x, t_y)$: $\begin{cases}x' = x + t_x\\y' = y + t_y\end{cases}$
-
-    The translation matrix is: $\begin{bmatrix}1&0&t_x\\0&1&t_y\\0&0&1\end{bmatrix}$
-
-    \pause
-    \begin{columns}
-        \begin{column}{0.7\textwidth}
-            \begin{codebox}
-                \texttt{from skimage.transform import SimilarityTransform, warp\\
-                    m = SimilarityTransform(translate = (2, 5))\\
-                    img = np.ones(shape=(10, 10))\\
-                    img[5:7, 5:7] = 0\\
-                    img\_translated = warp(img, m)
-                }
-            \end{codebox}
-        \end{column}
-        \pause
-        \begin{column}{0.3\textwidth}
-            \includegraphics[width=.7\textwidth]{translation.png}
-        \end{column}
-    \end{columns}
-
-\end{frame}
-
-\subsection{Rotations}
-
-\begin{frame}
-    {Rotating a point around the origin}
-    \centering
-    We want to rotate a point $P (x,y)$ around the origin by an angle $\theta$ to get $P' (x',y')$.\\
-    \begin{tikzpicture}
-        \draw [<->,thick] (0,3) node (yaxis) [left] {$y$}
-        |- (3,0) node (xaxis) [below] {$x$};
-        \draw [thin] (1,2) -- (0,0) -- (2,1);
-        \fill[red] (1, 2) circle (2pt) node at (1, 2.3) {$P'$};
-        \fill[red] (2, 1) circle (2pt) node at (2.3, 1) {$P$};
-        \draw [->, dashed] (2,1) arc (0:86:1);
-        \draw (.4,.25) arc (0:86:.2) node at (.5, .5) {$\theta$};
-        \node at (-.1, -.1) {O};
-    \end{tikzpicture}
-\end{frame}
-
-\begin{frame}
-    {Rotating a point around the origin}
-    \center
-    {
-        \begin{tikzpicture}
-            % Axes
-            \draw [<->,thick] (0,3) node (yaxis) [left] {$y$}
-            |- (3,0) node (xaxis) [below] {$x$};
-            \draw [thin, blue] (1,2) -- (0,0) -- (2,1);
-            % Points
-            \fill[red] (1, 2) circle (2pt) node at (1, 2.3) {$P' (x'; y')$};
-            \fill[red] (2, 1) circle (2pt) node at (2.7, 1) {$P (x; y)$};
-            % Rotation arrow
-            \draw [->, dashed] (2,1) arc (0:86:1);
-            % Angle theta
-            \draw (.4,.25) arc (0:86:.2) node at (.5, .5) {$\theta$};
-            % Angle alpha
-            \draw [purple] (.7,0) arc (0:20:1) node at (1, .2) {$\alpha$};
-            % Origin
-            \node at (-.1, -.1) {O};
-            % Radius
-            \node [blue] at (1.3, .5) {r};
-        \end{tikzpicture}
-    }
-
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            $$P: \begin{cases}x = r~\text{cos}(\alpha)\\y = r~\text{sin}(\alpha)\end{cases}
-                P': \begin{cases}x' = r~\text{cos}(\alpha+\theta)\\y' = r~\text{sin}(\alpha+\theta)\end{cases}$$
-        \end{column}
-        \pause
-        \begin{column}{0.5\textwidth}
-            \centering
-            $$P': \begin{cases}x' = r~\text{cos}(\alpha)\text{cos}(\theta)-r~\text{sin}(\alpha)\text{sin}(\theta)\\y' = r~\text{sin}(\alpha)\text{cos}(\theta)+r~\text{sin}(\theta)\text{cos}(\alpha)\end{cases}$$
-
-            Why? \href{https://en.wikipedia.org/wiki/List\_of\_trigonometric\_identities\#Angle\_sum\_and\_difference\_identities}{\underline{Wikipedia to the rescue!}}
-        \end{column}
-    \end{columns}
-    \pause
-    Thus:
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            $$P': \begin{cases}x' = x~\text{cos}(\theta)-y~\text{sin}(\theta)\\y' = y~\text{cos}(\theta)+x~{sin}(\theta)\end{cases}$$
-        \end{column}
-        \pause
-        \begin{column}{0.5\textwidth}
-            $$\begin{bmatrix}x'\\y'\end{bmatrix} = \color{red}\begin{bmatrix}\text{cos}\theta&-\text{sin}\theta\\\text{sin}\theta&\text{cos}\theta\end{bmatrix}\color{black}\begin{bmatrix}x\\y\end{bmatrix}$$
-            \centering
-            \color{red}Transformation (rotation) matrix
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}
-    {Rotating in Scikit Image}
-    To rotate an image we will:
-    \begin{itemize}
-        \item Offset our image so that it is centered on the origin
-        \item Generate a rotation matrix
-        \item Multiply the coordinates of each pixel by the rotation matrix
-    \end{itemize}
-    \pause
-    Luckily, Scikit Image has a ready function for that, \texttt{skimage.transform.rotate}.
-
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \begin{codebox}
-                \texttt{import matplotlib.pyplot as plt\\
-                    from skimage.transform import rotate\\
-                    \\
-                    img = plt.imread("cells.jpg")\\
-                    img\_rotated = rotate(img, 20)\\
-                    \\
-                    plt.imshow(img\_rotated, cmap="gray")\\
-                    plt.show()}
-            \end{codebox}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \begin{figure}
-                \includegraphics[width=\textwidth]{rotate_image.png}
-                \caption{Note: we lost part of the image and we "gained" black pixels around it.}
-            \end{figure}
-        \end{column}
-    \end{columns}
-\end{frame}
-
-\begin{frame}
-    {Optional exercise - want to try by yourself?}
-    It might be interesting to try to code image rotation by yourself.
-
-    Hints:
-
-    \begin{itemize}
-        \item Generate the transformation matrices using \texttt{skimage.transform.SimilarityTransform}
-        \item You will need three matrices: one translation matrix to offset your image by (-xcenter, -ycenter); a rotation matrix to rotate your image around (0, 0); and finally another translation matrix to translate your image back to its original position.
-        \item You can combine the matrices as \texttt{m1+m2+m3}
-        \item You can use \texttt{skimage.transform.warp} to apply the combined transformation matrix to your image.
-    \end{itemize}
-
-    \textbf{Are there any differences between your result and the results from \texttt{rotate}?}
-
-    \textit{If you are stuck, try to look at the \href{https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/\_warps.py\#L349-L460}{\underline{source code for \texttt{rotate}}}!}
 \end{frame}
 
 \subsection{Scaling}
@@ -512,21 +363,26 @@ Cropping is as easy as subsetting the image matrix.
             Scaling transforms the coordinates as:
 
             $$\begin{cases}x' = s_x * x\\y' = s_y * y\end{cases}$$
+            \pause
+            We can write this in matrix form\textsuperscript{*}:
 
-            Transformation matrix = $\begin{bmatrix}s_x&0&0\\0&s_y&0\\0&0&1\end{bmatrix}$
+            $$\begin{bmatrix}x'\\y'\end{bmatrix} = \color{red}\begin{bmatrix}s_x&0\\0&s_y\end{bmatrix}\color{black}\begin{bmatrix}x\\y\end{bmatrix}$$
+
+            \begin{center}
+                This is called the scaling \color{red}\textbf{transformation matrix}.\\
+                \color{black}
+            \end{center}
+
+            \footnotesize
+            \textsuperscript{*} Don't remember how matrix multiplication works? Check out \href{https://en.wikipedia.org/wiki/Matrix_multiplication}{\underline{Wikipedia}}!
         \end{column}
     \end{columns}
-    \pause
-    \begin{codebox}
-        \texttt{from skimage.transform import SimilarityTransform\\
-            m = SimilarityTransform(scale = (2, 3))
-        }
-    \end{codebox}
 \end{frame}
+
 \begin{frame}
     {Scaling}
     \centering
-    \includegraphics[width=.3\textwidth]{scaling.png}\\
+    \includegraphics[width=.5\textwidth]{scaling.png}\\
     Two problems:\\
     When \textbf{upscaling} we need to generate new information.
     \\
@@ -555,7 +411,7 @@ Cropping is as easy as subsetting the image matrix.
     \pause
     \begin{codebox}
         \texttt{from skimage.transform import rescale\\
-            img\_scaled = rescale(img, 2, order=0)}
+            \texttt{img\_scaled = rescale(}\texttt{img, 2, }order=0)}
     \end{codebox}
 \end{frame}
 
@@ -578,7 +434,7 @@ Cropping is as easy as subsetting the image matrix.
 
     \begin{codebox}
         \texttt{from skimage.transform import rescale\\
-            img\_scaled = rescale(img, 2, order=1)}
+            \texttt{img\_scaled = rescale(}\texttt{img, 2, }order=1)}
     \end{codebox}
 \end{frame}
 
@@ -613,8 +469,8 @@ Cropping is as easy as subsetting the image matrix.
         \texttt{import matplotlib.pyplot as plt\\
             from skimage.transform import resize, rescale\\
             \\
-            img = plt.imread("cells.jpg")\\
-            img\_scaled1 = rescale(img, 2)\\
+            \texttt{img = plt.imread(}"cells.jpg")\\
+            \texttt{img\_scaled1 = rescale(}img, 2)\\
             img\_scaled2 = resize(img, (150, 150))
         }
     \end{codebox}
@@ -631,11 +487,14 @@ Cropping is as easy as subsetting the image matrix.
             img\_small = downscale\_local\_mean(img, (2,2))}
     \end{codebox}
 
-    Image needs to be padded if the size is not a multiple of the downscaling factor. This method is fast but not good at keeping fine details.
+    Image needs to be padded if the size is not a multiple of the downscaling factor.\\
+    This method is fast but not good at keeping fine details.
 \end{frame}
 
 \begin{frame}
     {Scaling summary}
+    $$\begin{bmatrix}x'\\y'\end{bmatrix} = \begin{bmatrix}s_x&0\\0&s_y\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}$$
+
     \texttt{skimage.transform.rescale} $\rightarrow$ scales an image by a specific factor (>1 upscaling; <1 downscaling.). Can specify a different scaling factor for each dimension of the image.
     \vspace{2em}
 
@@ -645,14 +504,200 @@ Cropping is as easy as subsetting the image matrix.
     \texttt{skimage.transform.downscale\_local\_mean} $\rightarrow$ downscales the image by a specific factor (>1), using the local mean of each pixel.
 \end{frame}
 
+\subsection{Rotations}
+
 \begin{frame}
-{Summary}
-\begin{itemize}
-\item Affine transformations are simple yet powerful way to modify an image.
-\item Scikit Image allows generation of any transformation matrix\dots
-\item \dots but also provides several pre-made functions for rotating, scaling, etc
-\item \textbf{Workshop 1} will allow you to practice what learned so far!
-\end{itemize}
+    {Rotating a point around the origin}
+    \centering
+    We want to rotate a point $P (x,y)$ around the origin by an angle $\theta$ to get $P' (x',y')$.\\
+    \begin{tikzpicture}
+        \draw [<->,thick] (0,3) node (yaxis) [left] {$y$}
+        |- (3,0) node (xaxis) [below] {$x$};
+        \draw [thin] (1,2) -- (0,0) -- (2,1);
+        \fill[red] (1, 2) circle (2pt) node at (1, 2.3) {$P'$};
+        \fill[red] (2, 1) circle (2pt) node at (2.3, 1) {$P$};
+        \draw [->, dashed] (2,1) arc (0:86:1);
+        \draw (.4,.25) arc (0:86:.2) node at (.5, .5) {$\theta$};
+        \node at (-.1, -.1) {O};
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+    {Rotating a point around the origin}
+    \center
+    {
+        \begin{tikzpicture}
+            % Axes
+            \draw [<->,thick] (0,2.5) node (yaxis) [left] {$y$}
+            |- (2.5,0) node (xaxis) [below] {$x$};
+            \draw [thin, blue] (1,2) -- (0,0) -- (2,1);
+            % Points
+            \fill[red] (1, 2) circle (2pt) node at (1, 2.3) {$P' (x'; y')$};
+            \fill[red] (2, 1) circle (2pt) node at (2.7, 1) {$P (x; y)$};
+            % Rotation arrow
+            \draw [->, dashed] (2,1) arc (0:86:1);
+            % Angle theta
+            \draw (.4,.25) arc (0:86:.2) node at (.5, .5) {$\theta$};
+            % Angle alpha
+            \draw [purple] (.7,0) arc (0:20:1) node at (1, .2) {$\alpha$};
+            % Origin
+            \node at (-.1, -.1) {O};
+            % Radius
+            \node [blue] at (1.3, .5) {r};
+        \end{tikzpicture}
+    }
+
+    $$P: \begin{cases}x = r~\text{cos}(\alpha)\\y = r~\text{sin}(\alpha)\end{cases}
+        P': \begin{cases}x' = r~\text{cos}(\alpha+\theta)\only<2->{= r~\text{cos}(\alpha)\text{cos}(\theta)-r~\text{sin}(\alpha)\text{sin}(\theta)}\\y' = r~\text{sin}(\alpha+\theta)\only<2->{= r~\text{sin}(\alpha)\text{cos}(\theta)+r~\text{sin}(\theta)\text{cos}(\alpha)}\end{cases}$$
+
+    \footnotesize
+    Why? \href{https://en.wikipedia.org/wiki/List\_of\_trigonometric\_identities\#Angle\_sum\_and\_difference\_identities}{\underline{Wikipedia to the rescue!}}\\
+
+    \normalsize
+    \pause
+    Thus:
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            $$P': \begin{cases}x' = x~\text{cos}(\theta)-y~\text{sin}(\theta)\\y' = y~\text{cos}(\theta)+x~{sin}(\theta)\end{cases}$$
+        \end{column}
+        \pause
+        \begin{column}{0.5\textwidth}
+            $$\begin{bmatrix}x'\\y'\end{bmatrix} = \color{red}\begin{bmatrix}\text{cos}\theta&-\text{sin}\theta\\\text{sin}\theta&\text{cos}\theta\end{bmatrix}\color{black}\begin{bmatrix}x\\y\end{bmatrix}$$
+            \centering
+            \color{red}Rotation transformation matrix
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    {Rotating in Scikit Image}
+    To rotate an image we will:
+    \begin{itemize}
+        \item Offset our image so that it is centered on the origin
+        \item Generate a rotation matrix
+        \item Multiply the coordinates of each pixel by the rotation matrix
+        \item Shift back the image to its original position
+    \end{itemize}
+    \pause
+    Luckily, Scikit Image has a function for that, \texttt{skimage.transform.rotate}.
+
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{codebox}
+                \texttt{import matplotlib.pyplot as plt\\
+                    from skimage.transform import rotate\\
+                    \\
+                    img = plt.imread("cells.jpg")\\
+                    img\_rotated = rotate(img, 20)\\
+                    \\
+                    plt.imshow(img\_rotated, cmap="gray")\\
+                    plt.show()}
+            \end{codebox}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{rotate_image.png}
+                \caption{Note: we lost part of the image and we "gained" black pixels around it.}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\subsection{Translation}
+
+\begin{frame}
+    {Translation}
+    To translate we offset the points by $(t_x, t_y)$: $\begin{cases}x' = x + t_x\\y' = y + t_y\end{cases}$
+
+    The transformation matrix is different from the ones we saw for before:
+
+    $\begin{bmatrix}x'\\y'\end{bmatrix} = \begin{bmatrix}x\\y\end{bmatrix} + \begin{bmatrix}t_x\\t_y\end{bmatrix}$
+
+    \pause
+    We can generate a transformation matrix using \texttt{SimilarityTransform} and apply it using \texttt{warp}.
+
+    \begin{columns}
+        \begin{column}{0.7\textwidth}
+            \begin{codebox}
+                \texttt{from skimage.transform import SimilarityTransform, warp\\
+                    \# Create a 10x10 white image\\
+                    img = np.ones(shape=(10, 10))\\
+                    \# Make the central pixels black\\
+                    img[5:7, 5:7] = 0\\
+                    \\
+                    m = SimilarityTransform(translate = (2, 5))\\
+                    img\_translated = warp(img, m)
+                }
+            \end{codebox}
+        \end{column}
+        \pause
+        \begin{column}{0.3\textwidth}
+            \includegraphics[width=.6\textwidth]{translation.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    {Transformation matrices - summary}
+    \centering
+    \textbf{Translation}
+    $$\begin{bmatrix}x'\\y'\end{bmatrix} = \begin{bmatrix}x\\y\end{bmatrix} + \begin{bmatrix}t_x\\t_y\end{bmatrix}$$
+    \textbf{Rotation}
+    $$\begin{bmatrix}x'\\y'\end{bmatrix} = \begin{bmatrix}\text{cos}\theta&-\text{sin}\theta\\\text{sin}\theta&\text{cos}\theta\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}$$
+    \textbf{Scaling}
+    $$\begin{bmatrix}x'\\y'\end{bmatrix} = \begin{bmatrix}s_x&0\\0&s_y\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}$$
+\end{frame}
+
+\begin{frame}
+    {The affine transformation matrix}
+    Sometimes we want to combine rotation, scaling and translation into a single operation.\\
+    We can rewrite the matrices as such (these are called homogeneous coordinates):\\
+
+    \centering
+    \textbf{Translation}
+    $$\begin{bmatrix}x'\\y'\\1\end{bmatrix} = \begin{bmatrix}1&0&t_x\\0&1&t_y\\0&0&1\end{bmatrix}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
+    \textbf{Rotation}
+    $$\begin{bmatrix}x'\\y'\\1\end{bmatrix} = \begin{bmatrix}\text{cos}\theta&-\text{sin}\theta&0\\\text{sin}\theta&\text{cos}\theta&0\\0&0&1\end{bmatrix}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
+    \textbf{Scaling}
+    $$\begin{bmatrix}x'\\y'\\1\end{bmatrix} = \begin{bmatrix}s_x&0&0\\0&s_y&0\\0&0&1\end{bmatrix}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
+\end{frame}
+
+\begin{frame}
+    {Combining matrices}
+    We can now easily combine these 3x3 matrices by multiplying them together.\\
+    Remember that the order is important!\\
+
+    $A * B$ is \textbf{not} the same as $B * A$!\\
+
+    You can use \texttt{skimage.transform.SimilarityTransform} to create transformation matrices and combine them using the \texttt{+} operator (Note that under the hood this performs matrix multiplication!). \\
+    
+    Using \texttt{skimage.transform.warp} we can apply these transformation matrices to an image.
+\end{frame}
+
+\begin{frame}
+    {Optional exercise - want to try by yourself?}
+    It might be interesting to try to code image rotation by yourself.
+
+    Hints:
+
+    \begin{itemize}
+        \item Generate the transformation matrices using \texttt{skimage.transform.SimilarityTransform}
+        \item You will need three matrices: one translation matrix to offset your image by (-xcenter, -ycenter); a rotation matrix to rotate your image around (0, 0); and finally another translation matrix to translate your image back to its original position.
+        \item You can combine the matrices as \texttt{m1+m2+m3}
+        \item You can use \texttt{skimage.transform.warp} to apply the combined transformation matrix to your image.
+    \end{itemize}
+
+    \textit{If you are stuck, try to look at the \href{https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/\_warps.py\#L349-L460}{\underline{source code for \texttt{rotate}}}!}
+\end{frame}
+
+\begin{frame}
+    {Summary}
+    \begin{itemize}
+        \item Affine transformations are simple yet powerful way to modify an image.
+        \item Scikit Image allows generation of any transformation matrix\dots
+        \item \dots but also provides several pre-made functions for rotating, scaling, etc
+        \item \textbf{Workshop 1} will allow you to practice what learned so far!
+    \end{itemize}
 
 \end{frame}
 \end{document}
