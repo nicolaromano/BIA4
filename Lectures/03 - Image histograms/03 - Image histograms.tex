@@ -3,16 +3,18 @@
 \usetheme{metropolis}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{array}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{multicol}
 \usepackage{tikz}
+\usepackage{pgfplots}
 \usetikzlibrary{matrix}
 \usepackage{xcolor}
 \usepackage[T1]{fontenc} 
 \usepackage[skins]{tcolorbox}
 \author{Nicola Roman\`o - nicola.romano@ed.ac.uk}
-\title{Image histogram}
+\title{Image histograms}
 \setlength{\fboxsep}{0pt}
 \setbeamertemplate{caption}{\raggedright\insertcaption\par}
 \setbeamertemplate {footline}{\begin{scriptsize}\hfill\insertframenumber ~of \inserttotalframenumber\kern1em\vskip5pt\end{scriptsize}}
@@ -116,9 +118,9 @@
                 \texttt{> print(img.shape)\\
                     (20, 20)\\
                     >print(np.min(img))\\
-                    0\\
+                    13\\
                     >print(np.max(img))\\
-                    100
+                    177
                 }
             \end{codebox}
             \only<2>
@@ -181,7 +183,7 @@
 
 \begin{frame}
     {Histograms are destructive}
-    It is important to remember that producing a histogram is a destructive operation. We can generate a histogram from an image, but cannot recreate the image from the histogram.
+    It is important to remember that producing a histogram is a many-to-one operation! We can generate a histogram from an image, but cannot recreate the image from the histogram.
 
     \begin{figure}
         \includegraphics[width=.5\textwidth]{samehisto.png}
@@ -208,7 +210,7 @@
             plt.show()}
     \end{codebox}
 
-    The \texttt{bins} parameter accepts either a sequence defining the bins edges, or a single value with the number of desired bins.
+    The \texttt{bins} parameter accepts either a sequence defining the edges of the bins, or a single value with the number of desired bins.
 \end{frame}
 
 \section {Brightness and contrast}
@@ -231,7 +233,6 @@
         \caption{\small{\color{gray}{Same X-ray, decreasing brightness - Image from Veldkamp et al., 2009}}}
     \end{figure}
     \includegraphics[width=\textwidth]{xray_brightness_Veldkamp_2009_histos.png}
-    Overexposed
 \end{frame}
 \begin{frame}
     {Contrast}
@@ -292,12 +293,12 @@
             $~~~~$Changes the brightness of an image\\
             $~~~~$img: the image\\
             $~~~~$offset: the brightness offset to apply\\
+            $~~~~$Returns: the modified image\\
             $~~~~$"""\\
             \\
             $~~~~$img2 = img\_as\_float(img)\\
             $~~~~$img2 += offset/255\\
-            $~~~~$img2[img2<0]=0\\
-            $~~~~$img2[img2>1]=1\\
+            $~~~~$img2 = np.clip(img2, 0, 1)\\
             $~~~~$return (img\_as\_ubyte(img2))\\
             \\
             img\_2 = change\_brightness(img, 10)
@@ -327,33 +328,166 @@
         \begin{column}{.6\textwidth}
             \centering
             \includegraphics[width=\textwidth]{histo_stretching_example.png}
-        \end{column}    
+        \end{column}
     \end{columns}
-    This can easily be skewed by a few values, so we can use the 2$^{nd}$ and 98$^{th}$ percentiles instead of the $I_{min}$ and $I_{max}$ values.
+    \pause
+    This calculation can become meaningless if we have even a single very light or dark pixel, so we can use the 2$^{nd}$ and 98$^{th}$ percentiles instead of $I_{min}$ and $I_{max}$ values.
 \end{frame}
 
 \begin{frame}
-{Histogram stretching in Python}
-\begin{codebox}
-\texttt{import numpy as np\\
-from skimage.exposure import rescale\_intensity\\
-\\
-img\_rescale = rescale\_intensity(img, in\_range=(0, 100), out\_range=(0, 255))\\
-\pause
-\# Or, use the percentile version:\\
-\# Calculate the 2nd and 98th percentiles\\
-p2, p98 = np.percentile(img, (2, 98))\\
-img\_rescale = rescale\_intensity(img, in\_range=(p2, p98), out\_range=(0, 255))
-}
-\end{codebox}
+    {Histogram stretching in Python}
+    \begin{codebox}
+        \texttt{import numpy as np\\
+            from skimage.exposure import rescale\_intensity\\
+            \\
+            img\_rescale = rescale\_intensity(img, in\_range=(0, 100), out\_range=(0, 255))\\
+            \pause
+            \# Or, use the percentile version:\\
+            \# Calculate the 2nd and 98th percentiles\\
+            p2, p98 = np.percentile(img, (2, 98))\\
+            img\_rescale = rescale\_intensity(img, in\_range=(p2, p98), out\_range=(0, 255))
+        }
+    \end{codebox}
 \end{frame}
 
 \begin{frame}
     {Histogram equalization}
+    Histogram equalization increases contrast by manipulating pixel intensities.
+
+    The idea is to generate a \textbf{histogram transfer function} $T(I)$ that will map the image intensities to a target, uniform histogram.
+    \centering
+
+    \includegraphics[width=.7\textwidth]{histo_eq_schematic.png}
 \end{frame}
 
 \begin{frame}
-    {Histogram matching}
+    {Choosing $T(I)$}
+
+    How do we choose $T(I)$?
+
+    $T(I)$ should be monotonically (not strictly) increasing, to preserve the intensity rank of the pixels.
+
+    \begin{columns}
+        \begin{column}{.6\textwidth}
+            \begin{tikzpicture}
+                \begin{axis}[
+                        xlabel=Input intensity,
+                        ylabel=Target intensity]
+
+                    \addplot[color=blue,mark=*] coordinates {
+                            (0,0)
+                            (1,2)
+                            (2,3)
+                            (3,4)
+                            (4,6)
+                            (5,7)
+                            (6,7)
+                            (7,7)
+                        };
+                \end{axis}
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{.4\textwidth}
+            In this example we would change any pixel of the original image with intensity 3 to intensity 4, any with intensity 6 to intensity 7 and so on.\\
+            \pause
+            It turns out that using the CDF (or the cumulative histogram, for the discrete case) is the solution!\\
+            Look here if you want a mathematical proof!
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    {Histogram equalization - an example}
+    \centering
+    Assume you have a 4-bit image (dynamic range 0-15) with the following histogram
+
+    \vspace{1em}
+
+    \begin{columns}
+        \begin{column}{.7\textwidth}
+            \tiny{
+                \begin{tabular}{ccc<{\onslide<2->}c<{\onslide<3->}c<{\onslide}}
+                    \hline
+                    \textbf{Pixel value} & \textbf{Number of pixels} & \textbf{Cumulative} & \textbf{Cum. normalized} ($h_n$) & \textbf{New pixel value} $\lfloor{(h_n*I_{max})}$ \\
+                    \hline
+                    0                    & 6                         & 6                   & 0.17                             & 2                                                 \\
+                    1                    & 7                         & 13                  & 0.36                             & 5                                                 \\
+                    2                    & 4                         & 17                  & 0.47                             & 7                                                 \\
+                    3                    & 10                        & 27                  & 0.75                             & 11                                                \\
+                    4                    & 4                         & 31                  & 0.86                             & 12                                                \\
+                    5                    & 2                         & 33                  & 0.92                             & 13                                                \\
+                    6                    & 0                         & 33                  & 0.92                             & 13                                                \\
+                    7                    & 2                         & 35                  & 0.97                             & 14                                                \\
+                    8                    & 0                         & 35                  & 0.97                             & 14                                                \\
+                    9                    & 1                         & 36                  & 1.00                             & 15                                                \\
+                    10                   & 0                         & 36                  & 1.00                             & 15                                                \\
+                    11                   & 0                         & 36                  & 1.00                             & 15                                                \\
+                    12                   & 0                         & 36                  & 1.00                             & 15                                                \\
+                    13                   & 0                         & 36                  & 1.00                             & 15                                                \\
+                    14                   & 0                         & 36                  & 1.00                             & 15                                                \\
+                    15                   & 0                         & 36                  & 1.00                             & 15                                                \\
+                    \hline
+                \end{tabular}
+            }
+        \end{column}
+        \begin{column}{.3\textwidth}
+            \includegraphics[width=\textwidth]{normalised_histo_example_4bit_before.png}
+            \onslide<4->{\includegraphics[width=\textwidth]{normalised_histo_example_4bit_after.png}}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    {On a real image...}
+    \centering
+    \includegraphics[width=.5\textwidth]{equalize_histo_example.png}
+
+    Note how, in practice, we often do not have a uniform histogram.
+\end{frame}
+
+\begin{frame}
+    {Beyond histogram equalization...}
+    Histogram equalization can result in increased noise and "unrealistic" looking images. Useful e.g. for X-rays, but other strategies exist
+    \pause
+    \\
+    \textbf{Adaptive histogram equalization} (AHE) computes several histograms of different regions of the image to improve local
+    contrast. Drawback: increased noise in areas with low contrast.
+
+    \pause
+    \centering
+    \begin{columns}
+        \begin{column}{.6\textwidth}
+            \textbf{Contrast Limited Adaptive Equalization} (CLAHE) solves this by reducing the amount of contrast enhancement. This is done by clipping the histogram to a maximum before calculating the cumulative histogram.
+
+            This is implemented in the \texttt{skimage.exposure.equalize\_adapthist} function.
+        \end{column}
+        \begin{column}{.35\textwidth}
+            \includegraphics[width=\textwidth]{Pizer1986.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    {Histogram equalization - Scikit image}
+    \begin{codebox}
+        \texttt{from skimage.exposure import equalize\_hist, equalize\_adapthist\\
+            \\
+            img\_equalized = equalize\_hist(img)\\
+            \# Or, with CLAHE\\
+            img\_equalized\_CLAHE = equalize\_adapthist(img, clip\_limit=0.03)
+        }
+    \end{codebox}
+    \centering
+    \includegraphics[width=\textwidth]{various_equalizations.png}
+\end{frame}
+
+\begin{frame}
+{Summary}
+\begin{itemize}
+\item Histograms are an important tool for inspecting image quality
+\item Optimal brightness and contrast can help reveal specific image features
+\item Manipulation of image histograms e.g. through point operations is one important tool for image enhancement
+\end{itemize}
 \end{frame}
 \end{document}
 
