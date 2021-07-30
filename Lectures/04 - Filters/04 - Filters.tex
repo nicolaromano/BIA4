@@ -53,7 +53,7 @@
     \begin{columns}
         \begin{column}{0.8\textwidth}
             \begin{itemize}
-                \item Define convolutional filters
+                \item Define rank and convolutional filters
                 \item Explain their use in image analysis
                 \item Implement basic filters in Python
             \end{itemize}
@@ -231,7 +231,7 @@
 
 \begin{frame}
     {Common convolutional filters - averaginig filter}
-    The \textbf{averaging filter} is a simple filter that is used to reduce noise in an image.\\
+    The \textbf{averaging filter} or \textbf{box blur} is a simple filter that is used to reduce noise in an image.\\
 
     It simply takes the average of the pixel values in the neighbourhood.
 
@@ -334,7 +334,7 @@
             \onslide<2>{
                 \textbf{Exercise:} try writing your own unsharp masking function.\\
                 It should accept an image, a radius (the $\sigma$ of the gaussian blur) and an amount for sharpening and return the sharpened image.
-                }
+            }
         \end{column}
         \begin{column}{.35\textwidth}
             \includegraphics[height=.7\textheight]{unsharp_mask_parameter_space.png}
@@ -344,6 +344,170 @@
 \end{frame}
 
 \begin{frame}
+    {What happens at the edges?}
+    Convolutional filters traverse the image pixel by pixel and apply a function that takes into account the pixel's neighbourhood.\\
+
+    \textbf{What happens at the edges}, where the neighbourhood is not complete?\\
+
+    There are several ways to deal with this.
+    \pause
+    \footnotesize{
+        \begin{itemize}
+            \item<2->\textbf{Zero-pad the image}: we create an extra padding of pixels with a value of zero around the image.
+            \item<3-> \textbf{Extend the image}: edge pixels are copied, corner pixels are repeated as \textit{wedges}.
+            \item<4-> \textbf{Wrap the image}: extra pixels are taken from the opposite side of the image.
+            \item<5-> \textbf{Mirror the image}: extra pixels are created by mirroring the image.
+            \item<6-> \textbf{Crop the image}: we ignore the edge pixels. This will result in a smaller output image.
+            \item<6-> \textbf{Crop the kernel}: we only use the kernel values corresponding to a pixel in the image. Kernel weights are adjusted to account for this.
+        \end{itemize}
+    }
+    \onslide<2->{
+        \begin{tikzpicture}[scale=.25]
+            \draw [fill=black] (-1, -1) rectangle (7, 7);
+            \draw [color=white] (-1, -1) grid (7, 7);
+            \draw [fill=white] (0, 0) rectangle (6, 6) grid (0, 0);
+            \node at (3, -3) {Zero-pad};
+        \end{tikzpicture}
+    }
+    \onslide<3->{
+        \begin{tikzpicture}[scale=.25]
+            \draw [fill=red] (-1, -1) rectangle (1, 1);
+            \draw [fill=orange] (1, -1) rectangle (2, 1);
+            \draw [fill=yellow] (2, -1) rectangle (3, 1);
+            \draw [fill=green] (-1, 1) rectangle (1, 2);
+            \draw [fill=blue] (-1, 2) rectangle (1, 3);
+
+            \draw [color=gray, dotted] (-1, -1) grid (7, 7);
+            \draw [thick] (0, 0) rectangle (6, 6);
+            \draw [thin] (0, 0) grid (6, 6);
+
+            \node at (3, -3) {Extend};
+        \end{tikzpicture}
+    }
+    \onslide<4->{
+        \begin{tikzpicture}[scale=.25]
+            \draw [fill=red] (0, 0) rectangle (1, 1);
+            \draw [fill=orange] (1, 0) rectangle (2, 1);
+            \draw [fill=yellow] (2, 0) rectangle (3, 1);
+            \draw [fill=red] (0, 6) rectangle (1, 7);
+            \draw [fill=orange] (1, 6) rectangle (2, 7);
+            \draw [fill=yellow] (2, 6) rectangle (3, 7);
+
+            \draw [fill=purple] (0, 5) rectangle (1, 6);
+            \draw [fill=pink] (1, 5) rectangle (2, 6);
+            \draw [fill=brown] (2, 5) rectangle (3, 6);
+            \draw [fill=purple] (0, 0) rectangle (1, -1);
+            \draw [fill=pink] (1, 0) rectangle (2, -1);
+            \draw [fill=brown] (2, 0) rectangle (3, -1);
+
+            \draw [color=gray, dotted] (-1, -1) grid (7, 7);
+            \draw [thick] (0, 0) rectangle (6, 6);
+            \draw [thin] (0, 0) grid (6, 6);
+
+            \node at (3, -3) {Wrap};
+        \end{tikzpicture}
+    }
+    \onslide<4->{
+        \begin{tikzpicture}[scale=.25]
+            \draw [fill=red] (0, -1) rectangle (1, 1);
+            \draw [fill=orange] (1, -1) rectangle (2, 1);
+            \draw [fill=yellow] (2, -1) rectangle (3, 1);
+            \draw [fill=purple] (0, 1) rectangle (1, 2);
+            \draw [fill=pink] (1, 1) rectangle (2, 2);
+            \draw [fill=brown] (2, 1) rectangle (3, 2);
+            \draw [fill=purple] (0, -2) rectangle (1, -1);
+            \draw [fill=pink] (1, -2) rectangle (2, -1);
+            \draw [fill=brown] (2, -2) rectangle (3, -1);
+
+            \draw [color=gray, dotted] (-2, -2) grid (8, 8);
+            \draw [thick] (0, 0) rectangle (6, 6);
+            \draw [thin] (0, 0) grid (6, 6);
+
+            \node at (3, -3) {Mirror};
+        \end{tikzpicture}
+    }
+    \onslide<5->{
+        \begin{tikzpicture}[scale=.25]
+            \foreach \i in {0.5,1.5,...,5.5}
+                {
+                    \node at (\i, 0.5) {X};
+                    \node at (\i, 5.5) {X};
+                }
+            \foreach \i in {1.5,2.5,3.5,4.5}
+                {
+                    \node at (0.5, \i) {X};
+                    \node at (5.5, \i) {X};
+                }
+            \draw [thick] (0, 0) rectangle (6, 6);
+            \draw [thin] (0, 0) grid (6, 6);
+
+            \node at (3, -3) {Crop the image};
+        \end{tikzpicture}
+    }
+    \onslide<5->{
+        \begin{tikzpicture}[scale=.25]
+            \draw [thick] (0, 0) rectangle (6, 6);
+            \draw [thin] (0, 0) grid (6, 6);
+            \draw [thick, color=red] (-1, -1) grid (2, 2);
+            \node at (-0.5, 1.5) {X};
+            \node at (-0.5, 0.5) {X};
+            \node at (-0.5, -0.5) {X};
+            \node at (0.5, -0.5) {X};
+            \node at (1.5, -0.5) {X};
+
+            \node at (3, -3) {Crop the kernel};
+        \end{tikzpicture}
+    }
+\end{frame}
+
+\begin{frame}
+{Edge behaviour in Scikit Image}
+Filters in Scikit Image allow you to choose what to do with the edge pixels using the \texttt{mode} parameter.
+
+For example
+
+\begin{codebox}
+\texttt{from skimage.filters import gaussian\\
+image\_smoothed = gaussian(image, sigma=1, mode="mirror")}
+\end{codebox}
+
+Allowed values for \texttt{mode} are
+
+\begin{itemize}
+\item \texttt{constant} - padding with the value specified by \texttt{cval}
+\item \texttt{nearest} - extend
+\item \texttt{mirror} and \texttt{reflect} - both of these mirror the image, but \texttt{reflect} does not duplicate the edge pixel
+\item \texttt{wrap}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+{Want to try out more?}
+
+You can design your own convolutional filter and apply it to an image using the \texttt{skimage.filters.edges.convolve} function.
+
+What happens using this kernel?
+
+$$\begin{bmatrix}0 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0\end{bmatrix}$$
+
+What about this?
+
+$$\begin{bmatrix}0 & 0 & 0 \\ 0 & 1.5 & 0 \\ 0 & 0 & 0\end{bmatrix}$$
+
+You can see convolutional filters in action at \href{https://setosa.io/ev/image-kernels/}{\underline{this website}}.
+\end{frame}
+
+\begin{frame}
+{Summary}
+\begin{itemize}
+\item Image filters are a simple yet powerful way of manipulating images.
+\item Filters can be used to remove noise, smooth images, sharpen them, and more.
+\item Rank filters such as median, maximum and minimum work by choosing a specific value of the pixels in the neighbourhood, depending on their rank.
+\item Convolutional filters use a kernel to apply a linear transformation to the image.
+\item In the next lecture we will look at other methods for noise removal and filters for edge detection.
+\end{itemize}
+
 
 \end{frame}
 \end{document}
