@@ -65,12 +65,7 @@
     \end{columns}
 \end{frame}
 
-\begin{frame}
-    {Convolution}
-    Reminder of what is a convolution
-\end{frame}
-
-\section{Edge detection}
+\section{Edge detection - introduction}
 
 \begin{frame}
     {Edge detection problem}
@@ -88,6 +83,8 @@
     \includegraphics[width=\textwidth]{line_intensity.png}
     Consider the vertical edges. We can see a change in the intensity of pixels as we move from black to white and vice versa. \textbf{Can you think of a way to detect these edges?}
 \end{frame}
+
+\subsection{Derivatives}
 
 \begin{frame}
     {We can use derivatives!}
@@ -120,6 +117,8 @@
     \centering
     \includegraphics[width=.7\textwidth]{monarch_gradient.png}
 \end{frame}
+
+\subsection {Calculating derivatives}
 
 \begin{frame}
     {Calculating a discrete derivative}
@@ -197,6 +196,9 @@
     \includegraphics[width=.7\textwidth]{derivative_noise.png}
 \end{frame}
 
+\section{Edge detection algorithms}
+\subsection{Prewitt and Sobel}
+
 \begin{frame}
     {2D derivative kernels (Prewitt edge detectors)}
     Expanding the derivative kernels to 2D we can directly smooth our intensity function.
@@ -234,45 +236,181 @@
     Simply threshold the gradient magnitude of the image to define which pixels are edges.
 
     \centering
-    \includegraphics[width=.7\textwidth]{monarch_prewitt.png}
+    \includegraphics[width=.9\textwidth]{monarch_prewitt.png}
 \end{frame}
 
 \begin{frame}
     {Edge detection in Scikit Image}
     \begin{columns}
-    \begin{column}{.6\textwidth}
-        \begin{codebox}
-            \texttt{from skimage.filters import prewitt, sobel\\
-                from skimage.io import imread\\
-                \\
-                img = imread("butterfly.jpg")\\
-                im\_prewitt = prewitt(img)\\
-                im\_sobel = sobel(img)\\
-                \pause
-                \\
-                fig, ax = plt.subplots(2, 1, figsize=(5, 10))\\
-                ax[0].imshow(im\_prewitt > 0.08, cmap="gray")\\
-                ax[0].set\_title("Prewitt", fontsize=25)\\
-                ax[1].imshow(im\_sobel > 0.08, cmap="gray")\\
-                ax[1].set\_title("Sobel", fontsize=25)\\
-                for a in ax:\\
-                a.axis("off")\\
-                plt.show()}
-        \end{codebox}        
-    \end{column}
-    \begin{column}{.4\textwidth}
-        \includegraphics[width=.7\textwidth]{monarch_prewitt_sobel.png}
-    \end{column}
+        \begin{column}{.6\textwidth}
+            \begin{codebox}
+                \texttt{from skimage.filters import prewitt, sobel\\
+                    from skimage.io import imread\\
+                    \\
+                    img = imread("butterfly.jpg")\\
+                    im\_prewitt = prewitt(img)\\
+                    im\_sobel = sobel(img)\\
+                    \pause
+                    \\
+                    fig, ax = plt.subplots(2, 1, figsize=(5, 10))\\
+                    ax[0].imshow(im\_prewitt > 0.08, cmap="gray")\\
+                    ax[0].set\_title("Prewitt", fontsize=25)\\
+                    ax[1].imshow(im\_sobel > 0.08, cmap="gray")\\
+                    ax[1].set\_title("Sobel", fontsize=25)\\
+                    for a in ax:\\
+                    a.axis("off")\\
+                    plt.show()}
+            \end{codebox}
+        \end{column}
+        \begin{column}{.4\textwidth}
+            \includegraphics[width=.7\textwidth]{monarch_prewitt_sobel.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% \subsection{Marr-Hildreth}
+
+% \begin{frame}
+%     {Marr-Hildreth detector (Laplacian of Gaussian)}
+
+%     The Marr-Hildreth detector finds edges by first smoothing the image using a Gaussian filter, then finding the Laplacian of the smoothed image.
+
+%     \pause
+
+%     The Laplacian ($\Delta$ or $\nabla^2$) of the image is the sum of the second partial derivatives of the image.
+
+%     $$\nabla^2(I) = \frac{\partial^2 I}{\partial x^2} + \frac{\partial^2 I}{\partial y^2}$$
+
+%     Technically, this is defined as the divergence of the gradient of the image. 
+
+% \end{frame}
+
+\subsection {Canny}
+\begin{frame}
+    {The Canny edge detector}
+    The Canny edge detector is a more advanced algorithm to detect edges.
+
+    It involves five steps
+
+    \begin{enumerate}
+        \item Apply a Gaussian filter to the image to smooth out noise
+        \item Calculate the gradient magnitude (e.g. using a Sobel filter)
+        \item Non-maximum suppression
+        \item Double thresholding
+        \item Edge tracking by hysteresis
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    {The Canny edge detector - step 1 and 2 - smoothing and gradient}
+    We start by convolving the image with a Gaussian kernel to smooth noise.
+
+    We then calculate the gradient magnitude and angle using the Sobel kernels.
+    \centering
+    \includegraphics[width=\textwidth]{canny_step1-2.png}
+\end{frame}
+
+\begin{frame}
+    {The Canny edge detector - step 3 - non-maximum suppression}
+    Non-maximum suppression allows us to thin the edges by only keeping the pixels with the largest gradient magnitude in the edge.
+
+    For each pixel, we take the neighbouring pixels in the direction of the gradients, and we keep only the pixels with the largest gradient magnitude.
+
+    \begin{columns}
+        \begin{column}{.33\textwidth}
+            \begin{tikzpicture}[scale=0.25]
+                \draw [fill=black] (-5, -5) rectangle (9, 9);
+                \draw [fill=white, color=white] (0, 0) rectangle (1, 2) rectangle (2, 3) rectangle (4, 4) rectangle (5, 6) rectangle (4, 7);
+                \draw [fill=white, color=white] (3, 4) rectangle (4, 5);
+                \draw [fill=gray, color=gray] (-1, -1) rectangle (2, 0) rectangle (1, 2);
+                \draw [fill=gray, color=gray] (2, 2) rectangle (5, 3);
+                \draw [fill=black!30!white, color=black!30!white] (4, 3) rectangle (6, 4) rectangle (5, 7);
+                \draw [fill=white, color=white] (2, 2) rectangle (3, 3);
+                \draw [->, color=red, very thick] (4.5, 3.5) -- (7.5, 0.5);
+                \draw [color=red, dashed] (3, 2) rectangle (6, 5);
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{.33\textwidth}
+            \begin{tikzpicture}[scale=1.2]
+                \draw [fill=black] (0, 0) rectangle (3, 3);
+                \draw [fill=white, color=white] (0, 1) rectangle (1, 2);
+                \draw [fill=black!30!white, color=black!30!white] (1, 1) rectangle (3, 3);
+                \draw [fill=white, color=white] (0, 2) rectangle (2, 3);
+                \draw [fill=gray, color=gray] (0, 0) rectangle (2, 1);
+                \draw [color=red, dashed] (0, 3) rectangle (1, 2) rectangle (2, 1) rectangle (3, 0);
+            \end{tikzpicture}
+        \end{column}
+        \pause
+        \begin{column}{.33\textwidth}
+            \begin{tikzpicture}[scale=1.2]
+                \draw [fill=black] (0, 0) rectangle (3, 3);
+                \draw [fill=white, color=white] (0, 1) rectangle (1, 2);
+                \draw [fill=black!30!white, color=black!30!white] (1, 1) rectangle (3, 3);
+                \draw [fill=white, color=white] (0, 2) rectangle (2, 3);
+                \draw [fill=gray, color=gray] (0, 0) rectangle (2, 1);
+                \draw [fill=black, color=black] (1, 1) rectangle (2, 2);
+                \draw [color=red, dashed] (0, 3) rectangle (1, 2) rectangle (2, 1) rectangle (3, 0);
+            \end{tikzpicture}
+        \end{column}
     \end{columns}
 \end{frame}
 
 \begin{frame}
-    {Problem with noise}
-    Smoothing to remove noise first
+    {The Canny edge detector - step 4 - double thresholding}
+    The next step is to set two arbitrary thresholds, one for the weak edges and one for the strong edges.
+
+    \begin{itemize}
+        \item \textbf{Strong edges} are those with gradient magnitude above the high threshold.
+        \item \textbf{Weak edges} are those with gradient magnitude between the low and high threshold.
+        \item Edges with gradient magnitude below the low threshold are suppressed (set to 0).
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
-    {Laplacian of Gaussian}
+{The Canny edge detector - step 5 - hysteresis}
+We need to decide what to do with weak edges.
+We keep those weak edges that are near a strong edge, and discard the others.
+
+\vspace{2em}
+
+\begin{columns}
+    \begin{column}{.33\textwidth}
+        \begin{tikzpicture}
+            \draw [fill=black] (0, 0) rectangle (3, 3);
+            \draw [fill=white, color=white] (0, 1) rectangle (2, 2);
+            \draw [fill=gray, color=gray] (0, 0) rectangle (1, 1);
+            \draw [color=red, dashed] (1, 1) rectangle (2, 2);
+            \node [align=center, text width=2cm] at (1.5, -1) {Strong edge, keep};
+        \end{tikzpicture}
+    \end{column}
+    \begin{column}{.33\textwidth}
+        \begin{tikzpicture}
+            \draw [fill=black] (0, 0) rectangle (3, 3);
+            \draw [fill=white, color=white] (0, 1) rectangle (1, 2);
+            \draw [fill=gray, color=gray] (1, 1) rectangle (2, 2);
+            \draw [color=red, dashed] (1, 1) rectangle (2, 2);
+            \node [align=center, text width=4cm] at (1.5, -1) {Weak edge near strong, mark as strong};
+        \end{tikzpicture}
+    \end{column}
+    \begin{column}{.33\textwidth}
+        \begin{tikzpicture}
+            \draw [fill=black] (0, 0) rectangle (3, 3);                
+            \draw [fill=gray, color=gray] (0, 0) rectangle (2, 2);
+            \draw [color=red, dashed] (1, 1) rectangle (2, 2);
+            \node [align=center, text width=2cm] at (1.5, -1) {Weak edge, remove};
+        \end{tikzpicture}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+{The Canny edge detector - The final result!}
+\centering
+\includegraphics[width=\textwidth]{canny_step1-2.png}
+
+\includegraphics[width=.75\textwidth]{canny_step3-5.png}
+
+All these steps are implemented in the \href{https://scikit-image.org/docs/dev/api/skimage.feature.html\#skimage.feature.canny}{\underline{skimage.feature.canny}} function.
+Try it by yourself and change the parameters to see what happens!
 \end{frame}
 \end{document}
-
