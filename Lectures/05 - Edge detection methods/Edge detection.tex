@@ -53,9 +53,8 @@
     \begin{columns}
         \begin{column}{0.8\textwidth}
             \begin{itemize}
-                \item Explain the use of image gradients for edge detection.
+                \item Explain the use of image derivatives for edge detection.
                 \item Describe various edge detection algorithms and how they work.
-                \item Describe different noise reduction algorithms and how they work.
                 \item Use Scikit Image to implement these techniques.
             \end{itemize}
         \end{column}
@@ -410,7 +409,21 @@ We keep those weak edges that are near a strong edge, and discard the others.
 
 \includegraphics[width=.75\textwidth]{canny_step3-5.png}
 
-All these steps are implemented in the \href{https://scikit-image.org/docs/dev/api/skimage.feature.html\#skimage.feature.canny}{\underline{skimage.feature.canny}} function.
+This is implemented in the \href{https://scikit-image.org/docs/dev/api/skimage.feature.html\#skimage.feature.canny}{\underline{skimage.feature.canny}} function.
 Try it by yourself and change the parameters to see what happens!
+
+Want to read more? The original 1986 paper from Canny is attached (lots of maths in there!).
+\end{frame}
+
+\begin{frame}
+{Summary}
+\begin{itemize}
+\item Edge detection is a valuable tool for image processing.
+\item We have covered some of the most common algorithms for edge detection, which can be used as an early step in more complex analysis pipelines.
+\item In the next lecture we will look at other algorithms to detect specific features in images.
+\end{itemize}
+
+
+
 \end{frame}
 \end{document}
