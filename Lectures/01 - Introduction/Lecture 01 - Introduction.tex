@@ -54,11 +54,15 @@
 
     \begin{columns}
         \begin{column}{0.6\textwidth}
-            Semester 1 only course, 20 UoE credits.\\
+            Semester 1 only course, 20 UoE credits / 5 ZJU credits.\\
             CO : Nicola Roman\`o - nicola.romano@ed.ac.uk\\
+            \vspace{2em}            
+            This course contributes 3.3\% of the final ZJU GPA or 3.6\% of the final GPA for international students.\\
+            \vspace{2em}
+            This course contributes 11.1\% of the final UoE degree mark used for degree classification.\\
             \vspace{2em}
 
-            \only<2>{This course aims to give you the ability to apply and improve strategies and pipelines for biomedical image analysis.}
+            \onslide<2>{This course aims to give you the ability to apply and improve strategies and pipelines for biomedical image analysis.}
         \end{column}
         \begin{column}{0.3\textwidth}
             \begin{figure}
@@ -565,9 +569,9 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
                 \# a list of axes (the subplots)\\
                 fig, ax = plt.subplots(ncols=3, nrows=1, figsize=(10, 6))\\
                 \pause
-                ax[0].imshow(img, cmap="viridis")\\
-                ax[1].imshow(img, cmap="terrain")\\
-                ax[2].imshow(img, cmap="spring")\\
+                ax[0].imshow(img, cmap="gray")\\
+                ax[1].imshow(img, cmap="viridis")\\
+                ax[2].imshow(img, cmap="rainbow")\\
                 plt.show()}
         \end{codebox}
     }
@@ -601,7 +605,7 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
     \end{column}
     \end{columns}
 
-    IMPORTANT: the actual pixel intensity of these images are all the same, we are just modifying how they are displayed on the screen.
+    IMPORTANT: the actual pixel intensity of these images are all the same we are just modifying how they are displayed on the screen.
 \end{frame}
 
 \begin{frame}
