@@ -118,11 +118,12 @@
         \begin{column}{0.6\textwidth}
             \begin{codebox}
                 \texttt{fig, ax = plt.subplots(ncols=2, nrows=2)\\
-                    ax[0, 0].imshow(\texttt{img, "gray")\\
-                    }                    ax[0, 1].imshow\texttt{img, "viridis")\\
-                    }                    ax[1, 0].imshow\texttt{img, "Greens")\\
-                    }                    ax[1, 1].imshow\texttt{img, "PuBu")}
-                }            \end{codebox}
+                ax[0, 0].imshow(img, cmap="gray")\\
+                ax[0, 1].imshow(img, cmap="viridis")\\
+                ax[1, 0].imshow(img, cmap="Greens")\\
+                ax[1, 1].imshow(img, cmap="PuBu")\\
+                plt.show()}
+            \end{codebox}
         \end{column}
         \begin{column}{0.4\textwidth}
             \includegraphics[width=\textwidth]{nuclei_cmapped.png}
@@ -182,9 +183,8 @@ Cropping is as easy as subsetting the image matrix.
 \begin{columns}
     \begin{column}{0.6\textwidth}
         \begin{codebox}
-            {\texttt{
-                    \# img contains a 512 x 512 image\\
-                    \# Take the bottom-left 100 x 100 pixels\\
+            {\texttt{\# img contains a 512 x 512 image\\
+                    \# Take the top-left 100 x 100 pixels\\
                     img1 = img[0:100, 0:100] \# shape (100, 100)\\
                     \onslide<2->
                     {\\
@@ -200,8 +200,8 @@ Cropping is as easy as subsetting the image matrix.
     \begin{column}{0.4\textwidth}
         \only<1>{
             \begin{tikzpicture}[scale=0.7]
-                \draw [fill=yellow]  (0,0) -- (0,5) -- (5,5) -- (5,0) -- cycle;
-                \draw [fill=orange]  (0, 0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+                \draw [fill=yellow]  (0,0) rectangle (5,5);
+                \draw [fill=orange]  (0, 4) rectangle (1,5);
                 \draw node at (1, -1) {\color{orange}\texttt{img[0:100, 0:100]}};
             \end{tikzpicture}
         }
@@ -670,7 +670,7 @@ Cropping is as easy as subsetting the image matrix.
     $A * B$ is \textbf{not} the same as $B * A$!\\
 
     You can use \texttt{skimage.transform.SimilarityTransform} to create transformation matrices and combine them using the \texttt{+} operator (Note that under the hood this performs matrix multiplication!). \\
-    
+
     Using \texttt{skimage.transform.warp} we can apply these transformation matrices to an image.
 \end{frame}
 
