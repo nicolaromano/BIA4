@@ -118,11 +118,11 @@
         \begin{column}{0.6\textwidth}
             \begin{codebox}
                 \texttt{fig, ax = plt.subplots(ncols=2, nrows=2)\\
-                ax[0, 0].imshow(img, cmap="gray")\\
-                ax[0, 1].imshow(img, cmap="viridis")\\
-                ax[1, 0].imshow(img, cmap="Greens")\\
-                ax[1, 1].imshow(img, cmap="PuBu")\\
-                plt.show()}
+                    ax[0, 0].imshow(img, cmap="gray")\\
+                    ax[0, 1].imshow(img, cmap="viridis")\\
+                    ax[1, 0].imshow(img, cmap="Greens")\\
+                    ax[1, 1].imshow(img, cmap="PuBu")\\
+                    plt.show()}
             \end{codebox}
         \end{column}
         \begin{column}{0.4\textwidth}
@@ -548,13 +548,13 @@ Cropping is as easy as subsetting the image matrix.
     }
 
     $$P: \begin{cases}x = r~\text{cos}(\alpha)\\y = r~\text{sin}(\alpha)\end{cases}
-        P': \begin{cases}x' = r~\text{cos}(\alpha+\theta)\only<2->{= r~\text{cos}(\alpha)\text{cos}(\theta)-r~\text{sin}(\alpha)\text{sin}(\theta)}\\y' = r~\text{sin}(\alpha+\theta)\only<2->{= r~\text{sin}(\alpha)\text{cos}(\theta)+r~\text{sin}(\theta)\text{cos}(\alpha)}\end{cases}$$
+        P': \begin{cases}x' = r~\text{cos}(\alpha+\theta)\onslide<2->{= r~\text{cos}(\alpha)\text{cos}(\theta)-r~\text{sin}(\alpha)\text{sin}(\theta)}\\y' = r~\text{sin}(\alpha+\theta)\onslide<2->{= r~\text{sin}(\alpha)\text{cos}(\theta)+r~\text{sin}(\theta)\text{cos}(\alpha)}\end{cases}$$
 
+    \pause
     \footnotesize
     Why? \href{https://en.wikipedia.org/wiki/List\_of\_trigonometric\_identities\#Angle\_sum\_and\_difference\_identities}{\underline{Wikipedia to the rescue!}}\\
-
-    \normalsize
     \pause
+    \normalsize
     Thus:
     \begin{columns}
         \begin{column}{0.5\textwidth}
