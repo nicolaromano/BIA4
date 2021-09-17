@@ -15,3 +15,5 @@ In order to use it you can install the Jupyterlab package.
 This is as simple as running `pip install jupyterlab` in your terminal; if you are not using `pip` as your package manager see the instructions on the [Jupyter website](https://jupyter.org/install.html).
 
 I have attached a test notebook (called `Test.ipynb`) which you can use to check that everything works as expected!
+
+More information about Jupyter can be found on the [Jupyter website](https://jupyter.org/); also [this page on the RealPython website](https://realpython.com/jupyter-notebook-introduction/) provides a brief introduction to Jupyter.
