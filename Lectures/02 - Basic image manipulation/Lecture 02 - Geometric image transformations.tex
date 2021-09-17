@@ -625,7 +625,7 @@ Cropping is as easy as subsetting the image matrix.
                     \# Make the central pixels black\\
                     img[5:7, 5:7] = 0\\
                     \\
-                    m = SimilarityTransform(translate = (2, 5))\\
+                    m = SimilarityTransform(translation = (2, 5))\\
                     img\_translated = warp(img, m)
                 }
             \end{codebox}
