@@ -91,7 +91,7 @@
     Consider the vertical edges. We can see a change in the intensity of pixels as we move from black to white and vice versa. \textbf{Can you think of a way to detect these edges?}
 \end{frame}
 
-\subsection{Derivatives}
+\subsection{First derivatives approaches}
 
 \begin{frame}
     {We can use derivatives!}
@@ -101,21 +101,23 @@
 
 \begin{frame}
     {Image derivatives}
-    With a 2D image, we can find the x and y derivatives of the image intensity.
-
-    The vector of derivatives is called the \textbf{gradient} and is given by:
-    \Large
-    $$\nabla I = \begin{bmatrix}\frac{\partial I}{\partial x}, \frac{\partial I}{\partial y}\end{bmatrix}$$
-
+    With a 2D image, we can find the x and y derivatives of the image intensity \huge$(\frac{\partial I}{\partial x} $\normalsize and \huge$\frac{\partial I}{\partial y})$.
     \normalsize
-
+    We can combine the derivatives in a vector, called the \textbf{gradient}:
+    \huge{
+        $$\nabla I = \begin{bmatrix}\frac{\partial I}{\partial x}, \frac{\partial I}{\partial y}\end{bmatrix}$$}
+    \pause
+    \normalsize
     The gradient is a vector with:
     \begin{itemize}
         \item Direction perpendicular to the edge
-              $$\theta = \arctan\left(\frac{\partial I}{\partial x} \mathbin{/} \frac{\partial I}{\partial y}\right)$$
+              \Large{
+                  $$\theta = \arctan\left(\frac{\partial I}{\partial x} \mathbin{/} \frac{\partial I}{\partial y}\right)$$}
               \pause
+              \normalsize
         \item Length (\textbf{gradient magnitude}) proportional to the intensity change
-              $$\lvert\lvert\nabla I\rvert\rvert = \sqrt{\left(\frac{\partial I}{\partial x}\right)^2 + \left(\frac{\partial I}{\partial y}\right)^2}$$
+              \Large{
+                  $$\lvert\lvert\nabla I\rvert\rvert = \sqrt{\left(\frac{\partial I}{\partial x}\right)^2 + \left(\frac{\partial I}{\partial y}\right)^2}$$}
     \end{itemize}
 \end{frame}
 
@@ -124,8 +126,6 @@
     \centering
     \includegraphics[width=.7\textwidth]{monarch_gradient.png}
 \end{frame}
-
-\subsection {Calculating derivatives}
 
 \begin{frame}
     {Calculating a discrete derivative}
@@ -139,7 +139,8 @@
 
     \pause
     The discrete derivative is given by:
-    $$\frac{dI}{dx} = \frac{I(x) - I(x-1)}{1} = I(x) - I(x-1)$$
+    \Large{
+        $$\frac{dI}{dx} = \frac{I(x) - I(x-1)}{1} = I(x) - I(x-1)$$}
 \end{frame}
 
 \begin{frame}
@@ -186,29 +187,30 @@
 \end{frame}
 
 \begin{frame}
-    {Derivative of an image}
+    {Derivatives of an image by convolution}
     We can apply these convolution kernels to an image as well.
 
     $$K_x = \begin{bmatrix}-1&0&1\end{bmatrix} \qquad K_y = \begin{bmatrix}-1\\0\\1\end{bmatrix}$$
 
-    \centering
-    \includegraphics[width=.8\textwidth]{monarch_derivatives.png}
+    \only<1>{
+        \includegraphics[width=.8\textwidth]{monarch_derivatives.png}
+    }
+    \only<2>{
+        \includegraphics[width=\textwidth]{monarch_derivatives_and_gradient.png}
+    }
 \end{frame}
 
 \begin{frame}
-    {The problem with noise...}
+    {The problem with noise}
     Derivatives are very sensitive to noise. Smoothing the function beforehand helps
 
     \centering
     \includegraphics[width=.7\textwidth]{derivative_noise.png}
 \end{frame}
 
-\section{Edge detection algorithms}
-\subsection{Prewitt and Sobel}
-
 \begin{frame}
-    {2D derivative kernels (Prewitt edge detectors)}
-    Expanding the derivative kernels to 2D we can directly smooth our intensity function.
+    {Smoothed 1st derivative kernels}
+    We can smooth the derivative kernels by averaging nearby pixels.
 
     These are called \textbf{Prewitt} kernels.
 
@@ -292,6 +294,150 @@
 
 % \end{frame}
 
+\subsection{Second derivative approaches}
+
+\begin{frame}
+    {Second derivative approaches}
+    We can also use second derivatives to detect edges.
+    \only<2>{Edges correspond to \textbf{zero-crossings} of the second derivative.}
+
+    \centering
+    \includegraphics[width=.7\textwidth]{intensity_derivative.png}
+    \pause
+    \centering
+    \includegraphics[width=.3\textwidth]{intensity_second_derivative.png}
+\end{frame}
+
+\begin{frame}
+    {The Laplacian}
+    We can combine the second derivatives of the image using the \textbf{Laplacian} operator.
+    \Large{
+    $$\nabla^2 I(x,y) = \frac{\partial^2{I}}{\partial^2{x}}+ \frac{\partial^2{I}}{\partial^2{y}}$$
+    }
+    \normalsize
+    The zero-crossing in the Laplacian are the \textbf{edges} of the image.
+
+    The Laplacian can be approximated by convolving with the kernel:
+
+    $$\begin{bmatrix}
+            0 & 1  & 0 \\
+            1 & -4 & 1 \\
+            0 & 1  & 0
+        \end{bmatrix}$$
+
+    \textbf{Can you guess how we got to that?}
+\end{frame}
+
+\begin{frame}
+    {Approximating the Laplacian}
+
+    We calculated the first derivative of the image using the central difference as:
+
+    \Large
+    $$\frac{\partial I}{\partial x} = I'_x = I_x - I_{x-1} \qquad \frac{\partial I}{\partial y} = I'_y = I_y - I_{y-1}$$
+
+    \pause
+    \normalsize
+    Similarly, for the second derivative we can write:
+
+    \Large
+    $$\frac{\partial^2 I}{\partial x^2} = I"_x = I'_x - I'_{x-1} = [I_x - I_{x-1}] - [I_{x-1} - I_{x-2}] = I_x - 2I_{x-1} + I_{x-2}$$
+    \pause
+    \normalsize
+    Applying the same reasoning to the y derivative, we obtain these kernels:
+
+    \centering
+
+    $\begin{bmatrix}
+            1 & -2 & 1
+        \end{bmatrix}
+        \qquad
+        \begin{bmatrix}
+            1  \\
+            -2 \\
+            1
+        \end{bmatrix}
+    $
+    which sum to  $\begin{bmatrix}
+            0 & 1  & 0 \\
+            1 & -4 & 1 \\
+            0 & 1  & 0
+        \end{bmatrix}$
+\end{frame}
+
+\begin{frame}
+    {The Laplacian is very sensitive to noise}
+    \begin{figure}
+        \includegraphics[width=.5\textwidth]{laplacian_zero_crossing_no_smooth.png}
+        \caption{\small{\color{gray}{Zero crossing of the Laplacian of our butterfly image}\color{black}}}
+        \pause
+        \textit{Challenge: can you try and reproduce this image?\\ Hint: use \texttt{skimage.filters.laplace} to calculate the Laplacian, then look at the sign of the result using the \texttt{np.sign} function... and think how you can define a zero-crossing!}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    {Laplacian vs Sobel/Prewitt operators}
+    \begin{itemize}
+        \item Both operators are sensitive to noise (Laplacian is more sensitive).
+        \item The Laplacian uses a single kernel, while the Sobel and Prewitt operators use two kernels.
+        \item This means that the Laplacian loses orientation information.
+        \item The Laplacian is an \textbf{isotropic filter}, meaning that it is invariant to the direction of the gradient (i.e. it performs well in all edge directions).
+        \item Generally, Laplacian gives better edge localization
+    \end{itemize}
+
+\end{frame}
+\begin{frame}
+    {Smoothing the Laplacian}
+    When using the Laplacian, most often we first smooth the image using a Gaussian filter, then convolve with the Laplacian kernel.
+
+    This can be done in one step since:
+
+    \Large
+    $$\nabla^2(G_\sigma * I) = \nabla^2(G_\sigma) * I$$
+    \pause
+    \normalsize
+    This is called the Laplacian of Gaussian (\textbf{LoG}) filter.
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=.45\textwidth]{gaussian_and_laplacian_2D.png}
+        \includegraphics[width=.45\textwidth]{gaussian_and_laplacian_3D.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    {Approximation of the LoG}
+    The Laplacian of a Gaussian function is given by:
+
+    \Large
+    $$LoG(x,y) = -\frac{1}{\pi \sigma^4}[1-\frac{x^2+y^2}{2\sigma^2}]\cdot e^{-\frac{x^2+y^2}{2\sigma^2}}$$
+
+    \normalsize
+    \centering
+    (no need to remember this formula, I certainly don't!)
+
+    This can be approximated by a LoG kernel. For example, for $\sigma = 1.4$ we can approximate LoG by:
+
+    \begin{columns}
+        \begin{column}{.7\textwidth}
+            \small
+            $\begin{bmatrix}0 & 0 & 1 & 2   & 2   & 2   & 1 & 0 & 0 \\
+                    0 & 1 & 3 & 5   & 5   & 5   & 3 & 1 & 0 \\
+                    1 & 3 & 5 & 3   & 0   & 3   & 5 & 3 & 1 \\
+                    2 & 5 & 3 & -12 & -23 & -12 & 3 & 5 & 2 \\
+                    2 & 5 & 0 & -23 & -40 & -23 & 0 & 5 & 2 \\
+                    2 & 5 & 3 & -12 & -23 & -12 & 3 & 5 & 2 \\
+                    1 & 3 & 5 & 3   & 0   & 3   & 5 & 3 & 1 \\
+                    0 & 1 & 3 & 5   & 5   & 5   & 3 & 1 & 0 \\
+                    0 & 0 & 1 & 2   & 2   & 2   & 1 & 0 & 0\end{bmatrix}$
+        \end{column}
+        \begin{column}{.3\textwidth}
+            \includegraphics[width=.6\textwidth]{LoG kernel.png}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
 \subsection {Canny}
 \begin{frame}
     {The Canny edge detector}
@@ -374,62 +520,67 @@
 \end{frame}
 
 \begin{frame}
-{The Canny edge detector - step 5 - hysteresis}
-We need to decide what to do with weak edges.
-We keep those weak edges that are near a strong edge, and discard the others.
+    {The Canny edge detector - step 5 - hysteresis}
+    We need to decide what to do with weak edges.
+    We keep those weak edges that are near a strong edge, and discard the others.
 
-\vspace{2em}
+    \vspace{2em}
 
-\begin{columns}
-    \begin{column}{.33\textwidth}
-        \begin{tikzpicture}
-            \draw [fill=black] (0, 0) rectangle (3, 3);
-            \draw [fill=white, color=white] (0, 1) rectangle (2, 2);
-            \draw [fill=gray, color=gray] (0, 0) rectangle (1, 1);
-            \draw [color=red, dashed] (1, 1) rectangle (2, 2);
-            \node [align=center, text width=2cm] at (1.5, -1) {Strong edge, keep};
-        \end{tikzpicture}
-    \end{column}
-    \begin{column}{.33\textwidth}
-        \begin{tikzpicture}
-            \draw [fill=black] (0, 0) rectangle (3, 3);
-            \draw [fill=white, color=white] (0, 1) rectangle (1, 2);
-            \draw [fill=gray, color=gray] (1, 1) rectangle (2, 2);
-            \draw [color=red, dashed] (1, 1) rectangle (2, 2);
-            \node [align=center, text width=4cm] at (1.5, -1) {Weak edge near strong, mark as strong};
-        \end{tikzpicture}
-    \end{column}
-    \begin{column}{.33\textwidth}
-        \begin{tikzpicture}
-            \draw [fill=black] (0, 0) rectangle (3, 3);                
-            \draw [fill=gray, color=gray] (0, 0) rectangle (2, 2);
-            \draw [color=red, dashed] (1, 1) rectangle (2, 2);
-            \node [align=center, text width=2cm] at (1.5, -1) {Weak edge, remove};
-        \end{tikzpicture}
-    \end{column}
-\end{columns}
+    \begin{columns}
+        \begin{column}{.33\textwidth}
+            \begin{tikzpicture}
+                \draw [fill=black] (0, 0) rectangle (3, 3);
+                \draw [fill=white, color=white] (0, 1) rectangle (2, 2);
+                \draw [fill=gray, color=gray] (0, 0) rectangle (1, 1);
+                \draw [color=red, dashed] (1, 1) rectangle (2, 2);
+                \node [align=center, text width=2cm] at (1.5, -1) {Strong edge, keep};
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{.33\textwidth}
+            \begin{tikzpicture}
+                \draw [fill=black] (0, 0) rectangle (3, 3);
+                \draw [fill=white, color=white] (0, 1) rectangle (1, 2);
+                \draw [fill=gray, color=gray] (1, 1) rectangle (2, 2);
+                \draw [color=red, dashed] (1, 1) rectangle (2, 2);
+                \node [align=center, text width=4cm] at (1.5, -1) {Weak edge near strong, mark as strong};
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{.33\textwidth}
+            \begin{tikzpicture}
+                \draw [fill=black] (0, 0) rectangle (3, 3);
+                \draw [fill=gray, color=gray] (0, 0) rectangle (2, 2);
+                \draw [color=red, dashed] (1, 1) rectangle (2, 2);
+                \node [align=center, text width=2cm] at (1.5, -1) {Weak edge, remove};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
-{The Canny edge detector - The final result!}
-\centering
-\includegraphics[width=\textwidth]{canny_step1-2.png}
+    {The Canny edge detector - The final result!}
+    \centering
+    \includegraphics[width=\textwidth]{canny_step1-2.png}
 
-\includegraphics[width=.75\textwidth]{canny_step3-5.png}
+    \includegraphics[width=.75\textwidth]{canny_step3-5.png}
 
-This is implemented in the \href{https://scikit-image.org/docs/dev/api/skimage.feature.html\#skimage.feature.canny}{\underline{skimage.feature.canny}} function.
-Try it by yourself and change the parameters to see what happens!
+    This is implemented in the \href{https://scikit-image.org/docs/dev/api/skimage.feature.html\#skimage.feature.canny}{\underline{skimage.feature.canny}} function.
+    Try it by yourself and change the parameters to see what happens!
 
-Want to read more? The original 1986 paper from Canny is attached (lots of maths in there!).
+    Want to read more? The original 1986 paper from Canny is attached (lots of maths in there!).
 \end{frame}
 
 \begin{frame}
-{Summary}
-\begin{itemize}
-\item Edge detection is a valuable tool for image processing.
-\item We have covered some of the most common algorithms for edge detection, which can be used as an early step in more complex analysis pipelines.
-\item In the next lecture we will look at other algorithms to detect specific features in images.
-\end{itemize}
+    {Summary}
+    \begin{itemize}
+        \item Edge detection is a valuable tool for image processing.
+        \item We have covered some of the most common algorithms for edge detection, which can be used as an early step in more complex analysis pipelines.
+              \begin{itemize}
+                  \item Prewitt and Sobel, based on the first derivative of the image.
+                  \item The Laplacian of Gaussian (LoG) based on the second derivative.
+                  \item The Canny edge detector, still based on first derivatives, but with a more complex approach.
+              \end{itemize}
+        \item In the next lecture we will look at other algorithms to detect specific features in images.
+    \end{itemize}
 
 
 
