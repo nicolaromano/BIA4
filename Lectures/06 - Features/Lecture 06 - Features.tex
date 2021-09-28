@@ -665,5 +665,78 @@ Examples of tasks for which we may use features
         \item \textbf{Flatten} results into a feature vector for further use.
     \end{enumerate}
 \end{frame}
+
+\begin{frame}
+    {Example of HOG features}
+    \begin{columns}
+        \begin{column}{.2\textwidth}
+            \includegraphics[width=.85\textwidth]{HOG_pt1.png}
+        \end{column}
+        \pause
+        \begin{column}{.8\textwidth}
+            \begin{tikzpicture}[scale=.8]
+                \draw [color=blue, step=1, very thin] (0, 0) grid (3, 3);
+                \draw [color=orange, very thick] (0, 0) rectangle (3, 3);
+                \draw [color=red, ->] (0.5, 0.5) -- (0.8, 0.7);
+                \draw [color=red, ->] (0.5, 1.5) -- (0.6, 1.7);
+                \draw [color=red, ->] (0.5, 2.5) -- (0.4, 2.4);
+
+                \draw [color=red, ->] (1.5, 0.5) -- (1.8, 0.7);
+                \draw [color=red, ->] (1.5, 1.5) -- (1.8, 1.4);
+                \draw [color=red, ->] (1.5, 2.5) -- (1.6, 2.1);
+
+                \draw [color=red, ->] (2.5, 0.5) -- (2.8, 0.9);
+                \draw [color=red, ->] (2.5, 1.5) -- (2.8, 1.5);
+                \draw [color=red, ->] (2.5, 2.5) -- (2.6, 2.0);
+
+                \node at (1.5, 3.5) {\Large Gradients in a cell};
+
+                \node at (7, 3.5) {\Large Histogram of gradients};
+
+                \draw [fill=gray] (5.5, 0) rectangle (6, 2.5);
+                \draw [fill=gray] (6, 0) rectangle (6.5, 2);
+                \draw [fill=gray] (6.5, 0) rectangle (7, 1.5);
+                \draw [fill=gray] (7, 0) rectangle (7.5, 3);
+                \draw [fill=gray] (7.5, 0) rectangle (8, 0.1);
+                \draw [fill=gray] (8, 0) rectangle (8.5, 1);
+
+                \node at (5.5, -0.3) {\textbf{0}};
+                \node at (7, -0.3) {\textbf{$\pi$}};
+                \node at (8.5, -0.3) {\textbf{$2\pi$}};
+
+            \end{tikzpicture}
+            \pause
+            \centering
+            \includegraphics[width=.4\textwidth]{HOG.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    {HOG features in Scikit-Image}
+    \begin{codebox}
+        \texttt{from skimage.feature import hog\\
+            from skimage.filters.edges import sobel\\
+            from skimage.io import imread\\
+            \\
+            img = imread('MRI.jpg')\\
+            img\_sobel = sobel(img)\\
+            \# Because visualize is True, hog returns a tuple of  (feature vector, HOG image)\\
+            fd, hog\_image = hog(img\_sobel, orientations=4,\\
+            pixels\_per\_cell=(32, 32), cells\_per\_block=(5, 5),\\
+            visualize=True)}
+    \end{codebox}
+\end{frame}
+
+\begin{frame}
+{Summary}
+
+\begin{enumerate}
+\item Feature extraction is a very important step in image analysis.
+\item Features can be fed to machine learning models, or used to detect specific objects in an image.
+\item Many other feature detectors exist, and many are implemented in \texttt{skimage.feature} 
+\end{enumerate}
+
+\end{frame}
 \end{document}
 
