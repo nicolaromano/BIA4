@@ -13,11 +13,11 @@
 \author{Nicola Roman\`o - nicola.romano@ed.ac.uk}
 \title{Lecture title}
 \setlength{\fboxsep}{0pt}
-\setbeamertemplate{caption}{\raggedright\insertcaption\par}
 \setbeamertemplate {footline}{\begin{scriptsize}\hfill\insertframenumber ~of \inserttotalframenumber\kern1em\vskip5pt\end{scriptsize}}
 
-%\setbeamercovered{transparent} 
-%\setbeamertemplate{navigation symbols}{} 
+% Remove "Figure" in front of captions
+% See https://tex.stackexchange.com/questions/82456/how-to-remove-figure-caption-prefix-figure-in-beamer
+\captionsetup{labelformat=empty,labelsep=none}
 
 \titlegraphic{\centering \includegraphics[scale=.5]{instituteLogo.png}}
 \date{}
@@ -27,6 +27,14 @@
   \begin{frame}<beamer>
     {Outline}
     \huge{\tableofcontents[currentsection]}
+  \end{frame}
+}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>
+    {Outline}
+    \huge{\tableofcontents[currentsection, currentsubsection]}
   \end{frame}
 }
 
