@@ -312,7 +312,7 @@
     {The Laplacian}
     We can combine the second derivatives of the image using the \textbf{Laplacian} operator.
     \Large{
-    $$\nabla^2 I(x,y) = \frac{\partial^2{I}}{\partial^2{x}}+ \frac{\partial^2{I}}{\partial^2{y}}$$
+    $$\nabla^2 I(x,y) = \frac{\partial^2{I}}{\partial{x^2}}+ \frac{\partial^2{I}}{\partial{y^2}}$$
     }
     \normalsize
     The zero-crossing in the Laplacian are the \textbf{edges} of the image.
@@ -371,7 +371,7 @@
         \includegraphics[width=.5\textwidth]{laplacian_zero_crossing_no_smooth.png}
         \caption{\small{\color{gray}{Zero crossing of the Laplacian of our butterfly image}\color{black}}}
         \pause
-        \textit{Challenge: can you try and reproduce this image?\\ Hint: use \texttt{skimage.filters.laplace} to calculate the Laplacian, then look at the sign of the result using the \texttt{np.sign} function... and think how you can define a zero-crossing!}
+        \textit{Challenge: can you try and reproduce this image?\\ Hint: use \texttt{ skimage.filters.edges.convolve} to apply the Laplacian kernel, then look at the sign of the result using the \texttt{np.sign} function... and think how you can define a zero-crossing!}
     \end{figure}
 \end{frame}
 
@@ -414,12 +414,13 @@
 
     \normalsize
     \centering
-    (no need to remember this formula, I certainly don't!)
+    (no need to remember this formula, I certainly don't!)\\
+    \pause
 
     This can be approximated by a LoG kernel. For example, for $\sigma = 1.4$ we can approximate LoG by:
 
     \begin{columns}
-        \begin{column}{.7\textwidth}
+        \begin{column}{.4\textwidth}
             \small
             $\begin{bmatrix}0 & 0 & 1 & 2   & 2   & 2   & 1 & 0 & 0 \\
                     0 & 1 & 3 & 5   & 5   & 5   & 3 & 1 & 0 \\
@@ -432,10 +433,14 @@
                     0 & 0 & 1 & 2   & 2   & 2   & 1 & 0 & 0\end{bmatrix}$
         \end{column}
         \begin{column}{.3\textwidth}
-            \includegraphics[width=.6\textwidth]{LoG kernel.png}
+            \centering
+            \includegraphics[width=.9\textwidth]{LoG kernel.png}
+        \end{column}
+        \pause
+        \begin{column}{.4\textwidth}
+            \includegraphics[width=.8\textwidth]{laplacian_of_gaussian_zero_crossing.png}
         \end{column}
     \end{columns}
-
 \end{frame}
 
 \subsection {Canny}
