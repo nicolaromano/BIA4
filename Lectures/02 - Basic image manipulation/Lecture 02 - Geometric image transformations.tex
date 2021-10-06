@@ -1,6 +1,6 @@
 \documentclass[9pt, aspectratio=169]{beamer}
 \usepackage{FiraSans}
-\usetheme{metropolis}
+\usetheme[subsectionpage=progressbar]{metropolis}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -23,22 +23,6 @@
 
 \titlegraphic{\centering \includegraphics[scale=.5]{instituteLogo.png}}
 \date{}
-
-\AtBeginSection[]
-{
-  \begin{frame}<beamer>
-    {Outline}
-    \huge{\tableofcontents[currentsection, currentsubsection]}
-  \end{frame}
-}
-
-\AtBeginSubsection[]
-    {
-    \begin{frame}<beamer>
-        {Outline}
-        \huge{\tableofcontents[currentsection, currentsubsection]}
-        \end{frame}        
-    }
 
 \begin{document}
 
