@@ -1,0 +1,315 @@
+\documentclass[9pt, aspectratio=169]{beamer}
+\usepackage{FiraSans}
+\usetheme[subsectionpage=progressbar]{metropolis}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage[T1]{fontenc} 
+\usepackage[skins]{tcolorbox}
+\author{Nicola Roman\`o - nicola.romano@ed.ac.uk}
+\title{Lecture 08 - Tracing of tube-like structures}
+\setlength{\fboxsep}{0pt}
+\setbeamertemplate {footline}{\begin{scriptsize}\hfill\insertframenumber ~of \inserttotalframenumber\kern1em\vskip5pt\end{scriptsize}}
+
+% Remove "Figure" in front of captions
+% See https://tex.stackexchange.com/questions/82456/how-to-remove-figure-caption-prefix-figure-in-beamer
+\captionsetup{labelformat=empty,labelsep=none}
+
+\titlegraphic{\centering \includegraphics[scale=.5]{instituteLogo.png}}
+\date{}
+
+\begin{document}
+
+\newtcolorbox{codebox}{enhanced,
+    top=2pt,
+    left=2pt,
+    right=2pt,
+    bottom=2pt,
+    boxrule=0pt,
+    leftrule=5pt,
+    sharp corners,
+    colback=gray!20,
+    colframe=blue!60!black}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\section{Recap}
+
+\begin{frame}
+    {In the past lectures...}
+    We have seen how to
+
+    \begin{itemize}[<+->]
+        \item [\checkmark] Use Numpy and Matplotlib/Scikit-Image to display and manipulate images
+        \item [\checkmark] Preprocess images, e.g. by modifying their histograms, or by using convolutional filters. This allows us to enhance contrast, sharpen or blur the image, find edges, etc.
+        \item [\checkmark] Use morphological operators to perform image processing, e.g. erosion, dilation, opening, closing, etc.
+        \item [\checkmark] Extract features from an image, to be used for further processing (blob, lines, circles, texture...)
+        \item [\checkmark] Segment an image into different regions, e.g. by thresholding, clustering, watershed, etc.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    {In this lecture...}
+    We are going to put all of this together today to see how we can perform more complex image processing.
+
+    As an example, we are going to talk about how to combine these techniques to trace tube-like structures, such as blood vessels and neuronal processes.
+
+    Note that these techniques can be modified \textit{ad-hoc} to be applied to a variety of different problems.
+\end{frame}
+
+\begin{frame}
+    {Learning objectives}
+    \begin{columns}
+        \begin{column}{0.8\textwidth}
+            \begin{itemize}
+                \item Describe the issues associated with tracing tube-like structures
+                \item Describe pipelines for processing these types of images
+                \item Give examples of strategies to extract features from these complex datasets.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.2\textwidth}
+            \includegraphics[angle=-30, origin=tr, width=1.5\textwidth]{lightbulb.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+    {What is tracing?}
+    \begin{columns}
+        \begin{column}{.7\textwidth}
+            In biomedical imaging, \textbf{tracing} is the process of segmenting tube-like structures in images.
+
+            In the literature, this is often called tracking, which should not be confused with motion tracking.
+
+            This is often applied to blood vessels and neuronal processes.
+
+            \pause
+
+            These techniques have been used in the past to study the anatomy of the brain, analysis of aneurysms.
+        \end{column}
+        \begin{column}{.3\textwidth}
+            \only<1->{
+                \includegraphics[width=\textwidth]{Babin2018-aneurysm.png}
+                \footnotesize
+                Babin et al. 2018 - Arteriovenous malformation in the brain.
+            }
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    {Challenges}
+    \begin{itemize}
+        \item Complex morphologies
+        \item Often need to work in 3D
+        \item Can require a lot of computational power
+    \end{itemize}
+    \centering
+    \includegraphics[width=.6\textwidth]{Boldog2018-neurons.png}
+
+    \footnotesize
+    Boldog et al. 2018 - 3D reconstruction of rosehip neurons in the human brain.
+
+\end{frame}
+
+\section{Blood vessel detection}
+
+\begin{frame}
+    {Detecting blood vessels}
+    \begin{columns}
+        \begin{column}{.5\textwidth}
+            Vessels can be characterised by colour, gradient, and contrast.
+
+            However, simple segmentation strategies are often sub-optimal.
+        \end{column}
+        \begin{column}{.5\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{retina_thresholding.png}
+
+            \footnotesize
+            \raggedright
+            Source: Mikael H\"aggstr\"om 2014, Fundus photograph of a normal right eye.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    {Bottom-hat filtering}
+    Morphological operators can be often used to improve the image before thresholding.
+
+    For example, \textbf{bottom-hat filtering} has been often used to help in segmenting blood vessels.
+
+    \pause
+
+    It involves applying a morphological closing to the image and then subtracting the original image from the result.
+    By using a structural element larger than the structures of interest, we can isolate them from the image.
+
+    \centering
+    \includegraphics[width=.7\textwidth]{bh_example.png}
+
+    \pause
+    \small
+    \begin{itemize}
+        \item Bottom-hat filtering extracts objects \textbf{darker} than the background.
+        \item Lighter objects can be extracted using \textbf{top-hat filtering}
+        \item For top-hat, you subtract a morphological opening of the image from the original image itself.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    {Bottom-hat filtering of blood vessels}
+    \centering
+    \includegraphics[width=\textwidth]{retina_bottomhat.png}
+\end{frame}
+\begin{frame}
+    {Template matching}
+    \textbf{Template matching} allows finding small parts of an image matching a template image. The cross-correlation between the template and the image is calculated pixel-wise and the maxima are taken as matches.
+
+    \only<1>{
+        \includegraphics[width=\textwidth]{template_matching_Thomas_and_Gehrig.png}
+        \footnotesize
+        Thomas and Gehrig, 2020 - Template matching (followed by non-maxima suppression) to identify fish embryos in a plate.
+    }
+
+    \pause
+    Template matching can be used for blood vessel detection by assuming that the cross section of the vessels is approximated by a Gaussian.
+
+    \pause
+    We design a series of templates, at various angles for piece-wise detection (in pieces of length L).
+
+    $$K(x, y) = - e^(-x^2/2/\sigma_x^2)\qquad \text{for}~|y| \leq \frac{L}{2}$$
+
+    \centering
+    \includegraphics[width=.9\textwidth]{template_matching_kernels.png}
+\end{frame}
+
+\begin{frame}
+    {Skeletonization}
+    Skeletonization, or center-line extraction is an useful morphological operation that can help delineating tube-like structures in images.
+
+    It works by thinning the image repeatedly until no more thinning is possible.
+
+    \centering
+    \includegraphics[width=.8\textwidth]{template_matching and skeleton.png}
+
+    \footnotesize
+    Green channel $\rightarrow$ bottom-hat filtering $\rightarrow$ template matching $\rightarrow$ remove small objects $\rightarrow$ skeletonization.
+\end{frame}
+
+\begin{frame}
+    {From skeleton to graphs and features}
+
+    Skeletonization can be mapped to a graph, a mathematical structure which allows for easier analysis of the structure.
+
+    Features can be extracted to find vessel length, number and location of branching points, tortuosity, discriminate arteries and veins etc
+
+    HOG features can be used to find the direction and bifurcation points of vessels.
+
+    \includegraphics[width=\textwidth]{vesselHOG.png}
+
+    \footnotesize
+    Srinidhi, 2017
+\end{frame}
+
+\begin{frame}
+    {Classification of intersections}
+    Other than HOG features, other strategies have been used for classifying structural features of a vascular network. For example, detection of key-points followed by polar projection has been used to classify branches.
+
+    \centering
+    \includegraphics[width=.7\textwidth]
+    {polar_map_classification_intersections.png}
+
+    \footnotesize
+    \raggedright
+    Srinidhi, 2017
+\end{frame}
+
+\begin{frame}
+    {Example of a complete pipeline}
+    \centering
+    \includegraphics[width=.8\textwidth]{retina_pipeline.png}
+
+    \footnotesize
+    Srinidhi et al. 2109 - extracting colour and other features allows for discrimination of arteries and veins.
+\end{frame}
+
+\begin{frame}
+    {Neuronal tracing}
+    Neuronal processes are another example of tube-like structures that can be traced in images.
+
+    Similar approaches, such as skeletonization and template matching, can be used to detect neuronal processes.
+\end{frame}
+
+\begin{frame}
+    {Finding the soma}
+    Tracing often starts by identifying the soma, as the starting point for neuronal processes.
+
+    There are many different methods for finding the soma. Simple approaches include thresholding and morphological operations.
+
+    \only<1>{
+        \centering
+        \includegraphics[width=\textwidth]{thresholding_soma.png}
+
+        \footnotesize
+        Low-pass filtering was obtained by convolving the image with a large Gaussian kernel, before Otsu's thresholding. Small objects were removed to isolate the soma.
+    }
+    \pause
+
+    Other more sophisticated approaches have been proposed, such as the use of oriented filters.
+
+    \centering
+    \includegraphics[width=\textwidth]{Kayasandik_2018_find_soma.jpg}
+    \footnotesize
+    Kayasandik et al. 2018 - The response to kernels oriented at different angles is used to discriminate the soma from the rest of the cell.
+\end{frame}
+
+\begin{frame}
+{Neural process seed points}
+Calculating the difference between incremental morphological openings of the soma we can find the start of the neuronal processes and their orientation.
+
+\includegraphics[width=\textwidth]{Kayasandik_2018_find_process_start.png}
+\end{frame}
+
+\begin{frame}
+{Tree tracing - finding seed points}
+This is the trickiest part of tracing neuronal processes.
+
+Some methods define points on the centerline of the neuronal process, then search the neighbourhood for the closest point in the orientation of the process.
+
+\centering
+\includegraphics[width=.65\textwidth]{Kayasandik_2018_trace_dendrite.jpg}
+\end{frame}
+
+\begin{frame}
+{Tree tracing}
+Other more complex algorithms have been used. 
+
+For example, the fast marching algorithm, which was developed to solve the Eikonal equation; this is a non-linear equation for example used to describe the propagation of a wavefront.
+
+\centering
+\includegraphics[width=\textwidth]{FastMarchingYang2018.jpg}
+\end{frame}
+
+\begin{frame}
+{Modern methods for tracing}
+The advent of machine learning has allowed for the use of more sophisticated methods for tracing vessels and neuronal processes.
+
+We will look at some of these methods later in the course.
+
+\centering
+\includegraphics[width=\textwidth]{neuron_tracing_CNN_Huang2021.png}
+
+\footnotesize
+Huang et al. 2021, Tracing of neurons in 3D using convolutional neural networks. 
+\end{frame}
+\end{document}
+
