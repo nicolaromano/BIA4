@@ -13,7 +13,7 @@
 \usepackage[T1]{fontenc} 
 \usepackage[skins]{tcolorbox}
 \author{Nicola Roman\`o - nicola.romano@ed.ac.uk}
-\title{Lecture 11 - Convolutional Neural Networks (CNN)}
+\title{Lecture 12 - Convolutional Neural Networks (CNN)}
 \setlength{\fboxsep}{0pt}
 \setbeamertemplate {footline}{\begin{scriptsize}\hfill\insertframenumber ~of \inserttotalframenumber\kern1em\vskip5pt\end{scriptsize}}
 
@@ -46,9 +46,10 @@
     \begin{columns}
         \begin{column}{0.8\textwidth}
             \begin{itemize}
-                \item LO 1
-                \item LO 2
-                \item LO 3
+                \item Explain the motivation behind the use of convolutional neural networks for image analysis.
+                \item Describe the main component of a CNN
+                \item Describe the basic structure of a CNN
+                \item Calculate the layer size and number of trainable parameters in a CNN
             \end{itemize}
         \end{column}
         \begin{column}{0.2\textwidth}
@@ -249,9 +250,10 @@
         \item \textbf{Padding}: the number of pixels to add to the input image to make it divisible by the filter size. Normally, zero-padding is used in CNN.
               \pause
         \item Some CNN terminology related to padding:
-              begin{itemize}
-        \item \textbf{Same padding}: we pad with the same amount of zeros on each side. If we use a stride of 1 we will have the same image shape after convolution.
-        \item \textbf{Valide padding}: only \textbf{valid} data is used, meaning no padding. The output image is smaller than the input image, since we cannot process edge pixels.
+              \begin{itemize}
+                  \item \textbf{Same padding}: we pad with the same amount of zeros on each side. If we use a stride of 1 we will have the same image shape after convolution.
+                  \item \textbf{Valid padding}: only \textbf{valid} data is used, meaning no padding. The output image is smaller than the input image, since we cannot process edge pixels.
+              \end{itemize}
     \end{itemize}
 \end{frame}
 
@@ -352,40 +354,40 @@
 
 \begin{frame}
     {Using convolution in an ANN}
-    How can we make use of convolution in an ANN?
-
+    \centering
     The general idea behind convolutional neural networks
 
+    \vspace {2em}
+
     \begin{tikzpicture}
+        % Image
         \draw [fill=white] (0.5, 0) rectangle (2.5, 2);
         \draw [step=0.25] (0.51, 0.01) grid (2.49, 1.99);
 
-        \foreach \z [count = \n] in {1, 0.8, ..., 0}
-            {
-                \draw [fill = white] (5.5 - \n * 0.2, \z) rectangle (7.3 - \n * 0.2, \z+1.8);
-            }
+        % Convolutions
+        \node [draw, fill=white, rectangle, text width=5em, align=center] at (5, 1) {Low-level features};
 
-        \foreach \z [count = \n] in {1, 0.9, ..., 0}
-            {
-                \draw [fill = white] (9.5 - \n * 0.1, \z) rectangle (11 - \n * 0.1, \z+1.5);
-            }
+        \draw [->] (2.75, 1) -- (3.75, 1) node [above, midway] {Conv.};
 
-        \foreach \z [count = \n] in {1, 0.95, ..., 0}
-            {
-                \draw [fill = white] (13.5 - \n * 0.05, \z) rectangle (14.5 - \n * 0.05, \z+1);
-            }
+        \draw [->] (6, 1) -- (7, 1) node [above, midway] {Conv.};
+        \node [align=center] at (7.5, 1) {\Large\dots};
+        \draw [->] (8, 1) -- (9, 1) node [above, midway] {Conv.};
 
-        \draw [->] (3, 1) -- (4, 1) node [above, midway] {Conv.};
-        \draw [->] (7.3, 1) -- (8.3, 1) node [above, midway] {Conv.};
-        \draw [->] (11.2, 1) -- (12.2, 1) node [above, midway] {Conv.};
+        \node [draw, fill=white, rectangle, text width=5em, align=center] at (10, 1) {High-level features};
 
-        \Large
-        \node at (1.5, -1) {Image};
-        \node (low) at (5, -1) {\textbf{Low-level features}};
-        \node (high) at (13, -1) {\textbf{High-level features}};
-        \draw [->] (low) -- (high);
+        % Output
+        \draw [->] (11, 1) -- (11.5, 1);
+        \node [draw, thick, fill=white, align=center, text width = 8em] at (13, 1) {OUTPUT \hspace{3em}\mbox{Classification,} \mbox{segmentation}, \dots};
 
     \end{tikzpicture}
+
+    \pause
+
+    \begin{enumerate}
+        \item We start by training the network on a set of images.
+        \item We update the filter weights using back-propagation (e.g. gradient descent).
+        \item We can use the trained network on a new set of images!
+    \end{enumerate}
 \end{frame}
 
 \section{Building a CNN}
@@ -401,7 +403,7 @@
         \item Hyperparameters: number of convolutions, filter size, stride, padding.\\
               Note: the size, stride and padding are the same for all convolutions in the same layer.
         \item Parameters to learn: filter weights and biases.
-        \item Number of parameters: $\text{num filters} \times \text{filter size}.$
+        \item Number of parameters: $\text{num filters} \times \text{filter size} + 1~(\text{bias}).$
         \item After convolution a non-linearity is introduced through the \textbf{activation function}. \textbf{ReLU} is the most commonly used.
     \end{itemize}
 
@@ -426,8 +428,8 @@
     \textbf{Max-pooling layer}
 
     \begin{itemize}[<+->]
-        \item Performs a maximum filters on the input.
-        \item Hyperparameters: filter size.
+        \item Performs a maximum filter on the input.
+        \item Hyperparameters: filter size, stride (padding usually 0).
         \item Parameters to learn: none.
         \item Mostly used after a convolutional layer (thus some people call "convolutional + max pooling" a layer, others will consider them two layers, there is no consensus).
     \end{itemize}
@@ -468,7 +470,7 @@
 
     \begin{itemize}[<+->]
         \item Performs average filtering on the input.
-        \item Hyperparameters: filter size, stride.
+        \item Hyperparameters: filter size, stride (padding usually 0).
         \item Parameters to learn: none.
         \item Rarely used nowadays
     \end{itemize}
@@ -557,8 +559,8 @@
     We are now ready to put everything together.
 
     Example, we want to create a CNN that can classify an image as one of two classes (e.g. illness vs no illness).
-
-    \begin{tikzpicture}[scale=0.7]
+    \centering
+    \begin{tikzpicture}[scale=0.65]
         \draw [fill=white] (0.5, 0.5) rectangle (2.5, 2.5);
         \draw [step=0.25] (0.51, 0.51) grid (2.49, 2.49);
 
@@ -571,7 +573,7 @@
                 \draw [fill = white] (3.5 + \n * 0.2, \z) rectangle (5.5 + \n * 0.2, \z+2);
             }
 
-        \node [text width = 5em, align=center, anchor=north] at (5, -1) {6 filters, size 5, s=1, p=0 $\mathbf{32\times 32\times 6}$};
+        \node [text width = 5em, align=center, anchor=north] at (5, -1) {6 filters, size 5, s=1, p=0 $\mathbf{28\times 28\times 6}$};
 
         \pause
 
@@ -596,8 +598,8 @@
             }
 
         \node [text width = 6em, align=center, anchor=north] at (13, -1) {16 filters, size 5, s=1 $\mathbf{10\times 10\times 16}$};
-        
-        \pause 
+
+        \pause
 
         \draw [->] (13.5, 1.5) -- (14.3, 1.5);
         % Max pooling 2
@@ -610,15 +612,73 @@
 
         \pause
 
+        % FC
+
+        % Inputs (layer + edges)
         \draw [fill=white] (18.5, 0) rectangle (19, 3);
-        \foreach \y in {3, 2.8, ..., 0}
+        \foreach \y in {2.75, 2.25, ..., 0.25}
             {
-                \draw [->] (18.5, \y) -- (19, \y);
+                \foreach \yy in {2.25, 1.75, 1.25, 0.75}
+                    {
+                        \draw [very thin, gray!80!white] (18.75, \y) -- (19.75, \yy);
+                    }
             }
 
-    \end{tikzpicture}
+        % Hidden layer (layer + edges)
+        \draw [fill=white] (19.5, 0.5) rectangle (20, 2.5);
+        \foreach \y in {2.25, 1.75, 1.25, 0.75}
+            {
+                \draw [very thin, gray!80!white] (19.75, \y) -- (21, 1.5);
+            }
 
+        % Input nodes
+        \foreach \y in {2.75, 2.25, ..., 0.25}
+            {
+                \node [draw, fill=white, circle, minimum size=.1cm] at (18.75, \y) {};
+            }
+
+        % Hidden nodes
+        \foreach \y in {2.25, 1.75, 1.25, 0.75}
+            {
+                \node [draw, fill=white, circle, minimum size=.1cm] at (19.75, \y) {};
+            }
+
+        % Final output
+        \node [draw, fill=white, circle, minimum size=0.1cm] at (21, 1.5) {\small O};
+
+        \draw [->] (17, 1.5) -- (18, 1.5) node [above, align=center, midway] {Flatten};
+
+        \node [text width = 6em, align=center, anchor=north] at (20, -1) {Fully \mbox{connected} (100 + 50 nodes)};
+    \end{tikzpicture}
 \end{frame}
 
+\begin{frame}
+    {Summary of our CNN}
+    \begin{table}[]
+        \begin{tabular}{cc|c|c|}
+            \hline
+            \multicolumn{1}{|c|}{}                           & Activation shape      & Activation size & \begin{tabular}[c]{@{}c@{}}Number \\ of params\end{tabular} \\ \hline
+            \multicolumn{1}{|c|}{Input}                      & (32,32)               & 1024            & -                          \\ \hline
+            \multicolumn{1}{|c|}{\begin{tabular}[c]{@{}c@{}}Convolution\\ 6 $\times$ (f=5, s=1, p=0)\end{tabular}} & (28,28,6)             & 4704            & \begin{tabular}[c]{@{}c@{}}150\\ $(5\times 5 + 1) * 6$\end{tabular} \\ \hline
+            \multicolumn{1}{|c|}{\begin{tabular}[c]{@{}c@{}}Max pooling\\ (f=2, s=0)\end{tabular}} & (14,14,6)             & 1176            & 0                          \\ \hline
+            \multicolumn{1}{|c|}{\begin{tabular}[c]{@{}c@{}}Convolution\\ 16 $\times$ (f=5, s=1, p=0)\end{tabular}} & (10,10,16)            & 1600            & \begin{tabular}[c]{@{}c@{}}2416\\ $(5\times 5 \times 6 + 1) *16$\end{tabular} \\ \hline
+            \multicolumn{1}{|c|}{\begin{tabular}[c]{@{}c@{}}Max pooling\\ (f=2, s=0)\end{tabular}} & (5,5,16)              & 400             & 0                          \\ \hline
+            \multicolumn{1}{|c|}{Fully connected}            & (100,1)               & 100             & \begin{tabular}[c]{@{}c@{}}40100\\ $(400\times 100 + 100)$\end{tabular} \\ \hline
+            \multicolumn{1}{|c|}{Fully connected}            & (50,1)                & 50              & \begin{tabular}[c]{@{}c@{}}5050\\ $(100\times 50 + 50)$\end{tabular} \\ \hline
+            \multicolumn{1}{|c|}{Output}                     & (1,1)                 & 1               & 50                         \\ \hline
+            \multicolumn{1}{l}{}                             & \multicolumn{1}{l|}{} & \textbf{TOTAL}  & \textbf{47766 parameters}  \\ \cline{3-4}
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}
+    {Coming up...}
+
+    In the next lectures we will explore some "classic" CNN structures, which you can use as a starting point for your own CNNs.
+
+    We will talk about the practical use of the CNNs for image analysis, e.g. for segmentation.
+
+    We will also build our own!
+\end{frame}
 \end{document}
 
