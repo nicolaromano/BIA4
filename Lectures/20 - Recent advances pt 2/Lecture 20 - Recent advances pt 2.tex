@@ -1,0 +1,258 @@
+\documentclass[9pt, aspectratio=169]{beamer}
+\usepackage{FiraSans}
+\usetheme[subsectionpage=progressbar]{metropolis}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage[absolute,overlay]{textpos}
+\usepackage[T1]{fontenc} 
+\usepackage[skins]{tcolorbox}
+\author{Nicola Roman\`o - nicola.romano@ed.ac.uk}
+\title{Lecture 20 - Recents advances in image analysis using deep learning\\\small Part 2 - Image segmentation}
+\setlength{\fboxsep}{0pt}
+\setbeamertemplate {footline}{\begin{scriptsize}\hfill\insertframenumber ~of \inserttotalframenumber\kern1em\vskip5pt\end{scriptsize}}
+
+% Remove "Figure" in front of captions
+% See https://tex.stackexchange.com/questions/82456/how-to-remove-figure-caption-prefix-figure-in-beamer
+\captionsetup{labelformat=empty,labelsep=none}
+
+\titlegraphic{\centering \includegraphics[scale=.5]{instituteLogo.png}}
+\date{}
+
+\begin{document}
+
+\newtcolorbox{codebox}{enhanced,
+    top=2pt,
+    left=2pt,
+    right=2pt,
+    bottom=2pt,
+    boxrule=0pt,
+    leftrule=5pt,
+    sharp corners,
+    colback=gray!20,
+    colframe=blue!60!black}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}
+    {Learning objectives}
+    \begin{columns}
+        \begin{column}{0.8\textwidth}
+            \begin{itemize}
+                \item Discuss recent advances in image analysis using deep learning.
+            \end{itemize}
+
+            \pause
+            \vspace{2em}
+
+            Today we are going to analyse recent articles related to image segmentation using deep learning.
+
+            \vspace{1em}
+            \begin{itemize}
+                \item The StarDist and StarDist3D methods for cell segmentation.
+                      \begin{itemize}
+                          \item Schmidt et al. 2018 - Cell Detection with Star-convex Polygons
+                          \item Weigert et al. 2020 - Star-convex Polyhedra for 3D Object Detection and Segmentation in Microscopy
+                      \end{itemize}
+                \item TissueNet and Mesmer
+                      \begin{itemize}
+                          \item Greenwald et al. 2021 - Whole-cell segmentation of tissue images with human-level performance using large-scale data annotation and deep learning
+                      \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.2\textwidth}
+            \includegraphics[angle=-30, origin=tr, width=1.5\textwidth]{lightbulb.png}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{StarDist and StarDist3D}
+
+\begin{frame}
+    {Instance segmentation of cell nuclei}
+    Instance segmentation of microscopy images is a difficult task.\\
+
+    \textit{Top-down approaches} perform semantic segmentation, then split instances.\\
+    \textbf{Problem}: nearby cells in crowded images fused together.\\
+
+    \textit{Bottom-up approaches} roughly define cells (bounding boxes), then classify pixels within each box.\\
+    \textbf{Problem}: NMS steps might miss nearby nuclei.
+
+    \centering
+    \includegraphics[width=.5\textwidth]{Schmidt2018_problems.png}
+\end{frame}
+
+\begin{frame}
+    {StarDist: cell detection with star-convex polygons}
+    \centering
+    \includegraphics[width=\textwidth]{Schmidt2018_title.png}
+
+    \raggedright
+    \textit{``To alleviate the aforementioned problems, we propose StarDist, a cell detection method that predicts a shape representation which is flexible enough such that – without refinement – the accuracy of the localization can compete
+        with that of instance segmentation methods. To that end, we use \textbf{star-convex polygons} that we find well-suited to approximate the typically roundish shapes of cell nuclei in microscopy images.''}
+\end{frame}
+
+\begin{frame}
+    {StarDist: method}
+    \centering
+    \includegraphics[width=.5\textwidth]{Schmidt2018_process.png}
+
+    \begin{textblock*}{2cm}(2cm,2.5cm)
+        Radial distances to border
+    \end{textblock*}
+
+    \begin{textblock*}{2cm}(12cm,2.5cm)
+        Object probabilities
+    \end{textblock*}
+
+    \begin{textblock*}{2cm}(2cm,6.5cm)
+        U-Net architecture
+    \end{textblock*}
+
+    \begin{textblock*}{4cm}(12cm,7cm)
+        Obj. prob. $\rightarrow$ binary cross-entropy loss
+    \end{textblock*}
+
+    \begin{textblock*}{4cm}(12cm,6cm)
+        Distances $\rightarrow$ MAE loss
+    \end{textblock*}
+\end{frame}
+
+\begin{frame}
+    {Results}
+    \centering
+    \only<1>{
+        \includegraphics[width=.75\textwidth]{Schmidt2018_comparison.png}
+    }
+    \only<2>{
+        \includegraphics[width=\textwidth]{Schmidt2018_comparison2.png}
+    }
+
+    \footnotesize
+    \raggedright
+    StarDist outperforms many common instance segmentation methods.
+\end{frame}
+
+\begin{frame}
+    {Can we extend StarDist to 3D?}
+    \centering
+    \includegraphics[width=\textwidth]{Weigert2020_title.png}
+\end{frame}
+
+\begin{frame}
+    {StarDist3D - method}
+    \centering
+    \includegraphics[width=\textwidth]{Weigert2020_method.png}
+\end{frame}
+
+\begin{frame}
+    {Results}
+    \centering
+
+    \includegraphics[width=\textwidth]{Weigert2020_results.png}
+\end{frame}
+
+\begin{frame}
+    {Comparison with existing methods}
+    \centering
+    \includegraphics[width=\textwidth]{Weigert2020_comparison.png}
+\end{frame}
+
+\section{TissueNet}
+
+\begin{frame}
+    {The problem}
+    \begin{itemize}
+        \item Lack of a generalized algorithm for locating single cells in images
+        \item Deep learning requires a lot of ground-truth data (difficult to get!) for high accuracy segmentation
+        \item Public datasets only annotate nuclei, not the entire cell
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    {TissueNet and the Mesmer algorithm}
+    \centering
+    \includegraphics[width=\textwidth]{Greenwald2021_title.png}
+
+    \begin{itemize}
+        \item \textbf{TissueNet}: ``a comprehensive segmentation dataset of >1 million paired whole-cell and nuclear annotations.''
+        \item \textbf{Mesmer}: a deep-learning segmentation algorithm.
+        \item \textbf{DeepCell}: an open-source collection of software libraries, to create a web interface for using Mesmer, as well as plugins for ImageJ and QuPath.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    {TissueNet development}
+    \centering
+    \includegraphics[width=\textwidth]{Greenwald2021_annotation_process.png}
+
+    \footnotesize
+    \raggedright
+    TissueNet was developed through a crowdsourcing approach
+\end{frame}
+
+\begin{frame}
+    {TissueNet - some statistics}
+    \centering
+    \includegraphics[width=\textwidth]{Greenwald2021_stats.png}
+\end{frame}
+
+\begin{frame}
+    {The Mesmer segmentation algorithm}
+    \centering
+    \includegraphics[width=.8\textwidth]{Greenwald2021_Mesmer_method.png}
+\end{frame}
+
+\begin{frame}
+    {Mesmer architecture}
+    \centering
+    \includegraphics[width=\textwidth]{Greenwald2021_architecture.png}
+\end{frame}
+
+\begin{frame}
+    {Segmentation results}
+    \centering
+    \only<1>{
+        \includegraphics[width=.9\textwidth]{Greenwald2021_method_comparison.png}
+    }
+    \only<2>{
+        \includegraphics[width=.5\textwidth]{Greenwald2021_method_F1_score.png}
+    }
+\end{frame}
+
+\begin{frame}
+    {Segmentation of different tissues}
+    \centering
+    \includegraphics[width=\textwidth]{Greenwald2021_various_tissues.png}
+\end{frame}
+
+\begin{frame}
+    {Human-level performance in segmentation}
+    \centering
+    \includegraphics[width=.7\textwidth]{Greenwald2021_Mesmer_vs_human.png}
+\end{frame}
+
+\begin{frame}
+    {Mesmer deployment}
+    \centering
+    \includegraphics[width=.75\textwidth]{Greenwald2021_Mesmer_deployment.png}
+\end{frame}
+
+\begin{frame}
+{The end!}
+\centering
+\Large
+That's the end of the course\\
+Hope you enjoyed it!
+
+\footnotesize
+(and looking forward to see your assignments!)
+\end{frame}
+
+\end{document}
