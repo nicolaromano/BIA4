@@ -6,5 +6,5 @@
 
 # BIA4
 
-This repository contains data for the Bioimaging Analysis 4 (BIA4) course for the Biomedical Sciences and Biomedical Informatics students at the Edinburgh/Zhejiang Institute in Haining, China.
+This repository contains data for the Biomedical Imaging Analysis 4 (BIA4) course for the Biomedical Sciences and Biomedical Informatics students at the Edinburgh/Zhejiang Institute in Haining, China.
 
