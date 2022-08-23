@@ -48,7 +48,7 @@
         \begin{column}{0.6\textwidth}
             Semester 1 only course, 20 UoE credits / 5 ZJU credits.\\
             CO : Nicola Roman\`o - nicola.romano@ed.ac.uk\\
-            \vspace{2em}            
+            \vspace{2em}
             This course contributes 3.3\% of the final ZJU GPA or 3.6\% of the final GPA for international students.\\
             \vspace{2em}
             This course contributes 11.1\% of the final UoE degree mark used for degree classification.\\
@@ -96,11 +96,11 @@
     {What will we talk about (roughly)}
     \begin{columns}
         \begin{column}{0.7\textwidth}
-            \begin{itemize}
-                \item \textit{Weeks 1-5} - Basic operations on images, filters and features.
-                \item \textit{Weeks 6-7} - More complex operations (tracking, registration, segmentation)
-                \item \textit{Weeks 8-12} - Traditional and modern machine learning methods for image analysis
-                \item \textit{Weeks 13-14} - Discussion on recent topics in image analysis
+            \begin{itemize}[<+->]
+                \item \textit{Weeks 1-4} - Basic operations on images, filters and features.
+                \item \textit{Weeks 5-6} - More complex operations (e.g. feature extraction, tracking, segmentation, \dots).
+                \item \textit{Weeks 8-12} - Traditional and modern (deep learning) machine learning methods for image analysis
+                \item \textit{Week 13} - Discussion on recent topics in image analysis
             \end{itemize}
         \end{column}
         \begin{column}{0.3\textwidth}
@@ -113,11 +113,16 @@
     \pause
 
     We will cover both the theory and practical aspects (with Python code!) of these topics.\\
-    You will have Python workshops to practice these problems first hand.
+
+    You will have \textbf{Python workshops} to practice these problems first hand.\\
 
     \pause
 
-    Please note that you will need Python knowledge to make the most of this course.
+    Please note that \textbf{you will need Python knowledge} to pass this course.
+
+    \pause
+
+    I will also post \textbf{quizzes} on Learn after each lecture, to reinforce your understanding and \textbf{extra reading material} that will be useful to expand your image analysis knowledge.
 \end{frame}
 
 \begin{frame}
@@ -126,11 +131,15 @@
         \includegraphics[width=0.1\textwidth]{slack.png}
     \end{center}
 
-    I added you to a Slack group. Please join and introduce yourself, if you have not already!
+    I added you to a \textbf{Slack} group. Please join and introduce yourself, if you have not already!
 
     This is an invaluable opportunity to discuss anything related to the course with your peers and myself.
 
     Introductory material about Python is available on Learn and further material can be provided, if needed - plase ask!
+\end{frame}
+
+\begin{frame}
+    \section {Introduction to image analysis}
 \end{frame}
 
 \begin{frame}
@@ -441,8 +450,24 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
             240 & 10 & 40 \\
         \end{bmatrix}
     $$
-    \pause
-    More information can be found on the NumPy paper (Harris et al., Nature 2020) or on the NumPy website (www.numpy.org)
+\end{frame}
+
+\begin{frame}
+    {More info on Numpy}
+    For more information on Numpy
+
+    \begin{columns}
+        \begin{column}{.7\textwidth}
+            \begin{enumerate}
+                \item Check their website \dots
+                \item \dots in particular \url{https://numpy.org/devdocs/user/absolute_beginners.html} \includegraphics[width=.25\textwidth]{QRnumpy.png}
+                \item Check the Numpy paper (Harris et al, Nature 2020, on Learn)
+            \end{enumerate}
+        \end{column}
+        \begin{column}{.3\textwidth}
+            \includegraphics[width=\textwidth, trim=0  0  390  0, clip]{numpylogo.png}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
@@ -500,7 +525,7 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
     \end{columns}
     \pause
     \centering
-    These are (almost) equivalent and will output \texttt{img} as a Numpy array.    
+    These are (almost) equivalent and will output \texttt{img} as a Numpy array.
 \end{frame}
 
 \begin{frame}
@@ -584,17 +609,17 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
     If you set \texttt{vmax=100}, then any pixel with an intensity higher than 100 will be shown as white.
     \pause
     \begin{columns}
-    \begin{column}{0.5\textwidth}
-        \begin{codebox}
-            \texttt{plt.imshow(img, vmin=0, vmax=255)\\
-            plt.imshow(img, vmin=0, vmax=50)\\
-            \# Automatically uses min and max of the image\\
-            plt.imshow(img)}
-        \end{codebox}        
-    \end{column}
-    \begin{column}{0.5\textwidth}
-        \includegraphics[width=\textwidth]{vmin_vmax.png}
-    \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{codebox}
+                \texttt{plt.imshow(img, vmin=0, vmax=255)\\
+                    plt.imshow(img, vmin=0, vmax=50)\\
+                    \# Automatically uses min and max of the image\\
+                    plt.imshow(img)}
+            \end{codebox}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \includegraphics[width=\textwidth]{vmin_vmax.png}
+        \end{column}
     \end{columns}
 
     IMPORTANT: the actual pixel intensity of these images are all the same we are just modifying how they are displayed on the screen.
