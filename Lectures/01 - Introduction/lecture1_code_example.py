@@ -2,8 +2,8 @@
 # 1. Load an image from file
 # 2. Inspect the image and show it with different colourmaps
 
-from skimage.io import imread
 import matplotlib.pyplot as plt
+from skimage.io import imread
 import numpy as np
 
 nuclei = imread("nuclei1.tif")
@@ -11,9 +11,9 @@ nuclei = imread("nuclei1.tif")
 print(type(nuclei))
 print(nuclei.shape)
 print(nuclei.dtype)
-print(np.max(nuclei))
+print(f"Minimum: {np.min(nuclei)} - Maximum: {np.max(nuclei)}")
 
 plt.imshow(nuclei, cmap="gray")
+plt.title("Nuclei stained with DAPI", fontsize = 18)
 plt.axis("off")
-plt.title("Cell nuclei stained with DAPI", fontsize=18)
 plt.show()
