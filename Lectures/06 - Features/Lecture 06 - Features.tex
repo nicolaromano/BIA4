@@ -290,17 +290,16 @@ Examples of tasks for which we may use features
 \end{frame}
 
 \begin{frame}
-    {The DoG method for blob detection}
-    \only<1->{To detect blobs of different size, we can use a Gaussian filter with different standard deviations.}
+    {The LoG method for blob detection}
+    To detect blobs of different size, we can use a Gaussian filter with different standard deviations.
+    
+    We can apply a threshold to the LoG image to remove spurious blobs and can also remove blobs overlapping over a certain \%
 
-    \pause
-    \only<2>{\includegraphics[width=\textwidth]{blob_detection_thr0.png}}
-    \only<3>{\includegraphics[width=\textwidth]{blob_detection_thr0_4.png}}
-    \only<4->{\includegraphics[width=\textwidth]{blob_detection_thr0_8.png}}
+    \only<1>{\includegraphics[width=\textwidth]{blob_detection_thr0.png}}
+    \only<2>{\includegraphics[width=\textwidth]{blob_detection_thr0_4.png}}
+    \only<3->{\includegraphics[width=\textwidth]{blob_detection_thr0_8.png}}
 
-    \only<2->{We can apply a threshold to the DoG image to remove spurious blobs and can also remove blobs overlapping over a certain \%}
-
-    \only<5>{Scikit image implements these steps in the \href{https://scikit-image.org/docs/dev/api/skimage.feature.html\#skimage.feature.blob\_log}{\texttt{skimage.feature.blob\_log}} function.}
+    \only<4>{Scikit image implements these steps in the \href{https://scikit-image.org/docs/dev/api/skimage.feature.html\#skimage.feature.blob\_log}{\texttt{skimage.feature.blob\_log}} function.}
 \end{frame}
 
 \begin{frame}
