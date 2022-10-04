@@ -4,6 +4,8 @@ For this ICA, you should produce an individual report highlighting the use for y
 
 The report should be max 4 pages long, including references and should contain:
 
+- A brief initial sentence, stating which group you were in for ICA 1 and what software you developed. For example: "_I was part of group 4, and we developed a software to classify X-ray images of the lungs into healthy and with pneumonia._"
+
 - An **introduction** to the biomedical problem you worked on as a group, and how your software can help towards solving this problem.
 
     **Important**: you probably will not produce a "final solution" and might only produce something that contributes toward solving a tiny fraction of the problem. This is absolutely fine and you will **not** be down-marked for this. However, you should be able to critically reflect on your contribution.
