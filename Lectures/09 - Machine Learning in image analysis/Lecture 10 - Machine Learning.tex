@@ -41,12 +41,11 @@
 \end{frame}
 
 \begin{frame}
-    {Plan for the next weeks}
+    {Plan for the next lectures}
     \begin{itemize}
-        \item Week 8 - Traditional ML approaches in image analysis
-        \item Week 9 - Convolutional neural networks (CNN)
-        \item Week 10 - CNN architectures
-        \item Week 11 - Practical aspects of using CNNs.
+        \item Lectures 9-11 - Traditional ML approaches in image analysis
+        \item Lectures 12-14 - Convolutional neural networks (CNN)
+        \item Lectures 15-17 - Practical aspects of using CNNs.
     \end{itemize}
 \end{frame}
 
@@ -56,8 +55,8 @@
         \begin{column}{0.8\textwidth}
             \begin{itemize}
                 \item Describe use cases for machine learning in image analysis
-                \item Describe the different types of machine learning algorithms
-                \item Use Python to implement supervised and unsupervised ML algorithms for image analysis
+                \item Explain the difference between supervised and unsupervised allgorithms
+                \item Discuss the bias-variance tradeoff and methods to reduce overfitting
             \end{itemize}
         \end{column}
         \begin{column}{0.2\textwidth}
@@ -223,8 +222,8 @@
                 Bhaskar et al, 2019
             \end{column}
             \begin{column}{.5\textwidth}
-                Dimensionality reduction methods map $Y = f(x_1, x_2, ..., x_n)$ to $Y = f(DR_1, ..., DR_m)$ with $m \leq n$. 
-                
+                Dimensionality reduction methods map $Y = f(x_1, x_2, ..., x_n)$ to $Y = f(DR_1, ..., DR_m)$ with $m \leq n$.
+
                 They include linear transformations, such as PCA (principal component analysis), and nonlinear transformations, such as t-SNE (t-distributed stochastic neighbor embedding) or UMAP (uniform manifold approximation).
             \end{column}
         \end{columns}
@@ -232,32 +231,42 @@
 
 \end{frame}
 
-\begin{frame}
-    {A simple example...}
-    Let's use t-SNE to classify handwritten digits!
-
-    We are going to use the UCI digits dataset, by E. Alpaydin and C. Kaynak, containing 1797 8x8 images of handwritten digits from 0 to 9.
-
-    It's a simple yet large dataset useful for quick image analysis tests!
-
-    \centering
-    \includegraphics[width=.4\textwidth, trim=0 0 0 30, clip]{uci.png}
-\end{frame}
-
 \section {Supervised methods}
+
+\begin{frame}
+    {The bias-variance tradeoff}
+    We want to train our model to perform some task. However, just like any statistical model, we don't want to \textbf{overfit}.
+
+    \only<1-2>{\centering
+        \includegraphics[width=.6\textwidth]{fitting.png}
+
+        \raggedright
+        In ML, we often describe this in terms of \textbf{bias} and \textbf{variance} errors.
+        \pause
+        \begin{itemize}
+            \item \textbf{Bias} derives from erroneous assumptions in the learning algorithm. High bias can cause an algorithm to miss the relevant relations between features and target outputs (underfitting).
+            \item \textbf{Variance} derives from sensitivity to small fluctuations in the training set. High variance may result from an algorithm modeling the random noise in the training data (overfitting).
+        \end{itemize}
+        \footnotesize(Adapted from Wikipedia)
+    }
+    \only<3>{
+        \centering
+        \includegraphics[width=.8\textwidth]{Bias_variance.jpg}
+    }
+\end{frame}
 
 \begin{frame}
     {Supervised learning}
     Many different supervised learning algorithms have been used for image analysis.
 
-    Commonly used:
+    Examples of commonly used algorithms include:
 
     \begin{itemize}
         \item Logistic regression
         \item Support vector machines (SVM)
         \item Random forests (RF)
-        \item Neural networks (Lecture 11)
-        \item Convolutional neural networks (Lectures 12 and beyond)
+        \item Neural networks
+        \item Convolutional neural networks
     \end{itemize}
 \end{frame}
 
@@ -284,52 +293,94 @@
         \draw [very thick, teal, domain=0:8,samples=100] plot (\x,{3/(1+(exp(-2*(\x-4)))});
     \end{tikzpicture}
 
-    Logistic regression is a simple supervised learning algorithm that is used to predict the class of a given data point. 
-    
+    Logistic regression is a simple supervised learning algorithm that is used to predict the class of a given data point.
+
     It is mostly used to predict binary outcomes but can be extended to multi-class classification (multinomial logistic regression).
 \end{frame}
 
 \begin{frame}
     {Supervised learning algorithms - support vector machines}
     \centering
-    \begin{tikzpicture}
-        % Draw axes
-        \draw [<->,thick] (0,5) node (yaxis) [left] {Feature 1}
-        |- (5,0) node (xaxis) [below] {Feature 2};
-        % draw line
-        \draw [color=orange] (0,-1) -- (5,4); % y=x-1
-        \draw[dashed] (-1,0) -- (4,5); % y=x+1
-        \draw[dashed] (2,-1) -- (6,3); % y=x-3
-        % \draw labels
-        \draw (3.5,3) node[color=orange, rotate=45,font=\small]
-        {\textbf{Optimal hyperplane}};
-        % draw distance
-        \draw[dotted, thick, color=teal] (4,5) -- (6,3);
-        \draw (5.25,4.25) node[color=teal, rotate=-45] {Maximised margin};
-        % draw negative dots
-        \node [color=red] at (-1, 1.5) {Support};
-        \node [color=red] at (-1, 1.2) {vectors};
-        \draw [->, color=red, thin, dotted] (-0.5, 1.3) -- (0.5, 1.5);
-        \draw [->, color=red, thin, dotted] (-0.5, 1.3) -- (3.3, 0.3);
-        \fill[red] (0.5,1.5) circle (3pt);
-        \fill[black] (1.5,2.6) circle (3pt);
-        \fill[black] (1,2.5) circle (3pt);
-        \fill[black] (0.75,2) circle (3pt);
-        \fill[black] (0.6,1.9) circle (3pt);
-        \fill[black] (0.77, 2.5) circle (3pt);
-        \fill[black] (1.5,3) circle (3pt);
-        \fill[black] (1.3,3.3) circle (3pt);
-        \fill[black] (0.6,3.2) circle (3pt);
-        % draw positive dots
-        \draw[red,thick] (3.3,.3)  circle (3pt);
-        \draw[black] (4.5,1) circle (3pt);
-        \draw[black] (4.5,1.2) circle (3pt);
-        \draw[black] (4.5,.5) circle (3pt);
-        \draw[black] (3.9,.7) circle (3pt);
-        \draw[black] (5,1) circle (3pt);
-        \draw[black] (3.5,.2) circle (3pt);
-        \draw[black] (4,.3) circle (3pt);
-    \end{tikzpicture}
+    \only<1>{
+        \begin{tikzpicture}
+            % Draw axes
+            \draw [<->,thick] (0,5) node (yaxis) [left] {Feature 1}
+            |- (5,0) node (xaxis) [below] {Feature 2};
+            % draw line
+            \draw [color=orange] (0,-1) -- (5,4); % y=x-1
+            \draw[dashed] (-1,0) -- (4,5); % y=x+1
+            \draw[dashed] (2,-1) -- (6,3); % y=x-3
+            % \draw labels
+            \draw (3.5,3) node[color=orange, rotate=45,font=\small]
+            {\textbf{Optimal hyperplane}};
+            % draw distance
+            \draw[dotted, thick, color=teal] (4,5) -- (6,3);
+            \draw (5.25,4.25) node[color=teal, rotate=-45] {Maximised margin};
+            % draw negative dots
+            \node [color=red] at (-1, 1.5) {Support};
+            \node [color=red] at (-1, 1.2) {vectors};
+            \draw [->, color=red, thin, dotted] (-0.5, 1.3) -- (0.5, 1.5);
+            \draw [->, color=red, thin, dotted] (-0.5, 1.3) -- (3.3, 0.3);
+            \fill[red] (0.5,1.5) circle (3pt);
+            \fill[black] (1.5,2.6) circle (3pt);
+            \fill[black] (1,2.5) circle (3pt);
+            \fill[black] (0.75,2) circle (3pt);
+            \fill[black] (0.6,1.9) circle (3pt);
+            \fill[black] (0.77, 2.5) circle (3pt);
+            \fill[black] (1.5,3) circle (3pt);
+            \fill[black] (1.3,3.3) circle (3pt);
+            \fill[black] (0.6,3.2) circle (3pt);
+            % draw positive dots
+            \draw[red,thick] (3.3,.3)  circle (3pt);
+            \draw[black] (4.5,1) circle (3pt);
+            \draw[black] (4.5,1.2) circle (3pt);
+            \draw[black] (4.5,.5) circle (3pt);
+            \draw[black] (3.9,.7) circle (3pt);
+            \draw[black] (5,1) circle (3pt);
+            \draw[black] (3.5,.2) circle (3pt);
+            \draw[black] (4,.3) circle (3pt);
+        \end{tikzpicture}
+    }
+    \only<2>{
+        \begin{tikzpicture}
+            % Draw axes
+            \draw [<->,thick] (0,5) node (yaxis) [left] {Feature 1}
+            |- (5,0) node (xaxis) [below] {Feature 2};
+            % draw line
+            \draw [color=orange] (0,-1) -- (5,4); % y=x-1
+            \draw[dashed] (-1,0) -- (4,5); % y=x+1
+            \draw[dashed] (2,-1) -- (6,3); % y=x-3
+            % \draw labels
+            \draw (3.5,3) node[color=orange, rotate=45,font=\small]
+            {\textbf{Optimal hyperplane}};
+            % draw distance
+            \draw[dotted, thick, color=teal] (4,5) -- (6,3);
+            \draw (5.25,4.25) node[color=teal, rotate=-45] {Soft margin};
+            % draw negative dots
+            \node [color=red] at (-1, 1.5) {Support};
+            \node [color=red] at (-1, 1.2) {vectors};
+            \draw [->, color=red, thin, dotted] (-0.5, 1.3) -- (0.5, 1.5);
+            \draw [->, color=red, thin, dotted] (-0.5, 1.3) -- (3.3, 0.3);
+            \fill[red] (0.5,1.5) circle (3pt);
+            \fill[black] (1.5,2.6) circle (3pt);
+            \fill[black] (1,2.5) circle (3pt);
+            \fill[black] (0.75,2) circle (3pt);
+            \fill[black] (1.7,0.9) circle (2pt);
+            \fill[black] (0.77, 2.5) circle (3pt);
+            \fill[black] (3.5,1.2) circle (2pt);
+            \fill[black] (1.3,3.3) circle (3pt);
+            \fill[black] (0.6,3.2) circle (3pt);
+            % draw positive dots
+            \draw[red,thick] (3.3,.3)  circle (3pt);
+            \draw[black] (4.5,1) circle (3pt);
+            \draw[black] (4.5,1.2) circle (3pt);
+            \draw[black] (4.5,.5) circle (3pt);
+            \draw[black] (3.9,1.3) circle (2pt);
+            \draw[black] (5,1) circle (3pt);
+            \draw[black] (3.5,.2) circle (3pt);
+            \draw[black] (4,.3) circle (3pt);
+        \end{tikzpicture}
+    }
 
     A support vector machine (SVM) uses a linear decision boundary to classify data points. It determines the optimal hyperplane that separates the data points into two classes.
 \end{frame}
@@ -345,27 +396,6 @@
     It classifies samples using many binary trees, fitted on various sub-samples of the dataset. A majority votes from these trees decides the outcome. This improves prediction accuracy and controls over-fitting.
 \end{frame}
 
-\begin{frame}
-{The bias-variance tradeoff}
-We want to train our model to perform some task. However, just like any statistical model, we don't want to \textbf{overfit}.
-
-\only<1-2>{\centering
-\includegraphics[width=.6\textwidth]{fitting.png}
-
-\raggedright
-In ML, we often describe this in terms of \textbf{bias} and \textbf{variance} errors.
-\pause
-\begin{itemize}
-\item \textbf{Bias} derives from erroneous assumptions in the learning algorithm. High bias can cause an algorithm to miss the relevant relations between features and target outputs (underfitting).
-\item \textbf{Variance} derives from sensitivity to small fluctuations in the training set. High variance may result from an algorithm modeling the random noise in the training data (overfitting).
-\end{itemize}
-\footnotesize(Adapted from Wikipedia)
-}
-\only<3>{
-\centering
-\includegraphics[width=.8\textwidth]{Bias_variance.jpg}
-}
-\end{frame}
 \begin{frame}
     {Data splitting}
     In order to avoid overfitting we can split our dataset in three parts:
@@ -417,12 +447,46 @@ In ML, we often describe this in terms of \textbf{bias} and \textbf{variance} er
     We will explore this more in details in the upcoming lectures!
 \end{frame}
 
-\begin{frame}
-{Supervised learning handwritten digits}
-We will use the handwritten digits dataset again, but this time we will train a supervised model (SVM) to predict the class of the digit.
+\section{Model evaluation}
 
-\centering
-\includegraphics[width=.4\textwidth]{uci.png}
+\begin{frame}
+    {Model evaluation}
+    Model evaluation is a crucial step in the machine learning pipeline.
+
+    It is used to estimate the performance of the model on \underline{unseen} data (i.e. the test set).
+
+    Depending on the task, we can use different metrics to evaluate the model performance.
+\end{frame}
+
+\begin{frame}
+    {Example - classification metrics}
+    When performing a classification task, we can use the following metrics to evaluate the model performance:
+
+    \begin{itemize}
+        \item \textbf{Accuracy} - the fraction of correct predictions
+        \item \textbf{Precision} - the fraction of true positives among all positive predictions
+        \item \textbf{Recall} - the fraction of true positives among all actual positives
+        \item \textbf{F1 score} - the harmonic mean of precision and recall = \Large $2 \cdot \frac{precision * recall}{precision + recall}$
+    \end{itemize}
+    \pause
+    These can also be visualized using a \textbf{confusion matrix}:
+
+    \centering
+    \def\arraystretch{2}
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \vtop{\hbox{\strut \textbf{Predicted $\rightarrow$}}\hbox{\strut \textbf{Actual $\downarrow$}}} & \textbf{Positive} & \textbf{Negative} \\
+        \hline
+        \textbf{Positive}                                                                               & True positive     & False positive    \\
+        \hline
+        \textbf{Negative}                                                                               & False negative    & True negative     \\
+        \hline
+    \end{tabular}
+\end{frame}
+
+\begin{frame}
+{Next lecture...}
+
+Next lecture will be a coding session, showing you examples of using machine learning for image analysis.
 \end{frame}
 \end{document}
-
