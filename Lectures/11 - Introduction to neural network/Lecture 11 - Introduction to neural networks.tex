@@ -108,9 +108,9 @@
         \node [below of = n] {\Large\textbf{$T$}};
 
         % Inputs and weights
-        \foreach \i in {0,1,2}
+        \foreach \i in {1,2,3}
             {
-                \node (i\i) at(0,\i) {\Large$I_\i$};
+                \node (i\i) at(0,\i-1) {\Large$I_\i$};
                 \draw [->] (i\i) -- node [above, midway, sloped] {\textbf{$w_\i$}} (n);
             }
 
@@ -278,12 +278,15 @@
         \node at (12,1){\vdots};
         \node[unit](yc) at (12,0){$y_C^{(L+1)}$};
 
+        \draw[->] (x0) -- (h10);       
         \draw[->] (x0) -- (h11);
         \draw[->] (x0) -- (h1m);
 
+        \draw[->] (x1) -- (h10);
         \draw[->] (x1) -- (h11);
         \draw[->] (x1) -- (h1m);
 
+        \draw[->] (xd) -- (h10);
         \draw[->] (xd) -- (h11);
         \draw[->] (xd) -- (h1m);
 
@@ -307,6 +310,10 @@
 
         \draw[->,path fading=east] (h1m) -- (h21);
         \draw[->,path fading=east] (h1m) -- (h22);
+
+        \draw[->,path fading=west] (hL10) -- (hL0);
+        \draw[->,path fading=west] (hL12) -- (hL0);
+        \draw[->,path fading=west] (hL11) -- (hL0);
 
         \draw[->,path fading=west] (hL10) -- (hL1);
         \draw[->,path fading=west] (hL11) -- (hL1);
