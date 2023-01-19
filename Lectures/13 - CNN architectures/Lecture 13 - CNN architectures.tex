@@ -57,9 +57,6 @@
     \end{itemize}
 
     The idea is to get some \textbf{intuition} about these architectures and how they work.
-
-    It is worth downloading the attached papers to follow/take notes during this lecture!
-
 \end{frame}
 
 \begin{frame}
@@ -93,6 +90,19 @@
     {LeNet-5 architecture}
     \centering
     \includegraphics[width=\textwidth]{LeNet-5.png}
+\end{frame}
+
+\begin{frame}
+    {LeNet-5 training}
+
+    \begin{itemize}
+        \item Trained on MNIST dataset (60000 handwritten digits)
+        \item Error rate: <1\%
+    \end{itemize}
+
+    \centering
+    \includegraphics[width=.4\textwidth]{lenet5_training.png}
+    \includegraphics[width=.4\textwidth]{lenet5_missclassification.png}
 \end{frame}
 
 \begin{frame}
@@ -139,6 +149,28 @@
     {AlexNet architecture}
     \centering
     \includegraphics[width=\textwidth]{AlexNet.png}
+\end{frame}
+
+\begin{frame}
+    {Improvements in AlexNet}
+    AlexNet introduced a number of improvements:
+
+    \begin {itemize}
+    \item ReLU activation function (instead of sigmoid/tanh)
+    \item Dropout
+    \item Softmax activation function in the last layer
+    \item Data augmentation
+    \item \color{gray}Local response normalization
+    \item Training on multiple GPUs
+    \end {itemize}
+\end{frame}
+
+\begin{frame}
+    {ReLU activation function}
+    \centering
+    \includegraphics[width=\textwidth]{alexnet_relu.png}
+
+    Introduction of the ReLU activation function (instead of sigmoid/tanh) allowed to train much faster.
 \end{frame}
 
 \begin{frame}
@@ -279,6 +311,22 @@
 \end{frame}
 
 \begin{frame}
+    {Inception module}
+    \begin{itemize}
+        \item The inception module is a building block of the GoogLeNet architecture
+        \item It is a combination of convolutions with different kernel sizes
+        \item It is a way to increase the non-linearity of the network
+        \item It is a way to reduce the number of parameters
+    \end{itemize}
+
+    \centering
+    \includegraphics[width=.4\textwidth]{inception_naive.png}
+    \pause
+    \includegraphics[width=.4\textwidth]{inception_dimred.png}
+
+\end{frame}
+
+\begin{frame}
     {GoogLeNet take home points}
     \begin{itemize}
         \item 22 layers
@@ -294,7 +342,7 @@
 \begin{frame}
     {ResNet}
     \begin{itemize}
-        \item He 2015 - Deep Residual Learning for Image Recognition.pdf
+        \item He 2015 - Deep Residual Learning for Image Recognition
         \item Tackles the problem of degraded performance in larger networks
         \item Introduces \textit{skip connections} between layers
         \item Up to 1000+ layers!
@@ -308,10 +356,34 @@
 \end{frame}
 
 \begin{frame}
+    {The problem with deep networks}
+    As we add more layers, the network becomes more difficult to train
+
+    \centering
+    \includegraphics[width=.7\textwidth]{resnet_big_small_network.png}
+
+    This is surprising because we expect a deeper network to be at least as good as a shallower network. Indeed the extra layers could "simply" learn the identity function $I(x) = x$.
+\end{frame}
+
+\begin{frame}
+{Skip connections}
+By adding a skip connection, the network can learn the residual function $F(x) = H(x) - x$. The intuition is that the residual function is easier to learn than the identity function as you could simply zero out some of the layers.
+
+\centering
+\includegraphics[width=.4\textwidth]{resnet_identity.png}
+\end{frame}
+
+\begin{frame}
+{Skip connections improve performance}
+\centering
+\includegraphics[width=\textwidth]{resnet_training.png}
+\end{frame}
+
+\begin{frame}
     {ResNet take home points}
     \begin{itemize}
         \item Very deep network (up to 1000+ layers)
-        \item Uses \textit{skip connections} between layers 
+        \item Uses \textit{skip connections} between layers
         \item Uses \textit{bottleneck} blocks (similar to GoogLeNet)
     \end{itemize}
 \end{frame}
@@ -320,6 +392,78 @@
     {Comparison of CNN architectures}
     \centering
     \includegraphics[width=\textwidth]{comparison.png}
+\end{frame}
+
+\begin{frame}
+    {Transfer learning}
+    \only <1>{
+        \begin{itemize}
+            \item Training a CNN is expensive in terms of time and computer memory.
+            \item Luckily, you can make use of pre-trained models to speed up the training process!
+            \item This process is called \textbf{transfer learning}.
+            \item For example, if you wanted to classify images, rather than start from scratch you could begin with VGG-16, or with GoogLeNet and modify them for your needs! (i.e. do not reinvent the wheel!)
+        \end{itemize}
+    }
+    \centering
+    \begin{tikzpicture}[scale=0.9]
+        \only <2->{
+            % Generic images
+            \node[inner sep=0pt] (generic) at (0,2)
+            {\includegraphics[height=2.5cm]{genericimages.png}};
+            \node (label) at (0, 0) {Generic images};
+
+            % Top CNN
+            % Conv layers
+            \foreach \x [count=\N] in {2.5,3,...,5}
+                {
+                    \node (layer\N) [draw, rectangle, fill=orange!50!yellow, minimum width=1, minimum height=3cm-0.4*\N cm] at (\x,1.5) {};
+                }
+            % FC layers
+            \foreach \x [count=\N from 7] in {6,6.5,7}
+                {
+                    \node (layer\N) [draw, rectangle, fill=blue!50!yellow, minimum width=1, minimum height=2.5cm-.1*\N cm] at (\x,1.5) {};
+                }
+            \node [text width=4em] (layer10) at (9.5, 1.5) {Dog, Cat, Plane, \dots};
+            % Arrows
+            \foreach \N [count=\Nn from 2] in {1,2,...,9}
+                {
+                    \draw [->] (layer\N) -- (layer\Nn.west);
+                }
+            \node [right of=label, node distance=6cm] {\textit{"Template"} CNN - e.g. VGG-16};
+
+            \only<3>{
+                % Domain specific images
+                \node[inner sep=0pt] (generic) at (0,-2)
+                {\includegraphics[height=2.5cm]{bioimages.png}};
+                \node at (0, -4) {Task-specific images};
+
+                % Bottom CNN
+                % Conv layers
+                \foreach \x [count=\N] in {2.5,3,...,4.5}
+                    {
+                        \node (layer_bottom_\N) [draw, rectangle, fill=orange!50!yellow, minimum width=1, minimum height=3cm-0.4*\N cm] at (\x,-2) {};
+                    }
+                \node (layer_bottom_6) [draw, rectangle, fill=green!40!yellow, minimum width=1, minimum height=0.6cm] at (5,-2) {};
+
+                % FC layers
+                \foreach \x [count=\N from 7] in {6,6.5,7}
+                    {
+                        \node (layer_bottom_\N) [draw, rectangle, fill=green!60!yellow, minimum width=1, minimum height=2.5cm-.1*\N cm] at (\x,-2) {};
+                    }
+
+                \node [text width=4em] (layer_bottom_10) at (9.5, -2) {Liver, Kidney, Bone, Retina, \dots};
+                \node [color=orange!80!black] at (4, 4) {\textbf{Conv layers}};
+                \node [color=blue!50!yellow] at (6.5, 4) {\textbf{FC layers}};
+                \draw [color=orange, line width=1pt] (2.2,-3.7) -- (4.8,-3.7) node [below, midway] {Keep};
+                \draw [color=green!50!black, line width=1pt] (5,-3.7) -- (8,-3.7) node [below, midway] {Retrain};
+                % Arrows
+                \foreach \N [count=\Nn from 2] in {1,2,...,9}
+                    {
+                        \draw [->] (layer_bottom_\N) -- (layer_bottom_\Nn.west);
+                    }
+            }
+        }
+    \end{tikzpicture}
 \end{frame}
 
 \end{document}

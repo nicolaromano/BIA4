@@ -1,0 +1,1 @@
+Attached are the articles discussed in Lecture 13.
