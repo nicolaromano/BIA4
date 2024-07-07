@@ -2,9 +2,7 @@ from shiny import App, reactive, render, ui
 from skimage.io import imread
 from pathlib import Path
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
 import pandas as pd
-from pprint import pformat
 
 base_path = Path(__file__).parent
 
@@ -29,12 +27,12 @@ app_ui = ui.page_fluid(
     ),
     ui.row(
         ui.column(4,
-                  ui.output_plot(id="image", width=400, hover=True),
+                  ui.output_plot(id="image", width=400, click=True),
                   offset=2),
         ui.column(3,
                   ui.card(
                       ui.div(
-                          "Move the mouse on the image to see the pixel values around the dot."),
+                          "Click on the image to see the pixel values around the cursor."),
                       ui.output_text_verbatim(id="matrix"))
                   )
     ),
@@ -57,8 +55,8 @@ def server(input, output, session):
     @render.text
     def matrix():
 
-        if input.image_hover():
-            coords = input.image_hover()
+        if input.image_click():
+            coords = input.image_click()
             mousex.set(int(coords["x"]))
             mousey.set(int(coords["y"]))
 
