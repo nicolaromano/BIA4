@@ -37,6 +37,11 @@ app_ui = ui.page_fluid(
                           "Move the mouse on the image to see the pixel values around the dot."),
                       ui.output_text_verbatim(id="matrix"))
                   )
+    ),
+    ui.row(
+        ui.column(4,
+                  ui.output_table(id="summary"),
+                  offset=2)
     )
 )
 
@@ -60,43 +65,16 @@ def server(input, output, session):
         matrix = imgs[input.bit_depth()][mousey() - 5:mousey() +
                                          5, mousex() - 5:mousex() + 5]
         return matrix
+    
+    @render.table
+    def summary():
+        img = imgs[input.bit_depth()]
 
-
-# with ui.layout_column_wrap(gap="2rem"):
-#     ui.output_plot(width=300, hover=True)
-
-#     def image():
-#         plt.imshow(imgs[input.bit_depth()], cmap="gray")
-#         plt.axis("off")
-
-#     with ui.card():
-#         ui.div("Move the mouse on the image to see the pixel values around the dot.")
-
-#         @render.ui
-#         def matrix():
-#             matrix = imgs[input.bit_depth()][400:420, 150:160]
-
-#             def format_row(row):
-#                 return " ".join("{:>3}".format(num) for num in row)
-
-#             return ui.div([ui.div({"style": "font-size: 0.8rem; font-family: 'monospace'"},
-#                                   format_row(row)) for row in matrix])
-
-
-# @render.table
-# def summary():
-#     bit_depths = {
-#         1: "1-bit",
-#         2: "2-bit",
-#         4: "4-bit",
-#         "uint8": "8-bit",
-#     }
-
-#     img = imgs[input.bit_depth()]
-
-#     return pd.DataFrame({
-#         "Image Min": [img.min()],
-#         "Image Max": [img.max()]
-#     })
+        return pd.DataFrame({
+            "Image Min": [img.min()],
+            "Image Max": [img.max()],
+            "Image Mean": [img.mean().round(2)],
+            "Image SD": [img.std().round(2)]
+        })
 
 app = App(app_ui, server)
