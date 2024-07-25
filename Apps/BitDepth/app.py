@@ -14,12 +14,13 @@ mousex = reactive.value(100)
 mousey = reactive.value(100)
 
 app_ui = ui.page_fluid(
+    ui.head_content(ui.include_css(str(base_path / "style.css"))),
     ui.h1("Bit Depth of an Image", align="center"),
     ui.row(
-        ui.column(2,
+        ui.column(3,
                   ui.div("Select the bit depth of the image:"),
-                  offset=4, align="right"),
-        ui.column(2,
+                  offset=3, align="right"),
+        ui.column(3,
                   ui.input_select("bit_depth", "",
                                   choices=bit_depths,
                                   selected="8", width="5em"),
@@ -29,7 +30,7 @@ app_ui = ui.page_fluid(
         ui.column(4,
                   ui.output_plot(id="image", width=400, click=True),
                   offset=2),
-        ui.column(3,
+        ui.column(4,
                   ui.card(
                       ui.div(
                           "Click on the image to see the pixel values around the cursor."),
@@ -40,6 +41,11 @@ app_ui = ui.page_fluid(
         ui.column(4,
                   ui.output_table(id="summary"),
                   offset=2)
+    ),
+    ui.row(
+        ui.column(8,
+                  ui.div("Photo by PixaBay from Pexels, CC0 License",
+                         style="font-size: 0.8em"),                  offset=2)
     )
 )
 
@@ -63,7 +69,7 @@ def server(input, output, session):
         matrix = imgs[input.bit_depth()][mousey() - 5:mousey() +
                                          5, mousex() - 5:mousex() + 5]
         return matrix
-    
+
     @render.table
     def summary():
         img = imgs[input.bit_depth()]

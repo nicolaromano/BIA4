@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+
+
+body {
+    font-family: 'Fira Sans', Arial, sans-serif;
+    font-size: 1em;
+    color: rgb(22, 22, 22);    
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 2.5rem;
+    color: rgb(15, 26, 128);
+}
+
+#matrix {
+    font-family: 'Fira Code', 'Courier New', Courier, monospace
+}
