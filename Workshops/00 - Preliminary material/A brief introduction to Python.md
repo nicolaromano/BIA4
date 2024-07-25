@@ -1,6 +1,6 @@
 # A brief introduction to Python
 
-*By Nicola Romanò - last updated on **27 August 2021***
+*By Nicola Romanò - last updated on **25 July 2024***
 
 ---
 
@@ -8,10 +8,12 @@ This document is a brief introduction to the Python programming language. It is 
 
 ### **0. First steps**
 
-This guide assumes you have installed Python 3.7 or higher. You can download Python from [the Python website](https://www.python.org/downloads/).
+This guide assumes you have installed Python 3.7 or higher. You can download Python from [the Python website](https://www.python.org/downloads/); at the moment of writing, the latest version is 3.12.4.
+
+Details for the installation of Python vary depending on the operating system you are using, but the Python website provides detailed instructions for each operating system.
 
 You can use the Python interpreter to test your code. To do so, open a command prompt (Windows) or terminal (Linux/Mac) and type: `python`.
-You will see a prompt (`>>>`), where you can enter your first Python command.
+You will see a prompt (`>>>`), where you can enter your first Python command. Note that some systems might require you to type `python3` instead of `python`.
 
 Try writing the following and press `Enter`:
 
@@ -32,6 +34,8 @@ Once you have a script, you can run it by typing its name in the command prompt 
     python hello.py
 
 Some editors also have a "Run" button or function that will run the script, without having to open the command prompt/terminal. 
+
+Finally, a very common way to write Python code is to use a **Jupyter notebook**. Jupyter notebooks are a great way to write code, as they allow you to write code in cells and run them individually. They are also great for writing reports, as you can include text and images in the same document. This is similar to what you previously saw using RMakrdown in R, however it is more interactive. We will use Jupyter notebooks in the workshops for the course, see the Introduction to Workshops document for more information.
 
 I will use the Python command line for this guide, but feel free to write the commands in a script and run them from there.
 
@@ -81,7 +85,7 @@ If you are dealing with long stretches of text on multiple lines you can use tri
     ... This is a very long string.
     ... """
 
-Python 3.6 has introduced a new syntax, called the *f-string* syntax. This is extremely useful when mixing strings and variables.
+Python 3.6 introduced a new syntax, called the *f-string* syntax. This is extremely useful when mixing strings and variables.
 For example, try to run the following:
 
     >>> a = 15
@@ -415,6 +419,8 @@ Certain libraries are very complex and contain many functions. If you just need 
 You made it to the end! Well done! This was just a short introduction to Python, and I hope it has been useful to get you started. 
 
 There are many more topics to cover and the Python documentation is very comprehensive. There are also many documents on the web that can help you learn Python.
+
+The [beginner's guide](https://wiki.python.org/moin/BeginnersGuide) on the Python website is also a good place to start.
 
 ---
 
