@@ -1,4 +1,4 @@
-# A brief introduction to Python
+# A brief introduction to Python - part 1, variables, data types and loops
 
 *By Nicola Romanò - last updated on **25 July 2024***
 
@@ -444,130 +444,11 @@ You can check this by running the following code:
 print(zip(my_list, other_list))
 ```
 
-## **6. Comprehensions**
+## **6. Conclusion**
 
-Comprehensions are a very "pythonic" way of creating lists. For example, you can create a list of squares of the numbers 1 to 5 using the following code:
+You made it to the end! Well done! This was just a short introduction to Python, and I hope it has been useful to get you started.
 
-```python
-squares = [i**2 for i in range(1, 6)]
-print(squares)
-```
-
-You can also have conditions in the comprehension:
-
-```python
-# Create a list of squares of the numbers 
-# 1 to 10, but only if the number is even
-squares = [i**2 for i in range(1, 10) if i % 2 == 0]
-print(squares)
-```
-
----
-
-Exercise 8
-
-1. Given the following list of names:
-
-    ```python
-    names = ["Alice", "Aziz", "Bob", "Chan", "Jasmina", "Linda", "Wei"]
-    ```
-
-    Use a list comprehension to create a list of names that are at least 5 characters long. (Hint: use the `len` function to get the length of a string).
-
----
-
-Comprehensions support multiple variables. What do you think this code will output?
-
-```python
-odd = [1, 3, 5, 7, 9]
-even = [2, 4, 6, 8, 10]
-print([(o, e) for o in odd for e in even])
-```
-
-Can you think of what could go wrong with this approach?
-
-While you can obtain the same result using a loop, the loop is more verbose and comprehensions are generally considered to be more concise and elegant, at least for simple situations.
-
-## **7. Functions**
-
-Functions are defined using the `def` keyword. Functions can accept arguments and return values. For example:
-
-```python
-def square(x):
-    return x**2
-
-print(square(5))
-```
-
-Other functions might not have any arguments:
-
-```python
-def say_hello():
-    print("Hello!")
-
-say_hello()
-```
-
-You can return multiple values from a function:
-
-```python
-def get_min_max(numbers):
-    return min(numbers), max(numbers)
-
-min, max = get_min_max([1, 2, 3, 4, 5])
-print(f"The minimum value is: {min}, the maximum is: {max}")
-```
-
-It is good practice to include docstrings in your functions. This is a string that describes what the function does. For example:
-
-```python
-def square(x):
-     """Return the square of x.
-     Parameters
-     x : int or float - the number to square
-     Returns
-     int or float - the square of x
-     """
-     return x**2
-```
-
-### **7. Importing external libraries**
-
-Python has a large ecosystem of libraries that can be used in your code. You can import a library by using the `import` keyword. For example to import the `math` library you can use:
-
-```python
-import math
-```
-
-All of the functions and variables in the `math` library are now available to you. For example:
-
-```python
-print(math.sqrt(16)) # Square root of 16
-print(math.pi)
-```
-
-Sometimes the name of the library is long or not descriptive enough. In this case you can use an alias to refer to the library:
-
-```python
-import math as m
-print(m.sqrt(16))
-```
-
-Certain libraries are very complex and contain many functions. If you just need one or two of the functions, you can import just those. You can then use the function names without the library name.
-
-```python
-from math import sqrt, pi
-print(sqrt(16)) 
-print(pi)
-```
-
-### **8. Conclusion**
-
-You made it to the end! Well done! This was just a short introduction to Python, and I hope it has been useful to get you started. 
-
-There are many more topics to cover and the Python documentation is very comprehensive. There are also many documents on the web that can help you learn Python.
-
-The [beginner's guide](https://wiki.python.org/moin/BeginnersGuide) on the Python website is also a good place to start.
+There are many more topics to cover and the Python documentation is very comprehensive. There are also many documents on the web that can help you learn Python, for example the [beginner's guide](https://wiki.python.org/moin/BeginnersGuide) is also a good place to start.
 
 ---
 
