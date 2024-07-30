@@ -14,7 +14,7 @@ base_path = Path(__file__).parent
 metadata = pd.read_csv(base_path / "metadata.csv")
 
 imgs = {metadata.iloc[i]["title"]: img_as_float(imread(
-    f"{base_path}/static/{metadata.iloc[i]["filename"]}")) for i in range(metadata.shape[0])}
+    f"{base_path}/static/{metadata.iloc[i]['filename']}")) for i in range(metadata.shape[0])}
 
 # Read the LoG kernels
 log_kernels = np.load(f'{base_path}/static/log_kernels.npz')
@@ -103,6 +103,11 @@ app_ui = ui.page_fluid(
                                            "<div class='information'>The Laplacian of the Gaussian (LoG) operator is an edge-detection algorithm based on the second derivative of the image.<br />Specifically, it uses the Laplacian operator, which is the sum of the second derivatives of the image in the x and y directions.<br /><img src='Laplacian.png' width='300px' /><br />The zero-crossings of this function correspond to the edges in the image.<br />This can be approximated by this kernel:<br /><img src='Laplacian_kernel.png' width='150px' /><ul><li>The LoG operator is very sensitive to noise, so it is usually applied after smoothing the image with a Gaussian filter (hence the name).</li><li>In practice, the LoG can be calculated in one go, using a kernel such as this (this is smoothing with sigma=1.4).</li><li>The LoG is <strong>anisotropic</strong>, meaning that it is sensitive to edges in all directions, an advantage compared to the Sobel and Prewitt kernels</li></ul><img src='LoG_kernel.png' width='100%' /></div>")
                                        )
                              ),
+        ui.panel_conditional("input.method == 'Canny'",
+                             ui.column(4,
+                                       ui.HTML(
+                                           "<div class='information'>The Canny edge detector is a widely used multi-step algorithm for edge detection.<br />The steps are:<br /><ol><li>Smoothing the image with a Gaussian filter to reduce noise.</li><li>Finding the intensity gradients of the image.</li><li>Suppressing non-maximum pixels (thin the edges).</li><li>Double thresholding to find potential edges.</li><li>Edge tracking by hysteresis: connecting edges that are above the high threshold and connected to an edge above the low threshold.</li></ol><br />The sigma parameter controls the amount of smoothing applied to the image before finding the gradients; try different values to see how the edge detection changes. Can you guess what is the effect of a high vs a low sigma?<br />The low and high thresholds control the minimum and maximum intensity gradient values that are considered as edges.</div>")
+                                       ))
     )
 )
 
@@ -120,26 +125,27 @@ def server(input, output, session):
 
         return f"Image by {md['author'].values[0]} - {md['license'].values[0]} license."
 
-    def get_zero_crossings(img:np.ndarray) -> np.ndarray:
+    def get_zero_crossings(img: np.ndarray) -> np.ndarray:
         """
         Gets the zero-crossings of an image (image must be a 2D array of floats)
         """
         zero_crossings = np.sign(img)
 
         # Zero-pad the last row and column
-        # The pad_width parameter is the number of pixels to pad 
+        # The pad_width parameter is the number of pixels to pad
         # on each side (before and after for each dimension)
-        zero_crossings = np.pad(zero_crossings, pad_width=((0, 1), (0, 1)), mode='constant')
+        zero_crossings = np.pad(zero_crossings, pad_width=(
+            (0, 1), (0, 1)), mode='constant')
 
         # Calculate differences between neighboring pixels
         diff_x = zero_crossings[1:-1, 1:-1] * zero_crossings[1:-1, 2:] < 0
         diff_y = zero_crossings[1:-1, 1:-1] * zero_crossings[2:, 1:-1] < 0
         diff_diag1 = zero_crossings[1:-1, 1:-1] * zero_crossings[2:, 2:] < 0
         diff_diag2 = zero_crossings[1:-1, 1:-1] * zero_crossings[2:, :-2] < 0
-        
+
         # Combine differences to get zero-crossings
         return np.logical_or.reduce((diff_x, diff_y, diff_diag1, diff_diag2))
-        
+
     @ render.plot
     def edges():
         edge = imgs[input.image_file()]
@@ -170,14 +176,14 @@ def server(input, output, session):
             elif input.log_type() == "Laplacian zero-crossings":
                 kernel = np.array([[0, 1, 0], [1, -4, 1], [0, 1, 0]])
                 edge = convolve(edge, kernel)
-                edge = get_zero_crossings(edge)                
+                edge = get_zero_crossings(edge)
             elif input.log_type() == "LoG":
                 log_kernel = log_kernels[f"LoG_sigma_{input.log_sigma():0.1f}"]
                 edge = convolve(edge, log_kernel)
             elif input.log_type() == "LoG zero-crossings":
                 log_kernel = log_kernels[f"LoG_sigma_{input.log_sigma():0.1f}"]
                 edge = convolve(edge, log_kernel)
-                edge = get_zero_crossings(edge)                                
+                edge = get_zero_crossings(edge)
         elif input.method() == "Canny":
             edge = canny(edge, sigma=input.canny_sigma(
             ), low_threshold=input.low_threshold(), high_threshold=input.high_threshold())
