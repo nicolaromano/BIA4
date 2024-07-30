@@ -86,7 +86,13 @@ app_ui = ui.page_fluid(
                                         ui.HTML(
                                             "<div class='information'>The Prewitt operator is similar to the Sobel operator, but uses a different pair of 3x3 kernels:<br/><img src='Prewitt_kernels.png' width='400px' /><br />The Prewitt kernels don't put as much weight on the central pixel as the Sobel kernels, which makes them less sensitive to noise.<br /><ul><li>As for the Sobel kernels, each of the kernels calculates the discrete derivative of the image in a given direction; by doing this over a 3x3 neighborhood we also smooth the image, which helps to reduce noise.<br />Notice how each kernel highlights a different direction of edges.</li><li>The two resulting images are then combined to obtain the final edge map by computing the gradient magnitude (square root of the sum of the squares of the horizontal and vertical gradients).</li><li>Finally, the gradient magnitude can be thresholded to obtain a binary edge map (1-bit image).</li></ul></div>")
                                         )
-                                )
+                                ),
+        ui.panel_conditional("input.method == 'Laplacian of the Gaussian (LoG)'",
+                                ui.column(4,
+                                        ui.HTML(
+                                            "<div class='information'>The Laplacian of the Gaussian (LoG) operator is an edge-detection algorithm based on the second derivative of the image.<br />Specifically, it uses the Laplacian operator, which is the sum of the second derivatives of the image in the x and y directions.<br /><img src='Laplacian.png' width='300px' /><br />The zero-crossings of this function correspond to the edges in the image.<br />This can be approximated by this kernel:<br /><img src='Laplacian_kernel.png' width='150px' /><br />Unfortunately the LoG operator is very sensitive to noise, so it is usually applied after smoothing the image with a Gaussian filter (hence the name).<br />In practice, the Laplacian of the Gaussian can be calculated in one go, by using a kernel such as this (this is for a smoothing with sigma=1.4)<img src='LoG_kernel.png' width='100%' /></div>")
+                                        )
+                                ),
     )
 )
 
