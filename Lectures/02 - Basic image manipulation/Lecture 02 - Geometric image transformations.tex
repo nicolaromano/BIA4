@@ -86,10 +86,10 @@
                 \includegraphics[width=0.5\textwidth]{skimage_logo.png}
             \end{center}
             \begin{codebox}
-                \texttt{from skimage import io\\
-                    \texttt{img = io.imread(}"cells.jpg")\\
-                    io.imshow(\texttt{img)\\
-                        io.show(})
+                \texttt{from skimage.io import imread\\
+                    img = io.imread("cells.jpg")\\
+                    plt.imshow(img)\\
+                    plt.show()
                 }
             \end{codebox}
         \end{column}
@@ -638,7 +638,7 @@ Cropping is as easy as subsetting the image matrix.
     We can rewrite the matrices as such (these are called homogeneous coordinates):\\
 
     \centering
-    \textbf{Translation}
+    \textbf{Translation}\\\tiny(now also as matrix multiplication!)\normalsize
     $$\begin{bmatrix}x'\\y'\\1\end{bmatrix} = \begin{bmatrix}1&0&t_x\\0&1&t_y\\0&0&1\end{bmatrix}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
     \textbf{Rotation}
     $$\begin{bmatrix}x'\\y'\\1\end{bmatrix} = \begin{bmatrix}\text{cos}\theta&-\text{sin}\theta&0\\\text{sin}\theta&\text{cos}\theta&0\\0&0&1\end{bmatrix}\begin{bmatrix}x\\y\\1\end{bmatrix}$$
@@ -649,17 +649,21 @@ Cropping is as easy as subsetting the image matrix.
 \begin{frame}
     {Combining matrices}
     We can now easily combine these 3x3 matrices by multiplying them together.\\
-    Remember that the order is important!\\
 
-    $A * B$ is \textbf{not} the same as $B * A$!\\
+    \begin{itemize}
+        \item Remember that the order is important!\\
+              $A * B$ is \textbf{not} the same as $B * A$!\\
+        \item Use \texttt{skimage.transform.SimilarityTransform} to create transformation matrices
+        \item Combine them using the \texttt{+} operator (Under the hood this performs matrix multiplication!). \\
+        \item Use \texttt{skimage.transform.warp} to apply these transformation matrices to an image.
+    \end{itemize}
 
-    You can use \texttt{skimage.transform.SimilarityTransform} to create transformation matrices and combine them using the \texttt{+} operator (Note that under the hood this performs matrix multiplication!). \\
 
-    Using \texttt{skimage.transform.warp} we can apply these transformation matrices to an image.
+
 \end{frame}
 
 \begin{frame}
-    {Optional exercise - want to try by yourself?}
+    {This week's challenge!}
     It might be interesting to try to code image rotation by yourself.
 
     Hints:
@@ -671,7 +675,7 @@ Cropping is as easy as subsetting the image matrix.
         \item You can use \texttt{skimage.transform.warp} to apply the combined transformation matrix to your image.
     \end{itemize}
 
-    \textit{If you are stuck, try to look at the \href{https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/\_warps.py\#L349-L460}{\underline{source code for \texttt{rotate}}}!}
+    \textit{If you are stuck, try to look at the \href{https://github.com/scikit-image/scikit-image/blob/main/skimage/transform/\_warps.py\#L349-L460}{\underline{source code for \texttt{rotate}}}!\\Discuss your results and/or doubts on Slack!}
 \end{frame}
 
 \begin{frame}
