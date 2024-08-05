@@ -93,16 +93,17 @@
 \end{frame}
 
 \begin{frame}
-    {What will we talk about (roughly)}
+    {What will we talk about}
     \begin{columns}
         \begin{column}{0.7\textwidth}
             \begin{itemize}[<+->]
-                \item \textit{Weeks 1-4} - Basic operations on images, filters and features.
-                \item \textit{Weeks 5-6} - More complex operations (e.g. feature extraction, tracking, segmentation, \dots).
-                \item \textit{Weeks 8-12} - Traditional and modern (deep learning) machine learning methods for image analysis
-                \item \textit{Week 13} - Discussion on recent topics in image analysis
+                \item \textit{Lectures 1-5} - Basic operations on images (e.g. displaying, cropping, rotating, \dots), filtering and image enhancement.
+                \item \textit{Lectures 6-8} - More complex operations (e.g. feature extraction, tracking, segmentation, \dots).
+                \item \textit{Lectures 9-16} - Traditional and modern (deep learning) machine learning methods for image analysis
+                \item \textit{Lectures 17-20} - Discussion on recent topics in image analysis
             \end{itemize}
         \end{column}
+
         \begin{column}{0.3\textwidth}
             \begin{figure}
                 \includegraphics[width=\textwidth]{notes.jpg}
@@ -110,19 +111,25 @@
             \end{figure}
         \end{column}
     \end{columns}
-    \pause
+    A complete timetable is available on Learn.
+\end{frame}
 
+\begin{frame}
+    {What will we talk about}
     We will cover both the theory and practical aspects (with Python code!) of these topics.\\
 
     You will have \textbf{Python workshops} to practice these problems first hand.\\
 
     \pause
 
-    Please note that \textbf{you will need Python knowledge} to pass this course.
+    Please note that \textbf{you will need Python knowledge} to pass this course. You can find \textbf{introductory material} on Learn, to learn the basics of Python or refresh your knowledge.
 
     \pause
 
-    I will also post \textbf{quizzes} on Learn after each lecture, to reinforce your understanding and \textbf{extra reading material} that will be useful to expand your image analysis knowledge.
+    I will also post \textbf{quizzes} on Learn after most lectures, to reinforce your understanding and \textbf{extra reading material} that will be useful to expand your image analysis knowledge. \\
+    
+    \vspace{1em}
+    While these materials are not mandatory we are assuming you are here to learn and will take advantage of these extra resources.
 \end{frame}
 
 \begin{frame}
@@ -131,11 +138,11 @@
         \includegraphics[width=0.1\textwidth]{slack.png}
     \end{center}
 
-    I added you to a \textbf{Slack} group. Please join and introduce yourself, if you have not already!
+    You have been added to a \textbf{Slack} group. Please join and introduce yourself, if you have not already!
 
-    This is an invaluable opportunity to discuss anything related to the course with your peers and myself.
+    This is an invaluable opportunity to discuss anything related to the course (including your ICA!) with your peers and the course staff.    
 
-    Introductory material about Python is available on Learn and further material can be provided, if needed - plase ask!
+    Introductory material about Python is available on Learn and further material can be provided, if needed - plase ask!    
 \end{frame}
 
 \begin{frame}
@@ -376,7 +383,7 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
 
     NumPy is a Python open-source library for numerical computing, with support for n-dimensional arrays and many functionalities to work with matrices.
 
-    Numpy can be installed via \texttt{pip}
+    Numpy can be installed via \texttt{pip} in a terminal or command prompt.
 
     \begin{codebox}
         \texttt{pip install numpy}
@@ -523,10 +530,10 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
                 \includegraphics[width=0.5\textwidth]{skimage_logo.png}
             \end{center}
             \begin{codebox}
-                \texttt{from skimage import io\\
-                    img = io.imread("cells.jpg")\\
-                    io.imshow(img)\\
-                    io.show()
+                \texttt{from skimage.io import imread\\
+                    img = imread("cells.jpg")\\
+                    plt.imshow(img)\\
+                    plt.show()
                 }
             \end{codebox}
         \end{column}
