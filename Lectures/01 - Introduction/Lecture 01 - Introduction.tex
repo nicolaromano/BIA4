@@ -362,6 +362,14 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
 \end{frame}
 
 \begin{frame}
+    {Bit-depth app}
+    This simple app will show you the effect of changing the bit depth of an image.
+
+    \centering
+    \includegraphics[width=.4\textwidth]{qrcode_bitdepth.png}
+\end{frame}
+
+\begin{frame}
     {Representing matrices in Python}
     \includegraphics[width = 0.3\textwidth]{numpylogo.png}
     The Numpy library simplifies working with matrices in Python.
@@ -558,18 +566,19 @@ A raster is a series of \textbf{pixels} arranged in a rectangular grid, which re
 
     \begin{figure}
         \centering
-        \only<1>
-        {
-            \includegraphics[width=300px]{jet_vs_viridis.png}
-            \caption{\centering\color{gray}{Jet can create artefacts in the data. [Source: Matplotlib website]}
-                See https://www.youtube.com/watch?v=xAoljeRJ3lU}
+        \includegraphics[width=300px]{jet_vs_viridis.png}
+
+        \caption{\centering
+            \color{gray}{Jet can create artefacts in the data. [Source: Matplotlib website]}
         }
-        \only<2>
-        {
-            \includegraphics[width=170px]{borkin2011.png}
-            \caption{\centering\color{gray}
-                {\textit{Rainbow} palette resulted in significantly more diagnostic errors - Borkin 2011}}
-        }
+
+        See also \url{https://www.youtube.com/watch?v=xAoljeRJ3lU}
+        % \only<2>
+        % {
+        %     \includegraphics[width=170px]{borkin2011.png}
+        %     \caption{\centering\color{gray}
+        %         {\textit{Rainbow} palette resulted in significantly more diagnostic errors - Borkin 2011}}
+        % }
     \end{figure}
 \end{frame}
 
