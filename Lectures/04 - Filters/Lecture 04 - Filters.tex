@@ -132,16 +132,27 @@
 
     For example
 
-    \begin{codebox}
-        \texttt{from skimage.rank import median\\
-            \\
-            \# 3x3 neighbourhood\\
-            footprint = np.ones(3, 3)\\
-            img\_median = median(img, selem=footprint)
-        }
-    \end{codebox}
+    \begin{columns}
+        \begin{column}{.65\textwidth}
+            \begin{codebox}
+                \texttt{from skimage.rank import median\\
+                    \\
+                    \# 3x3 neighbourhood\\
+                    img\_median = median(img, footprint = \texttt{np.ones(3, 3)})
+                }
+            \end{codebox}
+        \end{column}
+        \begin{column}{.35\textwidth}
+            \centering
+            \texttt{np.ones(3, 3)} creates
+            $$\begin{bmatrix}1&1&1\\1&1&1\\1&1&1\end{bmatrix}$$
+        \end{column}
+    \end{columns}
     \centering
     \includegraphics[width=.85\textwidth]{median_filter_different_footprints.png}
+
+    \pause
+    What happens with larger footprints? What about non-square footprints?
 \end{frame}
 
 \begin{frame}
@@ -151,24 +162,24 @@
     \vspace{2em}
 
     \begin{columns}
-        \begin{column}{.5\textwidth}
+        \begin{column}{.57\textwidth}
             \begin{codebox}
                 \texttt{from skimage.morphology import disk, diamond\\
                     \\
-                    dsk = disk(7) \# A disk, radius 7\\
-                    dia = diamond(7) \# A diamond, radius 7\\
+                    dsk = disk(5) \# A disk, radius 5 px\\
+                    dia = diamond(5) \# A diamond, radius 5 px\\
                     \\
-                    fig, ax = plt.subplots(1, 2)\\
-                    ax[0].imshow(dsk, cmap="gray")\\
-                    ax[1].imshow(dia, cmap="gray")
+                    img\_disk = median(img, footprint=dsk)
+                    img\_diamond = median(img, footprint=dia)
                 }
             \end{codebox}
         \end{column}
-        \begin{column}{.5\textwidth}
+        \begin{column}{.43\textwidth}
             \centering
             \includegraphics[width=\textwidth]{different_shaped_footprints.png}
         \end{column}
     \end{columns}
+    The difference in output can be subtle, but it can be useful in some cases to use a different shape.
 \end{frame}
 
 \begin{frame}
@@ -178,14 +189,14 @@
     The \textbf{median filter} is used to remove noise and to smooth images.\\
     \pause
     \vspace{1em}
-    The \textbf{maximum filter} can be used in binary images to remove  small "holes". It is also a very common filter used in modern neural networks for image analysis.\\
+    The \textbf{maximum filter} can be used in binary images to remove  small "holes" (can you think of why?). It is also a very common filter used in modern neural networks for image analysis.\\
     \only<2>{
         \centering
         \includegraphics[width=.55\textwidth]{maximum_filter.png}
     }
     \only<3>{
         \begin{flushleft}
-            The \textbf{minimum filter} can be used to remove small bright spots.
+            The \textbf{minimum filter} can be used to remove small bright spots (can you think of why?)  .
         \end{flushleft}
         \centering
         \includegraphics[width=.55\textwidth]{minimum_filter.png}
@@ -458,52 +469,52 @@
 \end{frame}
 
 \begin{frame}
-{Edge behaviour in Scikit Image}
-Filters in Scikit Image allow you to choose what to do with the edge pixels using the \texttt{mode} parameter.
+    {Edge behaviour in Scikit Image}
+    Filters in Scikit Image allow you to choose what to do with the edge pixels using the \texttt{mode} parameter.
 
-For example
+    For example
 
-\begin{codebox}
-\texttt{from skimage.filters import gaussian\\
-image\_smoothed = gaussian(image, sigma=1, mode="mirror")}
-\end{codebox}
+    \begin{codebox}
+        \texttt{from skimage.filters import gaussian\\
+            image\_smoothed = gaussian(image, sigma=1, mode="mirror")}
+    \end{codebox}
 
-Allowed values for \texttt{mode} are
+    Allowed values for \texttt{mode} are
 
-\begin{itemize}
-\item \texttt{constant} - padding with the value specified by \texttt{cval}
-\item \texttt{nearest} - extend
-\item \texttt{mirror} and \texttt{reflect} - both of these mirror the image, but \texttt{reflect} does not duplicate the edge pixel
-\item \texttt{wrap}
-\end{itemize}
+    \begin{itemize}
+        \item \texttt{constant} - padding with the value specified by \texttt{cval}
+        \item \texttt{nearest} - extend
+        \item \texttt{mirror} and \texttt{reflect} - both of these mirror the image, but \texttt{reflect} does not duplicate the edge pixel
+        \item \texttt{wrap}
+    \end{itemize}
 
 \end{frame}
 
 \begin{frame}
-{Want to try out more?}
+    {Want to try out more?}
 
-You can design your own convolutional filter and apply it to an image using the \texttt{skimage.filters.edges.convolve} function.
+    You can design your own convolutional filter and apply it to an image using the \texttt{skimage.filters.edges.convolve} function.
 
-What happens using this kernel?
+    What happens using this kernel?
 
-$$\begin{bmatrix}0 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0\end{bmatrix}$$
+    $$\begin{bmatrix}0 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0\end{bmatrix}$$
 
-What about this?
+    What about this?
 
-$$\begin{bmatrix}0 & 0 & 0 \\ 0 & 1.5 & 0 \\ 0 & 0 & 0\end{bmatrix}$$
+    $$\begin{bmatrix}0 & 0 & 0 \\ 0 & 1.5 & 0 \\ 0 & 0 & 0\end{bmatrix}$$
 
-You can see convolutional filters in action at \href{https://setosa.io/ev/image-kernels/}{\underline{this website}}.
+    You can see convolutional filters in action at \href{https://setosa.io/ev/image-kernels/}{\underline{this website}}.
 \end{frame}
 
 \begin{frame}
-{Summary}
-\begin{itemize}
-\item Image filters are a simple yet powerful way of manipulating images.
-\item Filters can be used to remove noise, smooth images, sharpen them, and more.
-\item Rank filters such as median, maximum and minimum work by choosing a specific value of the pixels in the neighbourhood, depending on their rank.
-\item Convolutional filters use a kernel to apply a linear transformation to the image.
-\item In the next lecture we will look at using filters for edge detection.
-\end{itemize}
+    {Summary}
+    \begin{itemize}
+        \item Image filters are a simple yet powerful way of manipulating images.
+        \item Filters can be used to remove noise, smooth images, sharpen them, and more.
+        \item Rank filters such as median, maximum and minimum work by choosing a specific value of the pixels in the neighbourhood, depending on their rank.
+        \item Convolutional filters use a kernel to apply a linear transformation to the image.
+        \item In the next lecture we will look at using filters for edge detection.
+    \end{itemize}
 
 
 \end{frame}
