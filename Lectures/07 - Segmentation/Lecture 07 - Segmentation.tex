@@ -424,7 +424,7 @@
                         \pause
                         \# Load the image, smooth and threshold\\
                         img = imread("nuclei\_DAPI.tif")\\
-                        img\_smooth = median(img, selem=disk(10))\\
+                        img\_smooth = median(img, footprint=disk(10))\\
                         img\_otsu = img\_smooth > threshold\_otsu(img\_smooth)
                     }
                 \end{codebox}
@@ -489,11 +489,7 @@
         \\
         areas = [prop.area for prop in props]\\
         intens = [prop.mean\_intensity for prop in props]\\
-        \\
-        plt.scatter(x=areas, y=intens, color="red")\\
-        plt.xlabel("Area")\\
-        plt.ylabel("Mean intensity")\\
-        plt.plot()\\
+        \# Plot, save to file etc...\\
         \\
         \pause
         \# Alternatively, with regionprops\_table\\
