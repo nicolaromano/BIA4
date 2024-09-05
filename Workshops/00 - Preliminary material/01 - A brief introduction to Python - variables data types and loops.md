@@ -8,9 +8,8 @@ This document is a brief introduction to the Python programming language. It is 
 
 ## **0. First steps**
 
-This guide assumes you have installed Python 3.7 or higher. You can download Python from [the Python website](https://www.python.org/downloads/); at the moment of writing, the latest version is 3.12.4.
-
-Details for the installation of Python vary depending on the operating system you are using, but the Python website provides detailed instructions for each operating system.
+This guide assumes you have installed Python 3.7 or higher. 
+Details for the installation of Python vary depending on the operating system you are using see the Python setup guide for more information.
 
 You can use the Python interpreter to test your code. To do so, open a command prompt (Windows) or terminal (Linux/Mac) and type: `python`.
 You will see a prompt (`>>>`), where you can enter your first Python command. Note that some systems might require you to type `python3` instead of `python`.
@@ -31,7 +30,7 @@ Ok, not the most exciting thing, but it's a start!
 
 A better way to code in Python is to write a **script**. A script is a file containing Python commands, generally saved with the `.py` extension.
 
-There are many different editors that can be used to write Python code. Some, such as [Spyder](https://www.spyder-ide.org/), are more lightweight, while others such as [PyCharm](https://www.jetbrains.com/pycharm/) or [VSCode](https://code.visualstudio.com/) are more powerful (but might be more confusing at first). It's up to you which editor you use, it's a matter of personal preference; you can use any text editor, really.
+There are many different editors that can be used to write Python code. Some, such as [Spyder](https://www.spyder-ide.org/), are more lightweight, while others such as [PyCharm](https://www.jetbrains.com/pycharm/) or [VSCode](https://code.visualstudio.com/) are more powerful (but might be more confusing at first). It's up to you which editor you use, it's a matter of personal preference; you can use any text editor, really. Again, see the Python setup guide for more information.
 
 <div style="page-break-after: always;"></div>
 
