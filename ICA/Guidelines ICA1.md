@@ -4,6 +4,19 @@ For this ICA, you should work in a group to create a piece of software to perfor
 
 The software should be functional and well documented to make it easy for someone with basic programming knowledge (and markers!) to use it.
 
+## Instructions
+
+You should submit the following:
+
+**As a group** (**one** single submission per group)
+1. Python code for your software **Submit on GitHub in the repository for your group.**
+2. Any necessary instructions to run the software / documentation. **Submit on Github**
+3. A file called CONTRIBUTIONS containing a short contribution statement to describe the contribution of each group member. For example: "Wang Jing: implemented the GUI, Li Wei: wrote the documentation, etc." **Submit on Github.**
+4. Short report (up to 3 pages) describing your software and showing some examples of using (e.g. the results of running the software on some images, or a larger analysis of a dataset, or any form of result obtained from using the software) . **Submit on Learn.**
+
+**Individually**
+1. Peer-evaluation form. **Submit on Learn.**
+
 ## Q&A
 
 - **Which programming language should we use?**
@@ -28,9 +41,8 @@ The software should be functional and well documented to make it easy for someon
 
     This is entirely up to you! Examples include:
     
-    1. An image-processing software with a graphical user interface (GUI). So, essentially, a window with buttons, sliders, menus etc so that the user can just interact with the software using their mouse, no Python knowledge needed! There are many Python packages to create GUIs. [PySimpleGUI](https://pysimplegui.readthedocs.io/en/latest/) is a good one to look at, but there is no restriction on which ones you can use.
-    I will post an example of a simple software with a GUI on Learn.
-    2. One, or a series of, command-line tools. In this case the user would use it like `python SuperCoolTool.py --input image.png --option1 value1 --option2 value2`.
+    1. An image-processing software with a graphical user interface (GUI). So, essentially, a window with buttons, sliders, menus etc so that the user can just interact with the software using their mouse, no Python knowledge needed! There are many Python packages to create GUIs; see the guide on Learn for some examples.
+    2. One, or a series of, command-line tools (CLI). In this case the user would use it like `python SuperCoolTool.py --input image.png --option1 value1 --option2 value2`. A guide on creating CLIs is also available on Learn.
     3. A Python module, containing useful functions to perform a series of related tasks. In this case the user would use it inside a Python script.
 
     Any of these is a valid option, but if you have other ideas, we can discuss them!
