@@ -1,0 +1,213 @@
+\documentclass[9pt, aspectratio=169]{beamer}
+\usepackage{FiraSans}
+\usetheme[subsectionpage=progressbar]{metropolis}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage[T1]{fontenc} 
+\usepackage[skins]{tcolorbox}
+\author{Nicola Roman\`o - nicola.romano@ed.ac.uk}
+\title{Introduction to BIA4 in-course assessments}
+\setlength{\fboxsep}{0pt}
+\setbeamertemplate {footline}{\begin{scriptsize}\hfill\insertframenumber ~of \inserttotalframenumber\kern1em\vskip5pt\end{scriptsize}}
+
+% Remove "Figure" in front of captions
+% See https://tex.stackexchange.com/questions/82456/how-to-remove-figure-caption-prefix-figure-in-beamer
+\captionsetup{labelformat=empty,labelsep=none}
+
+\titlegraphic{\centering \includegraphics[scale=.5]{instituteLogo.png}}
+\date{}
+
+\begin{document}
+
+\newtcolorbox{codebox}{enhanced,
+    top=2pt,
+    left=2pt,
+    right=2pt,
+    bottom=2pt,
+    boxrule=0pt,
+    leftrule=5pt,
+    sharp corners,
+    colback=gray!20,
+    colframe=blue!60!black}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}
+    {Assessments}
+
+    \textbf{ICA 1 – Group work – 40\% final mark}
+
+    You will produce a well-documented piece of Python software to solve a specific problem in bio-imaging.
+
+    \textbf{ICA 2 – Individual work – 60\% final mark}
+
+    You will produce an individual report highlighting the use for your software and reflecting on your group work.
+\end{frame}
+
+\begin{frame}
+    {Groups}
+    Groups of 7-8 students have been generated through a random process, ensuring that each group has a mix of students from both the Integrative Biomedical Sciences and the Biomedical Informatics programmes.
+
+    \centering
+    \Large
+    \textbf{The list of groups and all necessary information\\
+        is available on Learn.}
+
+    \normalsize
+    Please contact me at nicola.romano@ed.ac.uk for any issues.
+
+\end{frame}
+
+\begin{frame}
+    {Setting the ground for group work}
+    There are no specific rules for group work, but here are some suggestions:
+
+    \begin{itemize}[<+->]
+        \item \textbf{Meet} your group members as soon as possible.
+        \item Set up a \textbf{communication channel}. I have created Slack channels for each group.
+        \item Decide \textbf{how you will work together}.
+        \item Set up some \textbf{rules and expectations} for your group work (How often will you meet? How will you make decisions? How will you deal with conflicts?...)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    {Setting the ground for group work}
+    \begin{itemize}
+        \item \textbf{Be respectful} of your group members. Everyone has different skills, experiences, and ways of working, and everyone has something to contribute.
+        \item \textbf{Be honest} with your group members. If you are struggling or unhappy with something, let your group members know.
+        \item \textbf{Be proactive}. If you see something that needs to be done, do it. If you see a problem, try to solve it. If you have an idea, share it.
+        \item \textbf{Be open-minded}. Your group members may have different ways of thinking. Listen
+        \item If anything goes wrong, \textbf{let me know as soon as possible}. I am here to help you, and I want to make sure that everyone has a positive experience.
+    \end{itemize}
+\end{frame}
+
+\section{ICA 1 - What to do}
+
+\begin{frame}
+    {Starting the group work}
+    \begin{itemize}
+        \item Choose a bio-imaging problem that you would like to solve.
+        \item Define the problem clearly.
+              \begin{itemize}
+                  \item What are you trying to achieve?
+                  \item What data do you need?
+                  \item What will your software do?
+                  \item Who is your target audience?
+                  \item What is the use case for your software?
+              \end{itemize}
+        \item I have provided a series of datasets that you can use for your project, but you are also welcome to use your own datasets if you prefer. You can find the list of datasets on Learn.
+    \end{itemize}
+
+    \pause
+
+    \textbf{IMPORTANT}: to ensure a variety of different projects we ask you \textbf{to rank three different projects}, so that we can assign you to one of them.
+    We will allow up to three groups to work on the same project, so we will assign you to one of your choices, based on availability.\\
+    From past experience, most groups get either their first or second choice, but we cannot guarantee this.
+\end{frame}
+
+\begin{frame}
+    {Ranking your choices}
+    \Large
+    \centering
+    Please send me a message (one per group!) with your group name and the three projects you would like to work on, ranked from 1 to 3\\before \textbf{Monday 21st October at noon}.\\
+    \vspace{1em}
+    I will release the assignments on Learn as soon as possible after that.
+\end{frame}
+
+\begin{frame}
+    {What is expected from the group work}
+    This is not (just) a programming assignment.
+
+    Your focus should be on \textbf{solving a life sciences problem}, not just writing code.\\
+    Understand the problem, research the data, and think about how your software will be used. Avoid writing complex code without a clear goal, as this can lead to poor results.
+\end{frame}
+
+\begin{frame}
+    {What you need to produce}
+    \textbf{As a group}
+    \begin{itemize}
+        \item Python code that solves the problem you have defined. This should be submitted on GitHub. I have created a repository for each group, you will receive an invitation to join it.
+        \item Documentation for your software. This could be in any format you like.
+        \item A contribution statement.
+        \item A short report summarising your work. This should be submitted on Learn.
+    \end{itemize}
+
+    \pause
+
+    \textbf{As an individual}
+    \begin{itemize}
+        \item A peer-marking form.
+    \end{itemize}
+
+    For more details, see the ICA 1 documentation on Learn.
+\end{frame}
+
+\begin{frame}
+    {Marking criteria}
+
+    Full marking criteria will be provided on Learn, but you will be assessed on the following:
+
+    \begin{itemize}
+        \item Understanding of the biomedical problem you are trying to solve.
+        \item Group effort and collaboration.
+        \item Quality of the software produced.
+        \item Documentation of the software.
+        \item Quality of the Python code.
+        \item Evidence of good programming practice.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    {Peer-marking}
+    This year we are introducing a peer-marking system for the group work. This means that you will be asked to mark and give feedback on the contributions of your group members.
+
+    \textbf{This is in response to feedback from previous years, where some students felt that not all group members were contributing equally to the project.}
+
+    \pause
+    I will provide a template for the peer-marking form
+
+    A more complete explanation of the peer-marking system will be provided on Learn.
+
+    \textit{If you do not complete the peer-marking form, I will assume you think everyone contributed equally to the project.}
+\end{frame}
+\section{ICA 2 - What to do}
+\begin{frame}
+    ICA 2 will be an individual report, where you
+
+    \begin{itemize}
+        \item Critically discuss the use of your software in the context of the bio-imaging literature. \textbf{It is important to reflect on the practical use of your software, this is not just about the technical details.}
+        \item Critically reflect on future directions that could be taken to improve your software.
+        \item Reflect on your group work. What went well? What could have been improved? What did you learn from the experience?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    {Marking criteria}
+    Full marking criteria will be provided on Learn, but you will be assessed on the following:
+
+    \begin{itemize}
+        \item Understanding of the biomedical problem you are trying to solve.
+        \item Critical appraisal of the literature.
+        \item Critical evaluation of how the work could be improved.
+        \item Support from the current literature on the topic.
+        \item Reflection on the group work.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    {Questions?}
+
+    \centering
+    \huge
+    \textbf{Any questions?}
+    Ask me on Slack (\#ICA channel)\\or send me an email at nicola.romano@ed.ac.uk
+\end{frame}
+\end{document}
