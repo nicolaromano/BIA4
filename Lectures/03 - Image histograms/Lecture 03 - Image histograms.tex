@@ -14,7 +14,7 @@
 \usepackage[T1]{fontenc} 
 \usepackage{hyperref}
 \usepackage[skins]{tcolorbox}
-\author{Nicola Roman\`o - nicola.romano@ed.ac.uk}
+\author{Nicola Romanò - nicola.romano@ed.ac.uk}
 \title{Lecture 3 - Image histograms}
 \setlength{\fboxsep}{0pt}
 \setbeamertemplate{caption}{\raggedright\insertcaption\par}
@@ -215,7 +215,6 @@
     $$B(I) = \frac{1}{w*h}\sum_{r=1}^{h}\sum_{c=1}^{w}I(r,c)$$
 
     Where $w$ and $h$ are the width and height of the image, and $I(r,c)$ is the intensity of the pixel at row $r$ and column $c$.
-    \pause
 \end{frame}
 
 \begin{frame}
@@ -251,7 +250,6 @@
         \end{column}
     \end{columns}
 \end{frame}
-
 \section {Point operations}
 
 \begin{frame}
@@ -314,7 +312,7 @@
         \begin{column}{.4\textwidth}
             Simplest form:
 
-            $$I' = (I - I_{min}) \frac{T_{max}-T_{min}}{I_{max}-I_{min}} + max$$
+            $$I' = (I - I_{min}) \frac{T_{max}-T_{min}}{I_{max}-I_{min}} + T_{min}$$
 
             Where $I_{min}$ and $I_{max}$ are the minimum and maximum intensity of the image, and $T_{min}$ and $T_{max}$ are the minimum and maximum intensity of the target histogram.
         \end{column}
