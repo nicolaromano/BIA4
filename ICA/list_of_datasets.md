@@ -9,7 +9,11 @@ As a group you need to:
 - Write your software to perform these tasks!
 - Test your software on the dataset and document the results.
 
-In some cases you might need to use some other datasets or tools to help you with your task. For example, you might need to use an extra dataset to train or test a machine learning model, or you might need to use another tool to annotate images. That is absolutely fine.
+It's important to remember that in some cases you might need to use some other datasets or tools to help you with your task. For example, you might need to use an extra dataset to train or test a machine learning model, or you might need to use another tool to annotate images.
+
+ICA 1 is a group assignment, with groups of 7-8 students, therefore the expectation is that the output will be a group effort from 7-8 students working together, so don't limit yourself to something obvious or trivial. The result might not be perfect but it needs to show group effort.
+
+It's fine to use other datasets if you have a specific question in mind that you want to answer and the dataset proposed here do not fit your needs. The course organizer will be happy to discuss your ideas and might point you to some other more relevant datasets.
 
 ## 1. *Drosophila melanogaster* wings
 
@@ -204,3 +208,32 @@ https://janelia.figshare.com/articles/dataset/Whole-brain_light-sheet_imaging_da
 
 ### *Data type and size*
 ~55 Gb of data; data from single fish is ~1-3 Gb.
+
+## 14. SNEMI3D dataset
+
+### *Description*
+A large training dataset of mouse cortex in which the neurites have been manually delineated. An unlabelled test dataset is also available.
+
+### *Reference*
+Kasthuri et al. 2015 - Reconstruction of a Volume of Neocortex.
+
+### *Available from*
+https://zenodo.org/records/7142003
+
+### *Data type and size*
+~400 Mb of data in TIFF format.
+
+## 15. Dendritic spine dataset
+
+### *Description*
+A fully annotated dataset of Two-Photon Laser Scanning Microscopy (2PLSM) images of three types of dendritic spines. 
+
+### *Reference*
+Ghani et al, 2017 - Shape and appearance features based dendritic spine classification
+
+### *Available from*
+
+https://github.com/mughanibu/Dendritic-Spine-Analysis-Dataset
+
+### *Data type and size*
+~8 Mb of PNG files.
