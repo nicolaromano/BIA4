@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{multicol}
 \usepackage{tikz}
+\usetikzlibrary{shapes.geometric, positioning}
 \usepackage{caption}
 \usepackage{xcolor}
 \usepackage[T1]{fontenc} 
@@ -74,18 +75,17 @@
                 \item Developed by Google
             \end{itemize}
 
-            \textbf{Keras}
-            \begin{itemize}
-                \item A high-level API for TensorFlow.
-                \item Developed by Fran\,cois Chollet (package \texttt{keras}).
-                \item Now embedded in TensorFlow (\texttt{tensorflow.keras} module $\leftarrow$ use this!).
-                \item The \texttt{keras} package also supports other "backends" (like Theano or CNTK).
-            \end{itemize}
-
             \textbf{PyTorch}
             \begin{itemize}
                 \item \textit{"An open source machine learning framework"}
                 \item Developed by Facebook
+            \end{itemize}
+
+            \textbf{Keras}
+            \begin{itemize}
+                \item \textit{"A deep learning framework"}
+                \item Developed by Fran\c{c}ois Chollet (package \texttt{keras}).
+                \item The \texttt{keras} package also supports other "backends" (like JAX or Pythorch).
             \end{itemize}
         \end{column}
     \end{columns}
@@ -93,41 +93,44 @@
 
     \vspace{1em}
     \centering
-    For this course we will use \texttt{tensorflow.keras}, but feel free to explore PyTorch as well!
+    For this course we will use \textbf{Keras version 3}, but feel free to explore PyTorch as well!
 \end{frame}
 
 \begin{frame}
     {A very brief overview of Keras}
     \centering
     \begin{tikzpicture}[scale=.8]
-        % Keras logo
-        \node[inner sep=0pt] (keras) at (7.5,5)
+        % Keras logo at the center
+        \node[inner sep=0pt] (keras) at (0,0)
         {\includegraphics[height=1cm]{keras_logo.png}};
-        % Modules
-        \node[draw, fill=white, align=center, text width=1.5cm, minimum height=1cm] (model) at (0,3) {Models};
-        \node[draw, fill=white, align=center, text width=1.5cm, minimum height=1cm] (layer) at (3,3) {Layers};
-        \node[draw, fill=white, align=center, text width=1.5cm, minimum height=1cm] (optimizer) at (6,3) {Optimizers};
-        \node[draw, fill=white, align=center, text width=1.5cm, minimum height=1cm] (loss) at (9,3) {Losses};
-        \node[draw, fill=white, align=center, text width=1.5cm, minimum height=1cm] (metrics) at (12,3) {Metrics};
-        \node[draw, fill=white, align=center, text width=1.5cm, minimum height=1cm] (callbacks) at (15,3) {Callbacks};
 
+        % Define radius and number of nodes
+        \def\radius{4}
+        \def\nodes{7}
 
-        % Arrows
-        \draw[->] (keras.south) -- (model.north);
-        \draw[->] (keras.south) -- (layer.north);
-        \draw[->] (keras.south) -- (optimizer.north);
-        \draw[->] (keras.south) -- (loss.north);
-        \draw[->] (keras.south) -- (metrics.north);
-        \draw[->] (keras.south) -- (callbacks.north);
+        % Place the nodes in a circle around the Keras logo
+        \foreach \i [count=\n] in {Models, Layers, Optimizers, Losses, Metrics, Callbacks, \dots} {
+                \node[draw, fill=white, align=center, text width=1.5cm, minimum height=1cm] (node\n) at ({360/\nodes*\n}:\radius) {\i};
+            }
 
-        % Explanations
-        \node[text width=2.2cm, minimum height=1cm, anchor=north, align=flush left] (model_explanation) at (0,2) {\texttt{Model} and \texttt{Sequential} classes - define a model};
-        \node[text width=2.2cm, minimum height=1cm, anchor=north, align=flush left] (layer_explanation) at (3,2) {Define various types of ANN layers};
-        \node[text width=2.2cm, minimum height=1cm, anchor=north, align=flush left] (optimizer_explanation) at (6,2) {Optimizers for training};
-        \node[text width=2.2cm, minimum height=1cm, anchor=north, align=flush left] (loss_explanation) at (9,2) {Loss functions};
-        \node[text width=2.2cm, minimum height=1cm, anchor=north, align=flush left] (metrics_explanation) at (12,2) {Metrics for evaluating the model};
-        \node[text width=2.2cm, minimum height=1cm, anchor=north, align=flush left] (callbacks_explanation) at (15,2) {Functions to perform actions during training};
+        % Add the "Other" node
+        \node[draw, fill=white, align=center, text width=1.5cm, minimum height=1cm] (other) at ({360/\nodes*7}:\radius) {\dots};
+
+        % Arrows from keras to each node
+        \foreach \n in {1,...,7} {
+                \draw[->] (keras) -- (node\n);
+            }
+
+        % Add explanations next to each node
+        \node[text width=2.2cm, minimum height=1cm, anchor=north west, align=center] (model_explanation) at ({360/7*1}:\radius+2) {\texttt{Model} and \texttt{Sequential} classes - define a model};
+        \node[text width=3.2cm, minimum height=1cm, anchor=east, align=center] (layer_explanation) at ({360/7*2.2}:\radius+1) {Define various types of ANN layers};
+        \node[text width=2.2cm, minimum height=1cm, anchor=north east, align=center] (optimizer_explanation) at ({360/7*3}:\radius+1) {Optimizers for training};
+        \node[text width=2.2cm, minimum height=1cm, anchor=east, align=center] (loss_explanation) at ({360/7*4}:\radius+1.5) {Loss functions};
+        \node[text width=4.4cm, minimum height=1cm, anchor=east, align=center] (metrics_explanation) at ({360/7*4.9}:\radius+0.5) {Metrics for\\evaluating the model};
+        \node[text width=4cm, minimum height=1cm, anchor=west, align=center] (callbacks_explanation) at ({360/7*6}:\radius+1) {Functions to perform actions during training};
+        \node[text width=2.2cm, minimum height=1cm, anchor=west, align=center] (other_explanation) at ({360/7*7}:\radius+1.5) {Other modules};
     \end{tikzpicture}
+
 \end{frame}
 
 \begin{frame}
@@ -225,6 +228,7 @@
     $^*$Note: Adam (ADAptive Movement estimation algorithm, Diederik et al, 2014), is an implementation of the stochastic gradient descent algorithm often used in deep learning.
 
     \vspace{2em}
+    \normalsize
     \begin{codebox}
         \texttt{model.compile(optimizer='adam',\\
         $~~~~$loss='categorical\_crossentropy',\\
