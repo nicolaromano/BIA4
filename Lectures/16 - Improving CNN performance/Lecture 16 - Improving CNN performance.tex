@@ -215,25 +215,13 @@
 
 \begin{frame}
     {Augmentation in Keras}
-    The \href{https://www.tensorflow.org/api_docs/python/tf/keras/preprocessing/image/ImageDataGenerator}{\underline{tf.keras.preprocessing.image.ImageDataGenerator}} class can be used to augment image data.
+    Keras 3 provides a new set of layers for data augmentation.
+    These include the \texttt{RandomFlip}, \texttt{RandomRotation}, \texttt{RandomContrast} (and many more!) layers.
 
-    \begin{codebox}
-        \texttt{\# Load data\\
-        x, y = \dots\\
-        \\
-        \# Create a generator allowing translation, zooming and rotation\\
-        generator = ImageDataGenerator(height\_shift\_range=[-50,50],\\
-        $~~~~~~~~$width\_shift\_range=[-50,50],\\
-        $~~~~~~~~$zoom\_range=[0.75,1.25],\\
-        $~~~~~~~~$rotation\_range=10)\\
-        \\
-        \pause
-        \# Create an iterator, that will generate 64 augmented images at a time\\
-        \# The iterator can be passed directly to the model\\
-        iterator = generator.flow(x, y, batch\_size=64)\\
-        model.fit(iterator, epochs=100, \dots)
-        }
-    \end{codebox}
+    See the documentation for more information on the \href{https://keras.io/api/layers/preprocessing_layers/image_augmentation/}{\underline{Image augmentation layers}}
+
+    \pause
+    These layers can be integrated into the model, so that the data is augmented on the fly during training!
 \end{frame}
 
 \begin{frame}
