@@ -295,19 +295,21 @@
     {KerasTuner example}
     \only<1>{
         \begin{codebox}
-            \texttt{import tensorflow.keras as keras\\
+            \texttt{import keras\\
                 import keras\_tuner as kt\\
                 \\
-                \# hp is an object that contains all the hyperparameters\\
-                \# it will be automatically passed by the tuner\\
+                \# hp contains all the hyperparameters and is passed automatically by the tuner\\
                 def build\_model(hp):\\
-                $~~~~$model = keras.Sequential()\\
-                $~~~~$\# Create an integer hyperparameter, going from 10 to 100\\
-                $~~~~$\# We can also have hp.Float, hp.Choice, hp.Bool\\
-                $~~~~$n\_units = hp.Int('units', min\_value=10, max\_value=100, step\_size=10)\\
-                $~~~~$model.add(keras.layers.Conv2D(n\_units, (3, 3), activation='relu', $~~~~~~~~$input\_shape=(256, 256, 1)))\\
-                $~~~~$\dots\\
-                $~~~~$return model
+                $~~~~~~~~$model = keras.Sequential()\\
+                $~~~~~~~~$\# Create an integer hyperparameter, going from 10 to 100\\
+                $~~~~~~~~$\# We can also have hp.Float, hp.Choice, hp.Bool\\
+                $~~~~~~~~$n\_filters = hp.Int('filters', min\_value=10, max\_value=100, step=10)\\
+                $~~~~~~~~$model.add(keras.layers.Conv2D(n\_filters, (3, 3),\\
+                $~~~~~~~~~~~~~~~~~~$input\_shape=(512, 512, 1)))\\
+                $~~~~~~~~$$\dots$\\
+                        $~~~~~~~~$model.compile($\dots$)\\
+                        $~~~~~~~~$$\dots$\\
+                    $~~~~~~~~$return model
             }
         \end{codebox}
     }
@@ -320,7 +322,7 @@
                 \\
                 \# Instead of calling model.fit we call tuner.search\\
                 rs.search(x\_train, y\_train,\\
-                $~~~~~~~~$x\_test, y\_test,\\
+                $~~~~~~~~$validation\_data=(x\_test, y\_test),\\
                 $~~~~~~~~$epochs=10, batch\_size=32)\\
                 \\
                 best\_hyperparameter = rs.get\_best\_hyperparameters(1)[0]\\
@@ -333,6 +335,15 @@
     We can now use a model with the best configuration for our task!
 \end{frame}
 
+\begin{frame}
+    {Summary}
+    \begin{itemize}
+        \item Hyperparameters are values that control the learning process of a model.
+        \item Manual methods are time-consuming, require expertise, and are not guaranteed to find the optimal model.
+        \item Automated methods such as grid search, random search, Bayesian optimization, and early-stopping based methods can help.
+        \item KerasTuner is a library that can help us tune hyperparameters in a Keras model.
+    \end{itemize}
+\end{frame}
 \end{document}
 
 
