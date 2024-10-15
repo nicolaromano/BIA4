@@ -230,7 +230,7 @@
     In classification problems a common problem is that the classes are not equally represented.
 
     For example, you might build a CNN to classify different types of cells. However, you might only have a small amount of cells for a specific type.
-    
+
     If you randomly sample the data for your training set you might not have enough information to classify that cell type.
 
     Solutions to this problem are:
@@ -238,7 +238,7 @@
     \begin{itemize}
         \item Balance the dataset by sampling the data in a skewed way. Problem: you might not have enough data to train the model.
         \item Create augmented data only for the rare classes.
-        \item Collect more data! 
+        \item Collect more data!
     \end{itemize}
 \end{frame}
 
@@ -384,15 +384,26 @@
 
     \begin{codebox}
         \texttt{\# Create a callback that stops training when there is no improvement in the validation loss in 3 epochs\\
-            early\_stop = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)\\
-            \# Train the model\\
-            model.fit(x\_train, y\_train,\\
-            $~~~~$epochs=100,\\
-            $~~~~$validation\_data=(x\_val, y\_val),\\
-            $~~~~$callbacks=[early\_stop])
+        early\_stop = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)\\
+        \# Train the model\\
+        model.fit(x\_train, y\_train,\\
+        $~~~~$epochs=100,\\
+        $~~~~$validation\_data=(x\_val, y\_val),\\
+        $~~~~$callbacks=[early\_stop])
         }
     \end{codebox}
 
+\end{frame}
+
+\begin{frame}
+    {Summary}
+    \begin{itemize}
+        \item Data quality is crucial for the performance of your model.
+        \item Data splitting is important to avoid bias.
+        \item Several techniques can be used to improve the performance of your model, including data augmentation, weight regularization, dropout, and early stopping.
+        \item Detecting underfitting and overfitting is crucial to improve the performance of your model.
+        \item Choosing the right hyperparameters is crucial to improve the performance of your model and will be discussed in the next lecture.
+    \end{itemize}
 \end{frame}
 
 \end{document}
